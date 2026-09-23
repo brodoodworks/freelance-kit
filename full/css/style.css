@@ -2294,6 +2294,17 @@ tr.row-clickable, .project-card-item.row-clickable { cursor: pointer; }
 
   .topbar { padding: 0 16px; gap: 8px; }
   .topbar-right { gap: 4px; }
+  /* Topbar CTA ("+ New Project" / "+ New Quotation" / etc) loses its
+     label and becomes a plain square icon button, so it always fits on
+     one line next to the hamburger + page title, however long the
+     label text is in either language. */
+  [data-topbar-cta-label] { display: none; }
+  [data-topbar-cta] {
+    width: 36px; height: 36px;
+    padding: 0;
+    justify-content: center;
+    flex-shrink: 0;
+  }
   .profile-trigger { padding: 6px 4px 6px 6px; }
   .profile-text { display: none; }
   .content { padding: 20px 16px; }

@@ -1,6 +1,6 @@
 // Freelance Kit — offline cache (app shell). Bump CACHE_NAME when files change
 // so returning users get the update instead of a stale cached copy.
-const CACHE_NAME = "freelance-kit-v6";
+const CACHE_NAME = "freelance-kit-v7";
 const ASSETS = [
   "./Freelance Kit.html",
   "./manifest.json",
@@ -11,6 +11,7 @@ const ASSETS = [
   "./js/data.js",
   "./js/help.js",
   "./js/i18n.js",
+  "./js/date-picker.js",
   "./js/install-prompt.js",
   "./js/onboarding.js",
   "./js/access-gate.js",

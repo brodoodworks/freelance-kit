@@ -2234,6 +2234,16 @@ tr.row-clickable, .project-card-item.row-clickable { cursor: pointer; }
   .quo-grid { grid-template-columns: minmax(0, 1fr); }
   .quo-preview-col { position: static; }
   .revc-grid { grid-template-columns: 1fr; }
+
+  /* iOS/iPadOS Safari auto-zooms the whole page on focus for any input
+     whose font-size is under 16px — our fields use 13.5px. Tapping a
+     date field (or any field) on a real iPhone/iPad then snaps the
+     viewport in, shoving/overlapping whatever was in a field-row right
+     as the native date picker opens, which reads as "the layout is
+     broken" even though nothing about the CSS layout itself is wrong.
+     Bumping date inputs to 16px on tablet/phone widths stops the zoom
+     from firing in the first place. */
+  .field input[type="date"] { font-size: 16px; }
 }
 
 @media (max-width: 860px) {

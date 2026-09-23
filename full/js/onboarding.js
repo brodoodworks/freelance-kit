@@ -244,7 +244,7 @@
             "Daftar pakai email biar data kamu aman dan bisa dibuka di HP, tablet, atau laptop mana aja. Atau lewati dulu — aplikasi ini tetap jalan penuh secara offline di device ini.",
             "Sign up with email so your data is safe and can be opened on any phone, tablet or laptop. Or skip for now — this app still works fully offline on this device."
           )}</p>
-          ${hasSyncHook ? `<button type="button" class="fkob-cta" data-fkob-signup>${pick("Daftar / Masuk dengan Email", "Sign Up / Log In with Email")}</button>` : ""}
+          <button type="button" class="fkob-cta" data-fkob-signup>${pick("Daftar / Masuk dengan Email", "Sign Up / Log In with Email")}</button>
           <button type="button" class="fkob-skip" data-fkob-skip>${pick("Lewati — pakai offline dulu", "Skip — use offline for now")}</button>
           <p class="fkob-note">${pick(
             "Data kamu tetap tersimpan di device ini walau nggak login. Kamu bisa daftar kapan aja lewat Settings.",
@@ -269,19 +269,41 @@
       signupBtn.addEventListener("click", () => {
         overlay.remove();
         markOnboarded();
-        window.__freelanceOpenSyncLogin();
-        // The login modal has its own cancel/submit flow; start the tour
-        // once it's closed either way, so the tour never fights with it
-        // for screen space.
-        const loginOverlay = document.querySelector('[data-sync-login-overlay]');
-        if (!loginOverlay) { startTour(); return; }
-        const observer = new MutationObserver(() => {
-          if (loginOverlay.hidden) {
-            observer.disconnect();
-            startTour();
-          }
-        });
-        observer.observe(loginOverlay, { attributes: true, attributeFilter: ["hidden"] });
+
+        // Normally sync.js (loaded earlier, synchronously, in the page's
+        // own <script> tags) has already defined this hook by the time
+        // anyone can click here — this file only shows up on "load" + a
+        // delay. But a stale cached copy of the page (an already-
+        // installed PWA that hasn't picked up an update yet, or a very
+        // old downloaded single-file copy) could still be missing it —
+        // fall back to sending them to the Settings > Sync card instead
+        // of silently doing nothing.
+        if (typeof window.__freelanceOpenSyncLogin === "function") {
+          window.__freelanceOpenSyncLogin();
+          const loginOverlay = document.querySelector('[data-sync-login-overlay]');
+          if (!loginOverlay) { startTour(); return; }
+          // The login modal has its own cancel/submit flow; start the
+          // tour once it's closed either way, so the tour never fights
+          // with it for screen space.
+          const observer = new MutationObserver(() => {
+            if (loginOverlay.hidden) {
+              observer.disconnect();
+              startTour();
+            }
+          });
+          observer.observe(loginOverlay, { attributes: true, attributeFilter: ["hidden"] });
+          return;
+        }
+
+        // Don't also force-navigate to Settings here — the tour below
+        // already ends on the Settings page, which is where Sync lives.
+        if (typeof showToast === "function") {
+          showToast(pick(
+            "Ini masih versi lama — buka lagi aplikasinya (atau update dulu) biar tombol daftarnya muncul.",
+            "This is still an old cached version — reopen (or update) the app so the sign-up button works."
+          ));
+        }
+        startTour();
       });
     }
   }

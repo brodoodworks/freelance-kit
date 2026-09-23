@@ -406,7 +406,7 @@ html.sidebar-collapsed .rail-menu-group { display: flex; }
 .topbar-left { display: flex; align-items: center; gap: 14px; }
 .icon-btn.hamburger-btn { display: none; flex-shrink: 0; }
 .hamburger-icon-close { display: none; }
-.topbar-menu-title { display: none; color: #fff; font-size: 17px; font-weight: 700; letter-spacing: -0.01em; }
+.topbar-menu-title { display: none; color: var(--text); font-size: 20px; font-weight: 700; letter-spacing: -0.015em; }
 .topbar-title-group { display: flex; flex-direction: column; }
 
 .topbar-right { display: flex; align-items: center; gap: 10px; }
@@ -2282,7 +2282,6 @@ tr.row-clickable, .project-card-item.row-clickable { cursor: pointer; }
     bottom: 0;
     height: auto;
     width: 100% !important;
-    overflow-y: auto;
     padding: 10px 16px calc(16px + env(safe-area-inset-bottom, 0px)) !important;
     opacity: 1 !important;
     border-radius: 0;
@@ -2296,11 +2295,13 @@ tr.row-clickable, .project-card-item.row-clickable { cursor: pointer; }
 
   /* The drawer is now a full standalone menu page — no second
      "brand + profile" header repeating inside it (the brand name moved
-     up into the topbar itself), and Appearance moved into Settings, so
-     the drawer is just the nav list. */
+     up into the topbar itself). Appearance stays, pinned below the nav
+     list the same way it already is on desktop: .nav scrolls
+     internally (flex:1 + its own overflow-y:auto from the base rules
+     above) while .sidebar-appearance (flex-shrink:0) never scrolls
+     away with it. */
   .sidebar-head,
-  .sidebar-profile,
-  .sidebar-appearance { display: none; }
+  .sidebar-profile { display: none; }
 
   /* Lock the page behind the drawer so only the drawer itself scrolls
      while it's open — the page and the drawer both being independently
@@ -2331,12 +2332,10 @@ tr.row-clickable, .project-card-item.row-clickable { cursor: pointer; }
 
   /* Topbar in "menu open" mode: becomes the drawer's own header instead
      of showing the current page's title. */
-  html:not(.sidebar-collapsed) .topbar { background: var(--primary); }
+  html:not(.sidebar-collapsed) .topbar { background: var(--sidebar-surface); }
   html:not(.sidebar-collapsed) .topbar-title-group,
   html:not(.sidebar-collapsed) .topbar-right { display: none; }
   html:not(.sidebar-collapsed) .topbar-menu-title { display: inline-flex; }
-  html:not(.sidebar-collapsed) .hamburger-btn { color: #fff; }
-  html:not(.sidebar-collapsed) .hamburger-btn:hover { background: rgba(255, 255, 255, 0.15); }
   html:not(.sidebar-collapsed) .hamburger-icon-open { display: none; }
   html:not(.sidebar-collapsed) .hamburger-icon-close { display: block; }
 }

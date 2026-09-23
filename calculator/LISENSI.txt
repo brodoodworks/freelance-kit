@@ -1,0 +1,82 @@
+========================================================
+FREELANCE KIT — LISENSI & KETENTUAN PENGGUNAAN
+BRODOOD WORKS
+========================================================
+
+Terima kasih sudah membeli Freelance Kit. Dengan mengunduh,
+mengekstrak, atau menggunakan produk ini, kamu dianggap
+menyetujui ketentuan di bawah ini.
+
+--------------------------------------------------------
+1. LISENSI PENGGUNAAN
+--------------------------------------------------------
+Pembelian ini memberikan lisensi PERSONAL — untuk digunakan
+pada bisnis freelance milik kamu sendiri (menghitung harga,
+membuat quotation/proposal/invoice/rate card untuk klien-klien
+kamu sendiri).
+
+Lisensi ini TIDAK berlaku untuk:
+- Digunakan sebagai tool internal agency/tim dengan banyak
+  pengguna berbeda di dalamnya.
+- Dijual, disewakan, atau didistribusikan ulang ke pihak lain
+  dalam bentuk apa pun, baik gratis maupun berbayar.
+- Di-rebrand, dimodifikasi lalu diklaim/dijual kembali sebagai
+  produk milik sendiri atau produk pihak lain (white-label).
+
+--------------------------------------------------------
+2. JUMLAH PERANGKAT (DEVICE)
+--------------------------------------------------------
+Satu pembelian boleh digunakan di beberapa perangkat/komputer,
+selama seluruhnya digunakan oleh orang atau bisnis freelance
+yang sama (pembeli). Tidak untuk dibagikan file-nya ke orang
+lain di luar bisnis kamu sendiri.
+
+--------------------------------------------------------
+3. HAK CIPTA
+--------------------------------------------------------
+Seluruh kode, desain antarmuka, dan aset (logo, ikon, dsb.)
+dalam Freelance Kit adalah hak cipta BRODOOD WORKS. Pembelian
+ini memberikan hak pakai (lisensi), BUKAN kepemilikan atas
+kode atau desain produk.
+
+--------------------------------------------------------
+4. DATA KAMU
+--------------------------------------------------------
+Freelance Kit adalah aplikasi HTML lokal yang berjalan
+sepenuhnya di browser kamu. Semua data project, quotation,
+proposal, invoice, dan rate card disimpan secara lokal di
+perangkat kamu — bukan dikirim atau disimpan di server mana
+pun. Kamu bertanggung jawab penuh untuk melakukan backup data
+secara berkala (fitur backup JSON sudah tersedia di dalam
+aplikasi, lihat menu Settings).
+
+--------------------------------------------------------
+5. KEBIJAKAN REFUND
+--------------------------------------------------------
+Karena Freelance Kit adalah produk digital yang bisa langsung
+diunduh dan digunakan, TIDAK ADA REFUND setelah pembelian
+berhasil, kecuali file yang diterima rusak/tidak bisa dibuka
+sama sekali — pada kasus ini, hubungi kami terlebih dahulu
+untuk mendapatkan file pengganti sebelum mengajukan refund.
+
+--------------------------------------------------------
+6. GARANSI & TANGGUNG JAWAB
+--------------------------------------------------------
+Freelance Kit disediakan "sebagaimana adanya" (as is). Hasil
+perhitungan harga, dokumen quotation/proposal/invoice yang
+dibuat melalui aplikasi ini sepenuhnya menjadi tanggung jawab
+pengguna untuk diperiksa kembali sebelum dikirim ke klien.
+BRODOOD WORKS tidak bertanggung jawab atas kerugian yang
+timbul dari kesalahan input, kehilangan data akibat tidak
+melakukan backup, atau keputusan bisnis yang diambil
+berdasarkan hasil dari aplikasi ini.
+
+--------------------------------------------------------
+7. DUKUNGAN
+--------------------------------------------------------
+Jika ada pertanyaan seputar penggunaan produk, silakan hubungi
+kami melalui platform tempat kamu membeli Freelance Kit.
+
+========================================================
+© BRODOOD WORKS — Freelance Kit. Seluruh hak dilindungi.
+========================================================

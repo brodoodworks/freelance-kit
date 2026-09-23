@@ -1,0 +1,1847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Freelance Kit — Pricing & Proposal Toolkit</title>
+<link rel="icon" type="image/png" href="assets/favicon-256.png">
+<link rel="shortcut icon" type="image/png" href="assets/favicon-256.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#025864">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Freelance Kit">
+
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ============ MOBILE OVERLAY ============ -->
+  <div class="drawer-overlay" data-overlay></div>
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar" data-sidebar>
+
+    <!-- RAIL — always visible, pinned flush to the left edge -->
+    <div class="sidebar-rail">
+
+      <!-- Menu icons: only shown here when the panel is closed -->
+      <div class="rail-menu-group">
+        <span class="brand-mark"><img src="assets/favicon-256.png" alt="Freelance Kit" class="brand-mark-img"></span>
+        <span class="avatar rail-avatar"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8.5" r="4"/><path d="M12 14.2c-4.4 0-8 2.9-8 6.5v1.3h16v-1.3c0-3.6-3.6-6.5-8-6.5z"/></svg></span>
+
+        <nav class="rail-nav">
+          <a class="nav-link rail-link" data-page="dashboard" href="#dashboard" aria-label="Dashboard">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="2" width="6.5" height="6.5" rx="1.5" stroke="currentColor" stroke-width="1.5"/><rect x="9.5" y="2" width="6.5" height="4.5" rx="1.5" stroke="currentColor" stroke-width="1.5"/><rect x="9.5" y="8.5" width="6.5" height="7.5" rx="1.5" stroke="currentColor" stroke-width="1.5"/><rect x="2" y="10.5" width="6.5" height="5.5" rx="1.5" stroke="currentColor" stroke-width="1.5"/></svg>
+          </a>
+          <a class="nav-link rail-link" data-page="quotation-generator" href="#quotation-generator" aria-label="Quotation Generator">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M5 1.8h5.2l3 3v9.9a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V2.8a1 1 0 0 1 1-1Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M10.2 1.8v2.5a1 1 0 0 0 1 1h3" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M6 10.5h6M6 12.7h4.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+          </a>
+          <a class="nav-link rail-link" data-page="proposal-generator" href="#proposal-generator" aria-label="Proposal Generator">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M16 2 2 8.2l5.2 2.1L9.3 16 16 2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M7.2 10.3 16 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </a>
+          <a class="nav-link rail-link" data-page="invoice-generator" href="#invoice-generator" aria-label="Invoice Generator">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 2h10v12.4l-1.25-.9-1.25.9-1.25-.9-1.25.9-1.25-.9-1.25.9-1.25-.9-1.25.9V2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M6 5.6h6M6 8h6M6 10.4h3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </a>
+          <a class="nav-link rail-link" data-page="rate-card-generator" href="#rate-card-generator" aria-label="Rate Card Generator">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M15.44 10.06 10.06 15.44a1.5 1.5 0 0 1 -2.12 0L1.5 9V1.5h7.5l6.44 6.44a1.5 1.5 0 0 1 0 2.12Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><circle cx="5.25" cy="5.25" r="0.9" fill="currentColor"/></svg>
+          </a>
+          <a class="nav-link rail-link" data-page="my-projects" href="#my-projects" aria-label="My Projects">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2.2" y="5.5" width="13.6" height="9.5" rx="1.8" stroke="currentColor" stroke-width="1.5"/><path d="M6.5 5.5V4a1.5 1.5 0 0 1 1.5-1.5h2A1.5 1.5 0 0 1 11.5 4v1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.2 9.8h13.6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </a>
+          <a class="nav-link rail-link" data-page="my-quotations" href="#my-quotations" aria-label="My Quotations">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 3.5h12a1.3 1.3 0 0 1 1.3 1.3v6.2a1.3 1.3 0 0 1-1.3 1.3H7.9L5 15v-2.7H3a1.3 1.3 0 0 1-1.3-1.3V4.8A1.3 1.3 0 0 1 3 3.5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="6.8" cy="7.9" r="0.95" fill="currentColor"/><circle cx="11.2" cy="7.9" r="0.95" fill="currentColor"/></svg>
+          </a>
+          <a class="nav-link rail-link" data-page="my-proposals" href="#my-proposals" aria-label="My Proposals">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M6.5 2.2h5a1 1 0 0 1 1 1v.3h.8a1.3 1.3 0 0 1 1.3 1.3v9.4a1.3 1.3 0 0 1-1.3 1.3H4.7a1.3 1.3 0 0 1-1.3-1.3V4.8a1.3 1.3 0 0 1 1.3-1.3h.8v-.3a1 1 0 0 1 1-1Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><rect x="6" y="1.6" width="6" height="2.4" rx="0.8" stroke="currentColor" stroke-width="1.5"/><path d="M6.2 9.6v3M9 8.2v4.4M11.8 10.4v2.2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </a>
+          <a class="nav-link rail-link" data-page="my-invoices" href="#my-invoices" aria-label="My Invoices">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2.3" y="7" width="11.2" height="6.8" rx="1.3" stroke="currentColor" stroke-width="1.5"/><rect x="4.1" y="4.3" width="11.2" height="6.8" rx="1.3" stroke="currentColor" stroke-width="1.5"/><circle cx="9.7" cy="7.7" r="1.5" stroke="currentColor" stroke-width="1.3"/></svg>
+          </a>
+          <a class="nav-link rail-link" data-page="my-rate-cards" href="#my-rate-cards" aria-label="My Rate Cards">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2.5" y="4.3" width="9.6" height="11.5" rx="1.5" stroke="currentColor" stroke-width="1.5"/><rect x="6" y="2" width="9.6" height="11.5" rx="1.5" stroke="currentColor" stroke-width="1.5"/></svg>
+          </a>
+          <a class="nav-link rail-link" data-page="templates" href="#templates" aria-label="Templates">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4.5 2.3h9a1 1 0 0 1 1 1v11.7l-5.5-3.3-5.5 3.3V3.3a1 1 0 0 1 1-1Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+          </a>
+        </nav>
+      </div>
+
+      <div class="rail-spacer"></div>
+
+      <!-- Always-on utility icons — evenly spaced, pinned at the bottom -->
+      <div class="rail-utility">
+        <a class="nav-link rail-link" data-page="help" href="#help" aria-label="Help">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3.3 10V8.5a5.7 5.7 0 0 1 11.4 0V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><rect x="2.1" y="9.4" width="2.7" height="4.5" rx="1.25" stroke="currentColor" stroke-width="1.5"/><rect x="13.2" y="9.4" width="2.7" height="4.5" rx="1.25" stroke="currentColor" stroke-width="1.5"/><path d="M13.2 13.9v.35a2 2 0 0 1-2 2H9.7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </a>
+        <a class="nav-link rail-link" data-page="settings" href="#settings" aria-label="Settings">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M10.1 2.3h-2.2l-.35 1.72a5.4 5.4 0 0 0-1.2.7L4.7 4.2 3.1 6.98l1.4 1.1a5.4 5.4 0 0 0 0 1.38l-1.4 1.1L4.7 13.3l1.65-.52c.37.28.77.51 1.2.7L7.9 15.2h2.2l.35-1.72c.43-.19.83-.42 1.2-.7l1.65.52 1.6-2.78-1.4-1.1a5.4 5.4 0 0 0 0-1.38l1.4-1.1-1.6-2.78-1.65.52a5.4 5.4 0 0 0-1.2-.7L10.1 2.3Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><circle cx="9" cy="9" r="2.1" stroke="currentColor" stroke-width="1.3"/></svg>
+        </a>
+        <button class="icon-btn rail-icon-btn" data-theme-toggle aria-label="Ganti tema">
+          <svg class="icon-sun" width="18" height="18" viewBox="0 0 19 19" fill="none"><circle cx="9.5" cy="9.5" r="3.4" stroke="currentColor" stroke-width="1.4"/><path d="M9.5 1.8v2M9.5 15.2v2M17.2 9.5h-2M3.8 9.5h-2M14.9 4.1l-1.4 1.4M5.5 13.5l-1.4 1.4M14.9 14.9l-1.4-1.4M5.5 5.5 4.1 4.1" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+          <svg class="icon-moon" width="18" height="18" viewBox="0 0 19 19" fill="none"><path d="M16 11.2A7 7 0 1 1 7.8 3a5.6 5.6 0 0 0 8.2 8.2Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="icon-btn rail-icon-btn" data-collapse-toggle aria-label="Buka atau tutup panel menu">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="2.5" width="14" height="13" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M7 2.5V15.5" stroke="currentColor" stroke-width="1.4"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- PANEL — togglable, sits to the right of the rail -->
+    <div class="sidebar-panel" data-sidebar-panel>
+      <div class="sidebar-head">
+        <span class="brand-text">
+          <span class="brand-name">Freelance Kit</span>
+          <span class="brand-sub" data-i18n="brand.subtitle">Pricing & Proposal Toolkit</span>
+        </span>
+      </div>
+
+      <div class="sidebar-profile">
+        <span class="avatar sidebar-profile-avatar" data-mini-avatar><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8.5" r="4"/><path d="M12 14.2c-4.4 0-8 2.9-8 6.5v1.3h16v-1.3c0-3.6-3.6-6.5-8-6.5z"/></svg></span>
+        <span class="sidebar-profile-text">
+          <span class="sidebar-profile-name" data-mini-name>Your Name</span>
+          <span class="sidebar-profile-email" data-mini-email>you@example.com</span>
+        </span>
+      </div>
+
+      <nav class="nav" data-nav>
+        <span class="nav-section-label" data-i18n="sidebar.group.overview">Overview</span>
+        <a class="nav-link panel-link" data-page="dashboard" href="#dashboard">
+          <span class="nav-icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="2" width="6.5" height="6.5" rx="1.5" stroke="currentColor" stroke-width="1.5"/><rect x="9.5" y="2" width="6.5" height="4.5" rx="1.5" stroke="currentColor" stroke-width="1.5"/><rect x="9.5" y="8.5" width="6.5" height="7.5" rx="1.5" stroke="currentColor" stroke-width="1.5"/><rect x="2" y="10.5" width="6.5" height="5.5" rx="1.5" stroke="currentColor" stroke-width="1.5"/></svg>
+          </span>
+          <span class="nav-label" data-i18n="nav.dashboard">Dashboard</span>
+        </a>
+        <span class="nav-section-label" data-i18n="sidebar.group.generate">Generate</span>
+        <a class="nav-link panel-link" data-page="quotation-generator" href="#quotation-generator">
+          <span class="nav-icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M5 1.8h5.2l3 3v9.9a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V2.8a1 1 0 0 1 1-1Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M10.2 1.8v2.5a1 1 0 0 0 1 1h3" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M6 10.5h6M6 12.7h4.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+          </span>
+          <span class="nav-label" data-i18n="nav.quotationGenerator">Quotation Generator</span>
+        </a>
+        <a class="nav-link panel-link" data-page="proposal-generator" href="#proposal-generator">
+          <span class="nav-icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M16 2 2 8.2l5.2 2.1L9.3 16 16 2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M7.2 10.3 16 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </span>
+          <span class="nav-label" data-i18n="nav.proposalGenerator">Proposal Generator</span>
+        </a>
+        <a class="nav-link panel-link" data-page="invoice-generator" href="#invoice-generator">
+          <span class="nav-icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 2h10v12.4l-1.25-.9-1.25.9-1.25-.9-1.25.9-1.25-.9-1.25.9-1.25-.9-1.25.9V2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M6 5.6h6M6 8h6M6 10.4h3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </span>
+          <span class="nav-label" data-i18n="nav.invoiceGenerator">Invoice Generator</span>
+        </a>
+        <a class="nav-link panel-link" data-page="rate-card-generator" href="#rate-card-generator">
+          <span class="nav-icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M15.44 10.06 10.06 15.44a1.5 1.5 0 0 1 -2.12 0L1.5 9V1.5h7.5l6.44 6.44a1.5 1.5 0 0 1 0 2.12Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><circle cx="5.25" cy="5.25" r="0.9" fill="currentColor"/></svg>
+          </span>
+          <span class="nav-label" data-i18n="nav.rateCardGenerator">Rate Card Generator</span>
+        </a>
+        <span class="nav-section-label" data-i18n="sidebar.group.manage">Manage</span>
+        <a class="nav-link panel-link" data-page="my-projects" href="#my-projects">
+          <span class="nav-icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2.2" y="5.5" width="13.6" height="9.5" rx="1.8" stroke="currentColor" stroke-width="1.5"/><path d="M6.5 5.5V4a1.5 1.5 0 0 1 1.5-1.5h2A1.5 1.5 0 0 1 11.5 4v1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.2 9.8h13.6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </span>
+          <span class="nav-label" data-i18n="nav.myProjects">My Projects</span>
+        </a>
+        <a class="nav-link panel-link" data-page="my-quotations" href="#my-quotations">
+          <span class="nav-icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 3.5h12a1.3 1.3 0 0 1 1.3 1.3v6.2a1.3 1.3 0 0 1-1.3 1.3H7.9L5 15v-2.7H3a1.3 1.3 0 0 1-1.3-1.3V4.8A1.3 1.3 0 0 1 3 3.5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="6.8" cy="7.9" r="0.95" fill="currentColor"/><circle cx="11.2" cy="7.9" r="0.95" fill="currentColor"/></svg>
+          </span>
+          <span class="nav-label" data-i18n="nav.myQuotations">My Quotations</span>
+        </a>
+        <a class="nav-link panel-link" data-page="my-proposals" href="#my-proposals">
+          <span class="nav-icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M6.5 2.2h5a1 1 0 0 1 1 1v.3h.8a1.3 1.3 0 0 1 1.3 1.3v9.4a1.3 1.3 0 0 1-1.3 1.3H4.7a1.3 1.3 0 0 1-1.3-1.3V4.8a1.3 1.3 0 0 1 1.3-1.3h.8v-.3a1 1 0 0 1 1-1Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><rect x="6" y="1.6" width="6" height="2.4" rx="0.8" stroke="currentColor" stroke-width="1.5"/><path d="M6.2 9.6v3M9 8.2v4.4M11.8 10.4v2.2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </span>
+          <span class="nav-label" data-i18n="nav.myProposals">My Proposals</span>
+        </a>
+        <a class="nav-link panel-link" data-page="my-invoices" href="#my-invoices">
+          <span class="nav-icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2.3" y="7" width="11.2" height="6.8" rx="1.3" stroke="currentColor" stroke-width="1.5"/><rect x="4.1" y="4.3" width="11.2" height="6.8" rx="1.3" stroke="currentColor" stroke-width="1.5"/><circle cx="9.7" cy="7.7" r="1.5" stroke="currentColor" stroke-width="1.3"/></svg>
+          </span>
+          <span class="nav-label" data-i18n="nav.myInvoices">My Invoices</span>
+        </a>
+        <a class="nav-link panel-link" data-page="my-rate-cards" href="#my-rate-cards">
+          <span class="nav-icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2.5" y="4.3" width="9.6" height="11.5" rx="1.5" stroke="currentColor" stroke-width="1.5"/><rect x="6" y="2" width="9.6" height="11.5" rx="1.5" stroke="currentColor" stroke-width="1.5"/></svg>
+          </span>
+          <span class="nav-label" data-i18n="nav.myRateCards">My Rate Cards</span>
+        </a>
+        <a class="nav-link panel-link" data-page="templates" href="#templates">
+          <span class="nav-icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4.5 2.3h9a1 1 0 0 1 1 1v11.7l-5.5-3.3-5.5 3.3V3.3a1 1 0 0 1 1-1Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+          </span>
+          <span class="nav-label" data-i18n="nav.templates">Templates</span>
+        </a>
+        <span class="nav-section-label" data-i18n="sidebar.group.settings">Settings</span>
+        <a class="nav-link panel-link" data-page="help" href="#help">
+          <span class="nav-icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3.3 10V8.5a5.7 5.7 0 0 1 11.4 0V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><rect x="2.1" y="9.4" width="2.7" height="4.5" rx="1.25" stroke="currentColor" stroke-width="1.5"/><rect x="13.2" y="9.4" width="2.7" height="4.5" rx="1.25" stroke="currentColor" stroke-width="1.5"/><path d="M13.2 13.9v.35a2 2 0 0 1-2 2H9.7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </span>
+          <span class="nav-label" data-i18n="nav.help">Help</span>
+        </a>
+        <a class="nav-link panel-link" data-page="settings" href="#settings">
+          <span class="nav-icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M10.1 2.3h-2.2l-.35 1.72a5.4 5.4 0 0 0-1.2.7L4.7 4.2 3.1 6.98l1.4 1.1a5.4 5.4 0 0 0 0 1.38l-1.4 1.1L4.7 13.3l1.65-.52c.37.28.77.51 1.2.7L7.9 15.2h2.2l.35-1.72c.43-.19.83-.42 1.2-.7l1.65.52 1.6-2.78-1.4-1.1a5.4 5.4 0 0 0 0-1.38l1.4-1.1-1.6-2.78-1.65.52a5.4 5.4 0 0 0-1.2-.7L10.1 2.3Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><circle cx="9" cy="9" r="2.1" stroke="currentColor" stroke-width="1.3"/></svg>
+          </span>
+          <span class="nav-label" data-i18n="nav.settings">Settings</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-appearance">
+        <span class="sidebar-appearance-label" data-i18n="sidebar.appearance.label">Appearance</span>
+        <div class="appearance-toggle" role="group" aria-label="Ganti tema">
+          <button type="button" class="appearance-option" data-theme-set="light" aria-pressed="true">
+            <svg width="14" height="14" viewBox="0 0 19 19" fill="none"><circle cx="9.5" cy="9.5" r="3.4" stroke="currentColor" stroke-width="1.4"/><path d="M9.5 1.8v2M9.5 15.2v2M17.2 9.5h-2M3.8 9.5h-2M14.9 4.1l-1.4 1.4M5.5 13.5l-1.4 1.4M14.9 14.9l-1.4-1.4M5.5 5.5 4.1 4.1" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+            <span data-i18n="sidebar.appearance.light">Light</span>
+          </button>
+          <button type="button" class="appearance-option" data-theme-set="dark" aria-pressed="false">
+            <svg width="14" height="14" viewBox="0 0 19 19" fill="none"><path d="M16 11.2A7 7 0 1 1 7.8 3a5.6 5.6 0 0 0 8.2 8.2Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+            <span data-i18n="sidebar.appearance.dark">Dark</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <div class="main">
+
+    <!-- TOP BAR -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <div class="topbar-title-group">
+          <h1 class="topbar-title" data-page-title>Dashboard</h1>
+          <span class="topbar-date" data-topbar-date></span>
+        </div>
+      </div>
+
+      <div class="topbar-right">
+        <button class="btn btn-primary" data-topbar-cta data-page="pricing-calculator">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3.3v9.4M3.3 8h9.4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+          <span data-topbar-cta-label>New Project</span>
+        </button>
+
+        <div class="profile" data-profile>
+          <button class="profile-trigger" data-profile-trigger>
+            <span class="avatar"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8.5" r="4"/><path d="M12 14.2c-4.4 0-8 2.9-8 6.5v1.3h16v-1.3c0-3.6-3.6-6.5-8-6.5z"/></svg></span>
+            <span class="profile-text">
+              <span class="profile-name">Hi, Your Name</span>
+              <span class="profile-role" data-i18n="profile.role">Freelancer</span>
+            </span>
+            <svg class="chev" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3.5 5.3 7 8.7l3.5-3.4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="profile-menu" data-profile-menu>
+            <a href="#settings" class="profile-menu-item" data-page="settings" data-i18n="profile.menu.settings">Account Settings</a>
+            <a href="#help" class="profile-menu-item" data-page="help" data-i18n="profile.menu.help">Help</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- PAGE CONTENT -->
+    <main class="content" data-content>
+
+      <!-- ===== DASHBOARD PAGE ===== -->
+      <section class="page" data-page-panel="dashboard">
+
+        <!-- ZERO STATE — shown only when there are no saved projects yet -->
+        <div class="dashboard-welcome" data-dashboard-welcome hidden>
+          <div class="dashboard-welcome-icon">
+            <svg width="26" height="26" viewBox="0 0 26 26" fill="none"><path d="M4 12.5 13 5l9 7.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M6.5 11v8a1.2 1.2 0 0 0 1.2 1.2H18.3a1.2 1.2 0 0 0 1.2-1.2v-8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h2 class="dashboard-welcome-title" data-i18n="dashboard.welcome.title">Your freelance workspace is ready.</h2>
+          <p class="dashboard-welcome-text">Start by setting up your first project and let Freelance Kit help you calculate your pricing and create professional documents.</p>
+          <div class="dashboard-welcome-actions">
+            <button class="btn btn-primary" data-page="pricing-calculator" data-i18n="action.calculateFirstProject">Calculate My First Project</button>
+            <button class="btn btn-secondary" data-welcome-load-sample data-i18n="action.loadSampleData">Load Sample Data</button>
+          </div>
+        </div>
+
+        <!-- NORMAL DASHBOARD — shown once at least one project exists -->
+        <div data-dashboard-body hidden>
+
+        <!-- TOP ROW: hero + upcoming deadlines -->
+        <div class="dashboard-top-row">
+
+          <div class="dashboard-hero">
+            <div class="dashboard-hero-art" aria-hidden="true">
+              <svg width="220" height="220" viewBox="0 0 220 220" fill="none">
+                <circle cx="150" cy="70" r="90" fill="url(#heroBlobA)"/>
+                <circle cx="120" cy="150" r="60" fill="url(#heroBlobB)"/>
+                <circle cx="185" cy="150" r="34" stroke="rgba(255,255,255,0.35)" stroke-width="1.4"/>
+                <path d="M60 60 L60 40 M50 50 L70 50" stroke="rgba(255,255,255,0.5)" stroke-width="2" stroke-linecap="round"/>
+                <defs>
+                  <linearGradient id="heroBlobA" x1="60" y1="0" x2="240" y2="160" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="rgba(255,255,255,0.35)"/>
+                    <stop offset="1" stop-color="rgba(255,255,255,0.05)"/>
+                  </linearGradient>
+                  <linearGradient id="heroBlobB" x1="60" y1="90" x2="180" y2="210" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="rgba(255,255,255,0.28)"/>
+                    <stop offset="1" stop-color="rgba(255,255,255,0.04)"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+            </div>
+            <div class="dashboard-hero-content">
+              <h1 class="dashboard-hero-greeting"><span data-dashboard-greeting>Good morning, Freelancer</span> <span aria-hidden="true">👋</span></h1>
+              <p class="dashboard-hero-subtitle" data-i18n="dashboard.subtitle">Here's what's happening with your freelance business.</p>
+              <div class="dashboard-hero-meta">
+                <span class="dashboard-hero-date">
+                  <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><rect x="1.5" y="2.8" width="12" height="10.7" rx="1.8" stroke="currentColor" stroke-width="1.2"/><path d="M1.5 6h12M4.5 1.5v2.3M10.5 1.5v2.3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+                  <span data-topbar-date></span>
+                </span>
+                <span class="dashboard-hero-msg" data-i18n="dashboard.productiveMsg">Have a productive day!</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="side-card dashboard-backup-card" data-dashboard-backup-card>
+            <!-- filled by app.js -->
+          </div>
+
+          <div class="side-card dashboard-upcoming" data-dashboard-upcoming>
+            <!-- filled by app.js -->
+          </div>
+
+        </div>
+
+        <!-- BUSINESS OVERVIEW -->
+        <div class="summary-grid" data-summary-grid>
+          <article class="summary-card">
+            <p class="summary-label" data-i18n="dashboard.summary.totalProjects">Total Projects</p>
+            <p class="summary-metric" data-summary="totalProjects">0</p>
+            <p class="summary-caption" data-summary-caption-text="totalProjects">Belum ada project</p>
+          </article>
+
+          <article class="summary-card">
+            <p class="summary-label" data-i18n="dashboard.summary.totalRevenue">Total Revenue</p>
+            <p class="summary-metric" data-summary="totalRevenue">Rp0</p>
+            <p class="summary-caption" data-summary-caption-text="totalRevenue">Dari project Approved & Completed</p>
+          </article>
+
+          <article class="summary-card">
+            <p class="summary-label" data-i18n="dashboard.summary.pendingProposals">Pending Proposals</p>
+            <p class="summary-metric" data-summary="pendingProposals">0</p>
+            <p class="summary-caption" data-summary-caption-text="pendingProposals">Menunggu respons client</p>
+          </article>
+
+          <article class="summary-card">
+            <p class="summary-label" data-i18n="dashboard.summary.approved">Approved</p>
+            <p class="summary-metric" data-summary="approvedCount">0</p>
+            <p class="summary-caption" data-summary-caption-text="approvedCount">Proyek disetujui</p>
+          </article>
+        </div>
+
+        <!-- BACKUP REMINDER — compact, conditional; empty/hidden when not relevant -->
+        <div class="dashboard-backup-reminder" data-backup-reminder hidden></div>
+
+        <!-- NEEDS ATTENTION + QUICK ACTIONS -->
+        <div class="dashboard-split-row">
+
+          <div class="side-card needs-attention" data-needs-attention>
+            <!-- filled by app.js -->
+          </div>
+
+          <div class="side-card quick-actions-card">
+            <p class="side-card-title" data-i18n="dashboard.quickActions.title">Quick Actions</p>
+            <div class="quick-actions-grid">
+              <a class="quick-action-tile" data-page="pricing-calculator" href="#pricing-calculator">
+                <span class="quick-action-icon">
+                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="3" y="1.5" width="12" height="15" rx="1.8" stroke="currentColor" stroke-width="1.5"/><path d="M5.5 5.3H12.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="6" cy="9" r="0.75" fill="currentColor"/><circle cx="9" cy="9" r="0.75" fill="currentColor"/><circle cx="12" cy="9" r="0.75" fill="currentColor"/><circle cx="6" cy="12.2" r="0.75" fill="currentColor"/><circle cx="9" cy="12.2" r="0.75" fill="currentColor"/><circle cx="12" cy="12.2" r="0.75" fill="currentColor"/></svg>
+                </span>
+                <span class="quick-action-text">
+                  <span class="quick-action-title" data-i18n="quickAction.calculatePrice.title">Calculate Project Price</span>
+                  <span class="quick-action-desc" data-i18n="quickAction.calculatePrice.desc">Start a new calculation</span>
+                </span>
+                <span class="quick-action-arrow">›</span>
+              </a>
+
+              <a class="quick-action-tile" data-page="quotation-generator" href="#quotation-generator">
+                <span class="quick-action-icon">
+                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M5 1.8h5.2l3 3v9.9a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V2.8a1 1 0 0 1 1-1Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M10.2 1.8v2.5a1 1 0 0 0 1 1h3" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M6 10.5h6M6 12.7h4.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+                </span>
+                <span class="quick-action-text">
+                  <span class="quick-action-title" data-i18n="quickAction.createQuotation.title">Create Quotation</span>
+                  <span class="quick-action-desc" data-i18n="quickAction.createQuotation.desc">Send to client</span>
+                </span>
+                <span class="quick-action-arrow">›</span>
+              </a>
+
+              <a class="quick-action-tile" data-page="proposal-generator" href="#proposal-generator">
+                <span class="quick-action-icon">
+                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M16 2 2 8.2l5.2 2.1L9.3 16 16 2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M7.2 10.3 16 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                </span>
+                <span class="quick-action-text">
+                  <span class="quick-action-title" data-i18n="quickAction.createProposal.title">Create Proposal</span>
+                  <span class="quick-action-desc" data-i18n="quickAction.createProposal.desc">Win more projects</span>
+                </span>
+                <span class="quick-action-arrow">›</span>
+              </a>
+
+              <a class="quick-action-tile" data-page="invoice-generator" href="#invoice-generator">
+                <span class="quick-action-icon">
+                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 2h10v12.4l-1.25-.9-1.25.9-1.25-.9-1.25.9-1.25-.9-1.25.9-1.25-.9-1.25.9V2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M6 5.6h6M6 8h6M6 10.4h3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                </span>
+                <span class="quick-action-text">
+                  <span class="quick-action-title" data-i18n="quickAction.createInvoice.title">Create Invoice</span>
+                  <span class="quick-action-desc" data-i18n="quickAction.createInvoice.desc">Request payment</span>
+                </span>
+                <span class="quick-action-arrow">›</span>
+              </a>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- RECENT PROJECTS — full width -->
+        <div class="dashboard-projects-col">
+          <div class="section-header">
+            <div>
+              <h3 class="section-title" data-i18n="dashboard.recentProjects.title">Recent Projects</h3>
+            </div>
+            <button class="btn btn-text" data-page="my-projects" data-i18n="action.viewAll">View All</button>
+          </div>
+
+          <div class="projects-panel" data-projects-panel>
+            <!-- filled by app.js: table (desktop/tablet) + card list (mobile) OR empty state -->
+          </div>
+        </div>
+
+        <!-- BUSINESS PROFILE — compact bar, only shown when real profile data exists -->
+        <div class="profile-card" data-profile-card>
+          <!-- filled by settings.js -->
+        </div>
+
+        </div>
+
+      </section>
+
+      <!-- ===== PRICING CALCULATOR PAGE ===== -->
+      
+
+      <!-- ===== MY PROJECTS PAGE ===== -->
+      
+
+      <!-- ===== QUOTATION GENERATOR PAGE ===== -->
+      <section class="page" data-page-panel="quotation-generator" hidden>
+
+        <div class="quo-grid" data-quo-form>
+
+          <!-- LEFT: FORM -->
+          <div class="quo-form-col">
+
+            <div class="calc-card calc-form-card">
+              <h3 class="section-title" data-i18n="section.quotationDetails">Quotation Details</h3>
+
+              <div class="field">
+                <label for="quo-number" data-i18n="field.quotationNumber">Quotation Number</label>
+                <input type="text" id="quo-number" readonly data-quo="quotationNumber">
+              </div>
+
+              <div class="field-row">
+                <div class="field">
+                  <label for="quo-date" data-i18n="field.date">Date</label>
+                  <input type="date" id="quo-date" data-quo="date">
+                </div>
+                <div class="field">
+                  <label for="quo-valid-until" data-i18n="field.validUntil">Valid Until</label>
+                  <input type="date" id="quo-valid-until" data-quo="validUntil">
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="quo-project" data-i18n="field.project">Project</label>
+                <select id="quo-project" data-quo="projectId">
+                  <option value="">Manual (no project)</option>
+                </select>
+                <p class="field-help" data-quo-no-projects hidden><span data-i18n="field.noSavedProjects">No saved projects.</span> <a href="#pricing-calculator" data-page="pricing-calculator" data-i18n="field.createAProject">Create a project</a> <span data-i18n="quotation.orFillManually">or fill this quotation manually.</span></p>
+              </div>
+            </div>
+
+            <div class="calc-card calc-form-card">
+              <h3 class="section-title" data-i18n="section.clientInformation">Client Information</h3>
+
+              <div class="field-row">
+                <div class="field">
+                  <label for="quo-client-name" data-i18n="field.clientName">Client Name</label>
+                  <input type="text" id="quo-client-name" placeholder="Andi Saputra" data-quo="clientName">
+                </div>
+                <div class="field">
+                  <label for="quo-client-company" data-i18n="field.company">Company</label>
+                  <input type="text" id="quo-client-company" placeholder="PT Maju Bersama" data-quo="clientCompany">
+                </div>
+              </div>
+              <div class="field-row">
+                <div class="field">
+                  <label for="quo-client-email" data-i18n="field.email">Email</label>
+                  <input type="text" id="quo-client-email" placeholder="client@email.com" data-quo="clientEmail">
+                </div>
+                <div class="field">
+                  <label for="quo-client-phone" data-i18n="field.phone">Phone</label>
+                  <input type="text" id="quo-client-phone" placeholder="+62 812 0000 0000" data-quo="clientPhone">
+                </div>
+              </div>
+              <div class="field">
+                <label for="quo-client-address" data-i18n="field.address">Address</label>
+                <textarea id="quo-client-address" rows="2" data-quo="clientAddress"></textarea>
+              </div>
+            </div>
+
+            <div class="calc-card calc-form-card">
+              <div class="quo-section-header-row">
+                <h3 class="section-title" data-i18n="section.businessInformation">Business Information</h3>
+                <button type="button" class="btn-link use-latest-btn" data-quo-use-latest-profile data-i18n="action.useLatestProfile">Use latest Business Profile</button>
+              </div>
+
+              <div class="field">
+                <label for="quo-biz-logo" data-i18n="field.logo">Logo</label>
+                <div class="logo-upload">
+                  <div class="logo-preview" data-quo-logo-preview>No logo</div>
+                  <div class="logo-upload-actions">
+                    <label class="btn btn-secondary logo-upload-btn">
+                      Upload Logo
+                      <input type="file" accept="image/*" id="quo-biz-logo" data-quo-logo-input hidden>
+                    </label>
+                    <button type="button" class="btn-link btn-link-danger" data-quo-logo-remove hidden data-i18n="action.remove">Remove</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="quo-biz-name" data-i18n="field.businessName">Business Name</label>
+                <input type="text" id="quo-biz-name" placeholder="Andi Studio" data-quo="businessName">
+              </div>
+              <div class="field-row">
+                <div class="field">
+                  <label for="quo-biz-email" data-i18n="field.email">Email</label>
+                  <input type="text" id="quo-biz-email" placeholder="hello@andistudio.id" data-quo="businessEmail">
+                </div>
+                <div class="field">
+                  <label for="quo-biz-phone" data-i18n="field.phoneWhatsapp">Phone / WhatsApp</label>
+                  <input type="text" id="quo-biz-phone" placeholder="+62 812 3456 7890" data-quo="businessPhone">
+                </div>
+              </div>
+              <div class="field">
+                <label for="quo-biz-website" data-i18n="field.website">Website</label>
+                <input type="text" id="quo-biz-website" placeholder="andistudio.id" data-quo="businessWebsite">
+              </div>
+              <div class="field">
+                <label for="quo-biz-address" data-i18n="field.address">Address</label>
+                <textarea id="quo-biz-address" rows="2" placeholder="Jakarta, Indonesia" data-quo="businessAddress"></textarea>
+              </div>
+            </div>
+
+            <div class="calc-card calc-form-card quo-items-card">
+              <h3 class="section-title" data-i18n="section.quotationItems">Quotation Items</h3>
+              <div class="field tpl-load-field">
+                <label for="quo-load-template" data-i18n="field.loadFromTemplate">Load from Template</label>
+                <select id="quo-load-template" data-quo-load-template>
+                  <option value="">—</option>
+                </select>
+              </div>
+              <div class="quo-items" data-quo-items></div>
+              <button type="button" class="btn btn-secondary quo-add-item" data-quo-add-item data-i18n="action.addItem">+ Add Item</button>
+            </div>
+
+            <div class="calc-card calc-form-card">
+              <h3 class="section-title" data-i18n="section.discountTax">Discount &amp; Tax</h3>
+
+              <div class="field-row">
+                <div class="field">
+                  <label for="quo-discount-type" data-i18n="field.discount">Discount</label>
+                  <select id="quo-discount-type" data-quo="discountType">
+                    <option value="none" data-i18n="discount.none">None</option>
+                    <option value="percentage" data-i18n="discount.percentage">Percentage</option>
+                    <option value="fixed" data-i18n="discount.fixedAmount">Fixed Amount</option>
+                  </select>
+                </div>
+                <div class="field" data-quo-discount-value-field hidden>
+                  <label for="quo-discount-value" data-i18n="field.discountValue">Discount Value</label>
+                  <div class="input-wrap">
+                    <span class="input-prefix" data-quo-discount-prefix>Rp</span>
+                    <input type="text" inputmode="numeric" id="quo-discount-value" data-quo="discountValue">
+                  </div>
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="quo-tax" data-i18n="field.tax">Tax</label>
+                <div class="input-wrap">
+                  <input type="number" id="quo-tax" min="0" max="100" step="1" data-quo="tax">
+                  <span class="input-suffix">%</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="calc-card calc-form-card">
+              <h3 class="section-title" data-i18n="section.paymentTerms">Payment Terms</h3>
+              <div class="field">
+                <label for="quo-payment-terms" data-i18n="field.terms">Terms</label>
+                <select id="quo-payment-terms" data-quo="paymentTermsType">
+                  <option value="50-50" data-i18n="terms.split5050">50% / 50%</option>
+                  <option value="100-upfront" data-i18n="terms.split100Upfront">100% Upfront</option>
+                  <option value="30-70" data-i18n="terms.split3070">30% / 70%</option>
+                  <option value="custom" data-i18n="terms.custom">Custom</option>
+                </select>
+              </div>
+              <div class="field" data-quo-payment-custom-field hidden>
+                <label for="quo-payment-custom" data-i18n="field.customPaymentTerms">Custom Payment Terms</label>
+                <textarea id="quo-payment-custom" rows="3" data-quo="paymentTermsCustom"></textarea>
+              </div>
+            </div>
+
+            <div class="calc-card calc-form-card">
+              <h3 class="section-title" data-i18n="section.notesTerms">Notes &amp; Terms</h3>
+              <div class="field">
+                <label for="quo-notes" data-i18n="field.notes">Notes</label>
+                <textarea id="quo-notes" rows="2" data-quo="notes"></textarea>
+              </div>
+              <div class="field">
+                <label for="quo-terms" data-i18n="field.termsConditions">Terms &amp; Conditions</label>
+                <textarea id="quo-terms" rows="3" data-quo="terms"></textarea>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- RIGHT: SUMMARY + LIVE PREVIEW -->
+          <div class="quo-preview-col">
+
+            <div class="calc-card quo-summary-card">
+              <div class="quo-summary-header">
+                <h3 class="section-title" data-i18n="section.summary">Summary</h3>
+                <span class="quo-save-status" data-quo-save-status></span>
+              </div>
+
+              <div class="quo-total-row"><span data-i18n="field.subtotal">Subtotal</span><span data-quo-summary-subtotal>Rp0</span></div>
+              <div class="quo-total-row" data-quo-summary-discount-row hidden><span data-i18n="field.discount">Discount</span><span data-quo-summary-discount>-Rp0</span></div>
+              <div class="quo-total-row" data-quo-summary-tax-row hidden><span>Tax</span><span data-quo-summary-tax>Rp0</span></div>
+              <div class="quo-total-row quo-total-row-grand"><span data-i18n="field.total">Total</span><span data-quo-summary-total>Rp0</span></div>
+
+              <p class="quo-validation-message" data-quo-validation hidden></p>
+
+              <div class="calc-actions quo-summary-actions">
+                <button type="button" class="btn btn-primary" data-quo-save data-i18n="action.saveQuotation">Save Quotation</button>
+                <button type="button" class="btn btn-secondary" data-quo-pdf data-i18n="action.exportPdf">Export PDF</button>
+              </div>
+              <p class="calc-save-feedback" data-quo-save-feedback hidden></p>
+            </div>
+
+            <div class="quo-preview-sheet" data-quo-preview>
+              <!-- filled by quotation.js -->
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ===== MY QUOTATIONS PAGE ===== -->
+      <section class="page" data-page-panel="my-quotations" hidden>
+
+        <div class="myp-summary" data-myq-summary>
+          <!-- filled by quotation.js -->
+        </div>
+
+        <div class="myp-controls">
+          <div class="myp-search">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="7.2" cy="7.2" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M11 11 14.5 14.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            <input type="text" placeholder="Search quotations..." data-myq-search data-i18n-placeholder="search.quotations">
+          </div>
+          <select class="myp-filter" data-myq-filter>
+            <option value="all" data-i18n="filter.allStatus">All Status</option>
+            <option value="draft" data-i18n="status.draft">Draft</option>
+            <option value="sent" data-i18n="status.sent">Sent</option>
+            <option value="accepted" data-i18n="status.accepted">Accepted</option>
+            <option value="rejected" data-i18n="status.rejected">Rejected</option>
+            <option value="expired" data-i18n="status.expired">Expired</option>
+          </select>
+          <select class="myp-filter" data-myq-sort>
+            <option value="updated-desc" data-i18n="sort.recentlyUpdated">Sort: Recently Updated</option>
+            <option value="updated-asc" data-i18n="sort.oldestUpdated">Sort: Oldest Updated</option>
+            <option value="total-desc" data-i18n="sort.totalHighLow">Sort: Total (High to Low)</option>
+            <option value="total-asc" data-i18n="sort.totalLowHigh">Sort: Total (Low to High)</option>
+          </select>
+        </div>
+
+        <div class="projects-panel myp-panel" data-myq-panel>
+          <!-- filled by quotation.js -->
+        </div>
+
+      </section>
+
+      <!-- ===== PROPOSAL GENERATOR PAGE ===== -->
+      <section class="page" data-page-panel="proposal-generator" hidden>
+
+        <div class="quo-grid" data-prop-form>
+
+          <!-- LEFT: FORM -->
+          <div class="quo-form-col">
+
+            <div class="calc-card calc-form-card">
+              <h3 class="section-title" data-i18n="section.proposalDetails">Proposal Details</h3>
+              <div class="field">
+                <label for="prop-project" data-i18n="field.project">Project</label>
+                <select id="prop-project" data-prop="projectId">
+                  <option value="">Select Project (manual entry)</option>
+                </select>
+                <p class="field-help" data-prop-no-projects hidden><span data-i18n="field.noSavedProjects">No saved projects.</span> <a href="#pricing-calculator" data-page="pricing-calculator" data-i18n="field.createAProject">Create a project</a> <span data-i18n="proposal.orFillManually">or fill this proposal manually.</span></p>
+              </div>
+              <div class="field">
+                <label for="prop-title" data-i18n="field.proposalTitle">Proposal Title</label>
+                <input type="text" id="prop-title" placeholder="Project Proposal" data-i18n-placeholder="placeholder.propTitle" data-prop="title">
+              </div>
+              <div class="field">
+                <label for="prop-number" data-i18n="field.proposalNumber">Proposal Number</label>
+                <input type="text" id="prop-number" readonly data-prop="proposalNumber">
+              </div>
+              <div class="field-row">
+                <div class="field">
+                  <label for="prop-date" data-i18n="field.date">Date</label>
+                  <input type="date" id="prop-date" data-prop="date">
+                </div>
+                <div class="field">
+                  <label for="prop-valid-until" data-i18n="field.validUntil">Valid Until</label>
+                  <input type="date" id="prop-valid-until" data-prop="validUntil">
+                </div>
+              </div>
+            </div>
+
+            <div class="calc-card calc-form-card">
+              <h3 class="section-title" data-i18n="section.clientInformation">Client Information</h3>
+              <div class="field-row">
+                <div class="field">
+                  <label for="prop-client-name" data-i18n="field.clientName">Client Name</label>
+                  <input type="text" id="prop-client-name" placeholder="Andi Saputra" data-prop="clientName">
+                </div>
+                <div class="field">
+                  <label for="prop-client-company" data-i18n="field.company">Company</label>
+                  <input type="text" id="prop-client-company" placeholder="PT Maju Bersama" data-prop="clientCompany">
+                </div>
+              </div>
+              <div class="field-row">
+                <div class="field">
+                  <label for="prop-client-email" data-i18n="field.email">Email</label>
+                  <input type="text" id="prop-client-email" data-prop="clientEmail">
+                </div>
+                <div class="field">
+                  <label for="prop-client-phone" data-i18n="field.phone">Phone</label>
+                  <input type="text" id="prop-client-phone" data-prop="clientPhone">
+                </div>
+              </div>
+              <div class="field">
+                <label for="prop-client-address" data-i18n="field.address">Address</label>
+                <textarea id="prop-client-address" rows="2" data-prop="clientAddress"></textarea>
+              </div>
+            </div>
+
+            <div class="calc-card calc-form-card">
+              <div class="quo-section-header-row">
+                <h3 class="section-title" data-i18n="section.businessInformation">Business Information</h3>
+                <button type="button" class="btn-link use-latest-btn" data-prop-use-latest-profile data-i18n="action.useLatestProfile">Use latest Business Profile</button>
+              </div>
+              <div class="field">
+                <label for="prop-biz-logo" data-i18n="field.logo">Logo</label>
+                <div class="logo-upload">
+                  <div class="logo-preview" data-prop-logo-preview>No logo</div>
+                  <div class="logo-upload-actions">
+                    <label class="btn btn-secondary logo-upload-btn">
+                      Upload Logo
+                      <input type="file" accept="image/*" id="prop-biz-logo" data-prop-logo-input hidden>
+                    </label>
+                    <button type="button" class="btn-link btn-link-danger" data-prop-logo-remove hidden data-i18n="action.remove">Remove</button>
+                  </div>
+                </div>
+              </div>
+              <div class="field">
+                <label for="prop-biz-name" data-i18n="field.businessName">Business Name</label>
+                <input type="text" id="prop-biz-name" placeholder="Andi Studio" data-prop="businessName">
+              </div>
+              <div class="field-row">
+                <div class="field">
+                  <label for="prop-biz-email" data-i18n="field.email">Email</label>
+                  <input type="text" id="prop-biz-email" placeholder="hello@andistudio.id" data-prop="businessEmail">
+                </div>
+                <div class="field">
+                  <label for="prop-biz-phone" data-i18n="field.phoneWhatsapp">Phone / WhatsApp</label>
+                  <input type="text" id="prop-biz-phone" placeholder="+62 812 3456 7890" data-prop="businessPhone">
+                </div>
+              </div>
+              <div class="field">
+                <label for="prop-biz-website" data-i18n="field.website">Website</label>
+                <input type="text" id="prop-biz-website" placeholder="andistudio.id" data-prop="businessWebsite">
+              </div>
+              <div class="field">
+                <label for="prop-biz-address" data-i18n="field.address">Address</label>
+                <textarea id="prop-biz-address" rows="2" data-prop="businessAddress"></textarea>
+              </div>
+            </div>
+
+            <div class="calc-card calc-form-card">
+              <h3 class="section-title" data-i18n="section.projectOverview">Project Overview</h3>
+              <div class="field">
+                <textarea id="prop-overview" rows="3" placeholder="Briefly describe the project, its purpose, and the expected outcome." data-prop="overview" data-i18n-placeholder="placeholder.proposalOverview"></textarea>
+              </div>
+            </div>
+
+            <!-- PROPOSAL CONTENT — collapsible sections. Collapsed state shows
+                 a live summary of that section's current content. -->
+            <div class="calc-card calc-form-card prop-accordion-card">
+              <h3 class="section-title" data-i18n="section.proposalContent">Proposal Content</h3>
+
+              <div class="prop-accordion">
+
+                <div class="prop-accordion-item is-open" data-accordion-item="objectives">
+                  <button type="button" class="prop-accordion-header" data-accordion-toggle>
+                    <span class="prop-accordion-title" data-i18n="proposal.accordion.objectivesTitle">Objectives</span>
+                    <span class="prop-accordion-summary" data-accordion-summary="objectives">No objectives yet</span>
+                    <svg class="prop-accordion-chevron" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3.5 5.3 7 8.7l3.5-3.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </button>
+                  <div class="prop-accordion-body" data-accordion-body>
+                    <div class="prop-list-items" data-prop-objectives></div>
+                    <button type="button" class="btn btn-secondary quo-add-item" data-prop-add-objective data-i18n="action.addObjective">+ Add Objective</button>
+                  </div>
+                </div>
+
+                <div class="prop-accordion-item" data-accordion-item="scope">
+                  <button type="button" class="prop-accordion-header" data-accordion-toggle>
+                    <span class="prop-accordion-title" data-i18n="proposal.accordion.scopeTitle">Scope of Work</span>
+                    <span class="prop-accordion-summary" data-accordion-summary="scope">No items yet</span>
+                    <svg class="prop-accordion-chevron" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3.5 5.3 7 8.7l3.5-3.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </button>
+                  <div class="prop-accordion-body" data-accordion-body hidden>
+                    <div class="prop-scope-items" data-prop-scope></div>
+                    <button type="button" class="btn btn-secondary quo-add-item" data-prop-add-scope data-i18n="action.addScope">+ Add Scope</button>
+                  </div>
+                </div>
+
+                <div class="prop-accordion-item" data-accordion-item="deliverables">
+                  <button type="button" class="prop-accordion-header" data-accordion-toggle>
+                    <span class="prop-accordion-title" data-i18n="proposal.accordion.deliverablesTitle">Deliverables</span>
+                    <span class="prop-accordion-summary" data-accordion-summary="deliverables">No deliverables yet</span>
+                    <svg class="prop-accordion-chevron" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3.5 5.3 7 8.7l3.5-3.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </button>
+                  <div class="prop-accordion-body" data-accordion-body hidden>
+                    <div class="prop-list-items" data-prop-deliverables></div>
+                    <button type="button" class="btn btn-secondary quo-add-item" data-prop-add-deliverable data-i18n="action.addDeliverable">+ Add Deliverable</button>
+                  </div>
+                </div>
+
+                <div class="prop-accordion-item" data-accordion-item="timeline">
+                  <button type="button" class="prop-accordion-header" data-accordion-toggle>
+                    <span class="prop-accordion-title" data-i18n="proposal.accordion.timelineTitle">Timeline</span>
+                    <span class="prop-accordion-summary" data-accordion-summary="timeline">No phases yet</span>
+                    <svg class="prop-accordion-chevron" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3.5 5.3 7 8.7l3.5-3.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </button>
+                  <div class="prop-accordion-body" data-accordion-body hidden>
+                    <div class="prop-timeline-items" data-prop-timeline></div>
+                    <button type="button" class="btn btn-secondary quo-add-item" data-prop-add-phase data-i18n="action.addPhase">+ Add Phase</button>
+                  </div>
+                </div>
+
+                <div class="prop-accordion-item" data-accordion-item="investment">
+                  <button type="button" class="prop-accordion-header" data-accordion-toggle>
+                    <span class="prop-accordion-title" data-i18n="proposal.accordion.investmentTitle">Investment</span>
+                    <span class="prop-accordion-summary" data-accordion-summary="investment">Rp0</span>
+                    <svg class="prop-accordion-chevron" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3.5 5.3 7 8.7l3.5-3.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </button>
+                  <div class="prop-accordion-body" data-accordion-body hidden>
+                    <div class="field">
+                      <label for="prop-investment" data-i18n="field.projectInvestment">Project Investment</label>
+                      <div class="input-wrap">
+                        <span class="input-prefix">Rp</span>
+                        <input type="text" inputmode="numeric" id="prop-investment" data-prop="investment" data-currency-input>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="prop-accordion-item" data-accordion-item="payment-terms">
+                  <button type="button" class="prop-accordion-header" data-accordion-toggle>
+                    <span class="prop-accordion-title" data-i18n="proposal.accordion.paymentTermsTitle">Payment Terms</span>
+                    <span class="prop-accordion-summary" data-accordion-summary="payment-terms">50% upfront / 50% completion</span>
+                    <svg class="prop-accordion-chevron" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3.5 5.3 7 8.7l3.5-3.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </button>
+                  <div class="prop-accordion-body" data-accordion-body hidden>
+                    <div class="field">
+                      <label for="prop-payment-terms" data-i18n="field.terms">Terms</label>
+                      <select id="prop-payment-terms" data-prop="paymentTermsType">
+                        <option value="50-50" data-i18n="terms.split5050Long">50% upfront / 50% completion</option>
+                        <option value="100-upfront" data-i18n="terms.split100UpfrontLong">100% upfront</option>
+                        <option value="30-70" data-i18n="terms.split3070Long">30% upfront / 70% completion</option>
+                        <option value="custom" data-i18n="terms.custom">Custom</option>
+                      </select>
+                    </div>
+                    <div class="field" data-prop-payment-custom-field hidden>
+                      <label for="prop-payment-custom" data-i18n="field.customPaymentTerms">Custom Payment Terms</label>
+                      <textarea id="prop-payment-custom" rows="3" data-prop="paymentTermsCustom"></textarea>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="prop-accordion-item" data-accordion-item="next-steps">
+                  <button type="button" class="prop-accordion-header" data-accordion-toggle>
+                    <span class="prop-accordion-title" data-i18n="proposal.accordion.nextStepsTitle">Next Steps</span>
+                    <span class="prop-accordion-summary" data-accordion-summary="next-steps">Not filled in yet</span>
+                    <svg class="prop-accordion-chevron" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3.5 5.3 7 8.7l3.5-3.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </button>
+                  <div class="prop-accordion-body" data-accordion-body hidden>
+                    <div class="field">
+                      <textarea id="prop-next-steps" rows="4" data-prop="nextSteps"></textarea>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="prop-accordion-item" data-accordion-item="terms">
+                  <button type="button" class="prop-accordion-header" data-accordion-toggle>
+                    <span class="prop-accordion-title" data-i18n="field.termsConditions">Terms &amp; Conditions</span>
+                    <span class="prop-accordion-summary" data-accordion-summary="terms">Not filled in yet</span>
+                    <svg class="prop-accordion-chevron" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3.5 5.3 7 8.7l3.5-3.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </button>
+                  <div class="prop-accordion-body" data-accordion-body hidden>
+                    <div class="field">
+                      <textarea id="prop-terms" rows="3" data-prop="terms"></textarea>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+
+          <!-- RIGHT: ACTIONS + LIVE PREVIEW -->
+          <div class="quo-preview-col">
+
+            <div class="calc-card quo-summary-card">
+              <div class="quo-summary-header">
+                <h3 class="section-title" data-i18n="section.investment">Investment</h3>
+                <span class="quo-save-status" data-prop-save-status></span>
+              </div>
+
+              <div class="quo-total-row-grand" data-prop-investment-row><span data-i18n="field.projectInvestment">Project Investment</span><span data-prop-investment-display>Rp0</span></div>
+
+              <p class="quo-validation-message" data-prop-validation hidden></p>
+
+              <div class="calc-actions quo-summary-actions">
+                <button type="button" class="btn btn-primary" data-prop-save data-i18n="action.saveProposal">Save Proposal</button>
+                <button type="button" class="btn btn-secondary" data-prop-pdf data-i18n="action.exportPdf">Export PDF</button>
+              </div>
+              <p class="calc-save-feedback" data-prop-save-feedback hidden></p>
+            </div>
+
+            <div class="quo-preview-sheet" data-prop-preview>
+              <!-- filled by proposal.js -->
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ===== MY PROPOSALS PAGE ===== -->
+      <section class="page" data-page-panel="my-proposals" hidden>
+
+        <div class="myp-summary" data-myr-summary>
+          <!-- filled by proposal.js -->
+        </div>
+
+        <div class="myp-controls">
+          <div class="myp-search">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="7.2" cy="7.2" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M11 11 14.5 14.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            <input type="text" placeholder="Search proposals..." data-myr-search data-i18n-placeholder="search.proposals">
+          </div>
+          <select class="myp-filter" data-myr-filter>
+            <option value="all" data-i18n="filter.allStatus">All Status</option>
+            <option value="draft" data-i18n="status.draft">Draft</option>
+            <option value="sent" data-i18n="status.sent">Sent</option>
+            <option value="accepted" data-i18n="status.accepted">Accepted</option>
+            <option value="rejected" data-i18n="status.rejected">Rejected</option>
+          </select>
+          <select class="myp-filter" data-myr-sort>
+            <option value="updated-desc" data-i18n="sort.recentlyUpdated">Sort: Recently Updated</option>
+            <option value="updated-asc" data-i18n="sort.oldestUpdated">Sort: Oldest Updated</option>
+            <option value="value-desc" data-i18n="sort.valueHighLow">Sort: Value (High to Low)</option>
+            <option value="value-asc" data-i18n="sort.valueLowHigh">Sort: Value (Low to High)</option>
+            <option value="name-asc" data-i18n="sort.nameAZ">Sort: Name (A–Z)</option>
+          </select>
+        </div>
+
+        <div class="projects-panel myp-panel" data-myr-panel>
+          <!-- filled by proposal.js -->
+        </div>
+
+      </section>
+
+      <!-- ===== INVOICE GENERATOR PAGE ===== -->
+      <section class="page" data-page-panel="invoice-generator" hidden>
+
+        <div class="quo-grid" data-inv-form>
+
+          <!-- LEFT: FORM -->
+          <div class="quo-form-col">
+
+            <div class="calc-card calc-form-card">
+              <h3 class="section-title" data-i18n="section.invoiceDetails">Invoice Details</h3>
+              <div class="field">
+                <label for="inv-project" data-i18n="field.project">Project</label>
+                <select id="inv-project" data-inv="projectId">
+                  <option value="">Select Project (manual entry)</option>
+                </select>
+                <p class="field-help" data-inv-no-projects hidden><span data-i18n="field.noSavedProjects">No saved projects.</span> <a href="#pricing-calculator" data-page="pricing-calculator" data-i18n="field.createAProject">Create a project</a> <span data-i18n="invoice.orFillManually">or fill this invoice manually.</span></p>
+              </div>
+              <div class="field">
+                <label for="inv-number" data-i18n="field.invoiceNumber">Invoice Number</label>
+                <input type="text" id="inv-number" readonly data-inv="invoiceNumber">
+              </div>
+              <div class="field-row">
+                <div class="field">
+                  <label for="inv-date" data-i18n="field.issueDate">Issue Date</label>
+                  <input type="date" id="inv-date" data-inv="date">
+                </div>
+                <div class="field">
+                  <label for="inv-due-date" data-i18n="field.dueDate">Due Date</label>
+                  <input type="date" id="inv-due-date" data-inv="dueDate">
+                </div>
+              </div>
+              <div class="field">
+                <label for="inv-status" data-i18n="field.status">Status</label>
+                <select id="inv-status" data-inv="status"></select>
+              </div>
+            </div>
+
+            <div class="calc-card calc-form-card">
+              <h3 class="section-title" data-i18n="section.billToClientInformation">Bill To / Client Information</h3>
+              <div class="field-row">
+                <div class="field">
+                  <label for="inv-client-name" data-i18n="field.clientName">Client Name</label>
+                  <input type="text" id="inv-client-name" data-inv="clientName">
+                </div>
+                <div class="field">
+                  <label for="inv-client-company" data-i18n="field.company">Company</label>
+                  <input type="text" id="inv-client-company" data-inv="clientCompany">
+                </div>
+              </div>
+              <div class="field-row">
+                <div class="field">
+                  <label for="inv-client-email" data-i18n="field.email">Email</label>
+                  <input type="text" id="inv-client-email" data-inv="clientEmail">
+                </div>
+                <div class="field">
+                  <label for="inv-client-phone" data-i18n="field.phone">Phone</label>
+                  <input type="text" id="inv-client-phone" data-inv="clientPhone">
+                </div>
+              </div>
+              <div class="field">
+                <label for="inv-client-address" data-i18n="field.address">Address</label>
+                <textarea id="inv-client-address" rows="2" data-inv="clientAddress"></textarea>
+              </div>
+            </div>
+
+            <div class="calc-card calc-form-card">
+              <div class="quo-section-header-row">
+                <h3 class="section-title" data-i18n="section.yourBusiness">Your Business</h3>
+                <button type="button" class="btn-link use-latest-btn" data-inv-use-latest-profile data-i18n="action.useLatestProfile">Use latest Business Profile</button>
+              </div>
+              <div class="field">
+                <label for="inv-biz-logo" data-i18n="field.logo">Logo</label>
+                <div class="logo-upload">
+                  <div class="logo-preview" data-inv-logo-preview>No logo</div>
+                  <div class="logo-upload-actions">
+                    <label class="btn btn-secondary logo-upload-btn">
+                      Upload Logo
+                      <input type="file" accept="image/*" id="inv-biz-logo" data-inv-logo-input hidden>
+                    </label>
+                    <button type="button" class="btn-link btn-link-danger" data-inv-logo-remove hidden data-i18n="action.remove">Remove</button>
+                  </div>
+                </div>
+              </div>
+              <div class="field">
+                <label for="inv-biz-name" data-i18n="field.businessName">Business Name</label>
+                <input type="text" id="inv-biz-name" placeholder="Andi Studio" data-inv="businessName">
+              </div>
+              <div class="field-row">
+                <div class="field">
+                  <label for="inv-biz-email" data-i18n="field.email">Email</label>
+                  <input type="text" id="inv-biz-email" data-inv="businessEmail">
+                </div>
+                <div class="field">
+                  <label for="inv-biz-phone" data-i18n="field.phoneWhatsapp">Phone / WhatsApp</label>
+                  <input type="text" id="inv-biz-phone" data-inv="businessPhone">
+                </div>
+              </div>
+              <div class="field">
+                <label for="inv-biz-website" data-i18n="field.website">Website</label>
+                <input type="text" id="inv-biz-website" data-inv="businessWebsite">
+              </div>
+              <div class="field">
+                <label for="inv-biz-address" data-i18n="field.address">Address</label>
+                <textarea id="inv-biz-address" rows="2" data-inv="businessAddress"></textarea>
+              </div>
+            </div>
+
+            <div class="calc-card calc-form-card">
+              <h3 class="section-title" data-i18n="section.invoiceItems">Invoice Items</h3>
+              <div class="field tpl-load-field">
+                <label for="inv-load-template" data-i18n="field.loadFromTemplate">Load from Template</label>
+                <select id="inv-load-template" data-inv-load-template>
+                  <option value="">—</option>
+                </select>
+              </div>
+              <div class="quo-items" data-inv-items></div>
+              <button type="button" class="btn btn-secondary quo-add-item" data-inv-add-item data-i18n="action.addItem">+ Add Item</button>
+            </div>
+
+            <div class="calc-card calc-form-card">
+              <h3 class="section-title" data-i18n="section.discountTax">Discount &amp; Tax</h3>
+              <div class="field-row">
+                <div class="field">
+                  <label for="inv-discount-type" data-i18n="field.discount">Discount</label>
+                  <select id="inv-discount-type" data-inv="discountType">
+                    <option value="none" data-i18n="discount.none">None</option>
+                    <option value="percentage" data-i18n="discount.percentage">Percentage</option>
+                    <option value="fixed" data-i18n="discount.fixedAmount">Fixed Amount</option>
+                  </select>
+                </div>
+                <div class="field" data-inv-discount-value-field hidden>
+                  <label for="inv-discount-value" data-i18n="field.discountValue">Discount Value</label>
+                  <div class="input-wrap">
+                    <span class="input-prefix" data-inv-discount-prefix>Rp</span>
+                    <input type="text" inputmode="numeric" id="inv-discount-value" data-inv="discountValue">
+                  </div>
+                </div>
+              </div>
+              <div class="field">
+                <label for="inv-tax" data-i18n="field.tax">Tax</label>
+                <div class="input-wrap">
+                  <input type="number" id="inv-tax" min="0" max="100" step="1" data-inv="tax">
+                  <span class="input-suffix">%</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="calc-card calc-form-card">
+              <h3 class="section-title" data-i18n="section.paymentInformation">Payment Information</h3>
+              <p class="section-subtitle" data-i18n="section.paymentInfoOptionalNote">Semua field di bawah ini opsional — kosongkan jika tidak relevan.</p>
+              <div class="field">
+                <label for="inv-payment-method" data-i18n="field.paymentMethod">Payment Method</label>
+                <select id="inv-payment-method" data-inv="paymentMethod">
+                  <option value="">—</option>
+                  <option value="Bank Transfer">Bank Transfer</option>
+                  <option value="E-Wallet">E-Wallet</option>
+                  <option value="Cash">Cash</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div class="field-row">
+                <div class="field">
+                  <label for="inv-bank-name" data-i18n="field.bankName">Bank Name</label>
+                  <input type="text" id="inv-bank-name" data-inv="bankName">
+                </div>
+                <div class="field">
+                  <label for="inv-account-name" data-i18n="field.accountName">Account Name</label>
+                  <input type="text" id="inv-account-name" data-inv="accountName">
+                </div>
+              </div>
+              <div class="field">
+                <label for="inv-account-number" data-i18n="field.accountNumber">Account Number</label>
+                <input type="text" id="inv-account-number" data-inv="accountNumber">
+              </div>
+              <div class="field">
+                <label for="inv-payment-instructions" data-i18n="field.paymentInstructions">Payment Instructions</label>
+                <textarea id="inv-payment-instructions" rows="2" placeholder="Please make payment to the account above and send proof of payment after completing the transfer." data-inv="paymentInstructions" data-i18n-placeholder="placeholder.invoicePaymentInstructions"></textarea>
+              </div>
+            </div>
+
+            <div class="calc-card calc-form-card">
+              <h3 class="section-title" data-i18n="section.paymentTerms">Payment Terms</h3>
+              <div class="field">
+                <label for="inv-payment-terms" data-i18n="field.terms">Terms</label>
+                <select id="inv-payment-terms" data-inv="paymentTermsType">
+                  <option value="due-on-receipt" data-i18n="terms.dueOnReceipt">Due on receipt</option>
+                  <option value="7-days" data-i18n="terms.7days">7 days</option>
+                  <option value="14-days" data-i18n="terms.14days">14 days</option>
+                  <option value="30-days" data-i18n="terms.30days">30 days</option>
+                  <option value="custom" data-i18n="terms.custom">Custom</option>
+                </select>
+              </div>
+              <div class="field" data-inv-payment-custom-field hidden>
+                <label for="inv-payment-custom" data-i18n="field.customPaymentTerms">Custom Payment Terms</label>
+                <textarea id="inv-payment-custom" rows="2" data-inv="paymentTermsCustom"></textarea>
+              </div>
+            </div>
+
+            <div class="calc-card calc-form-card">
+              <h3 class="section-title" data-i18n="section.notes">Notes</h3>
+              <div class="field">
+                <textarea id="inv-notes" rows="2" data-inv="notes"></textarea>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- RIGHT: SUMMARY + LIVE PREVIEW -->
+          <div class="quo-preview-col">
+
+            <div class="calc-card quo-summary-card">
+              <div class="quo-summary-header">
+                <h3 class="section-title" data-i18n="section.summary">Summary</h3>
+                <span class="quo-save-status" data-inv-save-status></span>
+              </div>
+
+              <div class="quo-total-row" data-inv-summary-subtotal-row><span data-i18n="field.subtotal">Subtotal</span><span data-inv-summary-subtotal>Rp0</span></div>
+              <div class="quo-total-row" data-inv-summary-discount-row hidden><span data-i18n="field.discount">Discount</span><span data-inv-summary-discount>-Rp0</span></div>
+              <div class="quo-total-row" data-inv-summary-tax-row hidden><span>Tax</span><span data-inv-summary-tax>Rp0</span></div>
+              <div class="quo-total-row-grand"><span data-i18n="field.total">Total</span><span data-inv-summary-total>Rp0</span></div>
+
+              <p class="quo-validation-message" data-inv-validation hidden></p>
+
+              <div class="calc-actions quo-summary-actions">
+                <button type="button" class="btn btn-primary" data-inv-save data-i18n="action.saveInvoice">Save Invoice</button>
+                <button type="button" class="btn btn-secondary" data-inv-pdf data-i18n="action.exportPdf">Export PDF</button>
+              </div>
+              <p class="calc-save-feedback" data-inv-save-feedback hidden></p>
+            </div>
+
+            <div class="quo-preview-sheet" data-inv-preview>
+              <!-- filled by invoice.js -->
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ===== MY INVOICES PAGE ===== -->
+      <section class="page" data-page-panel="my-invoices" hidden>
+
+        <div class="myp-summary" data-myi-summary>
+          <!-- filled by invoice.js -->
+        </div>
+
+        <div class="myp-controls">
+          <div class="myp-search">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="7.2" cy="7.2" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M11 11 14.5 14.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            <input type="text" placeholder="Search invoices..." data-myi-search data-i18n-placeholder="search.invoices">
+          </div>
+          <select class="myp-filter" data-myi-filter>
+            <option value="all" data-i18n="filter.allStatus">All Status</option>
+            <option value="draft" data-i18n="status.draft">Draft</option>
+            <option value="sent" data-i18n="status.sent">Sent</option>
+            <option value="paid" data-i18n="status.paid">Paid</option>
+            <option value="overdue" data-i18n="status.overdue">Overdue</option>
+          </select>
+          <select class="myp-filter" data-myi-sort>
+            <option value="updated-desc" data-i18n="sort.recentlyUpdated">Sort: Recently Updated</option>
+            <option value="updated-asc" data-i18n="sort.oldestUpdated">Sort: Oldest Updated</option>
+            <option value="total-desc" data-i18n="sort.highestValue">Sort: Highest Value</option>
+            <option value="total-asc" data-i18n="sort.lowestValue">Sort: Lowest Value</option>
+          </select>
+        </div>
+
+        <div class="projects-panel myp-panel" data-myi-panel>
+          <!-- filled by invoice.js -->
+        </div>
+
+      </section>
+
+      <!-- ===== BUSINESS SETTINGS PAGE ===== -->
+      <section class="page" data-page-panel="settings" hidden>
+
+        <div class="quo-grid" data-settings-form>
+
+          <!-- LEFT: FORM -->
+          <div class="quo-form-col">
+
+            <div class="calc-card calc-form-card">
+              <h3 class="section-title" data-i18n="section.businessIdentity">Business Identity</h3>
+
+              <div class="field">
+                <label for="set-logo" data-i18n="settings.businessLogo">Business Logo</label>
+                <div class="logo-upload">
+                  <div class="logo-preview" data-set-logo-preview>No logo</div>
+                  <div class="logo-upload-actions">
+                    <label class="btn btn-secondary logo-upload-btn">
+                      Upload Logo
+                      <input type="file" accept="image/*" id="set-logo" data-set-logo-input hidden>
+                    </label>
+                    <button type="button" class="btn-link btn-link-danger" data-set-logo-remove hidden data-i18n="action.remove">Remove</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="set-business-name" data-i18n="settings.businessNameRequired">Business Name <span class="field-required">*</span></label>
+                <input type="text" id="set-business-name" placeholder="Nama Bisnis Anda" data-set="businessName">
+              </div>
+              <div class="field">
+                <label for="set-tagline" data-i18n="settings.businessTagline">Business Tagline</label>
+                <input type="text" id="set-tagline" placeholder="Digital Design & Web Services" data-set="tagline">
+              </div>
+              <div class="field">
+                <label for="set-owner-name" data-i18n="settings.ownerName">Owner Name</label>
+                <input type="text" id="set-owner-name" placeholder="John Doe" data-set="ownerName">
+              </div>
+
+              <div class="settings-subsection-divider"></div>
+              <p class="settings-subsection-label" data-i18n="settings.contactInformation">Contact Information</p>
+
+              <div class="field-row">
+                <div class="field">
+                  <label for="set-email" data-i18n="settings.emailRequired">Email <span class="field-required">*</span></label>
+                  <input type="text" id="set-email" placeholder="hello@bisnisanda.com" data-set="businessEmail">
+                </div>
+                <div class="field">
+                  <label for="set-phone" data-i18n="settings.phoneWhatsappRequired">Phone / WhatsApp <span class="field-required">*</span></label>
+                  <input type="text" id="set-phone" placeholder="+62 812-xxxx-xxxx" data-set="businessPhone">
+                </div>
+              </div>
+              <div class="field-row">
+                <div class="field">
+                  <label for="set-website" data-i18n="field.website">Website</label>
+                  <input type="text" id="set-website" placeholder="bisnisanda.com" data-set="businessWebsite">
+                </div>
+                <div class="field">
+                  <label for="set-instagram" data-i18n="settings.instagram">Instagram</label>
+                  <input type="text" id="set-instagram" placeholder="@bisnisanda" data-set="instagram">
+                </div>
+              </div>
+
+              <div class="settings-subsection-divider"></div>
+              <p class="settings-subsection-label" data-i18n="field.address">Address</p>
+
+              <div class="field">
+                <label for="set-address" data-i18n="field.address">Address</label>
+                <textarea id="set-address" rows="2" placeholder="Jl. Sudirman No.10" data-set="businessAddress"></textarea>
+              </div>
+              <div class="field-row">
+                <div class="field">
+                  <label for="set-city" data-i18n="settings.city">City</label>
+                  <input type="text" id="set-city" placeholder="Jakarta Selatan" data-set="city">
+                </div>
+                <div class="field">
+                  <label for="set-country" data-i18n="settings.country">Country</label>
+                  <input type="text" id="set-country" placeholder="Indonesia" data-set="country">
+                </div>
+              </div>
+            </div>
+
+            <div class="calc-card calc-form-card">
+              <h3 class="section-title" data-i18n="section.paymentInformation">Payment Information</h3>
+              <div class="field">
+                <label for="set-payment-method" data-i18n="field.paymentMethod">Payment Method</label>
+                <select id="set-payment-method" data-set="paymentMethod">
+                  <option value="">—</option>
+                  <option value="Bank Transfer">Bank Transfer</option>
+                  <option value="E-Wallet">E-Wallet</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div class="field-row">
+                <div class="field">
+                  <label for="set-bank-name" data-i18n="field.bankName">Bank Name</label>
+                  <input type="text" id="set-bank-name" data-set="bankName">
+                </div>
+                <div class="field">
+                  <label for="set-account-name" data-i18n="field.accountName">Account Name</label>
+                  <input type="text" id="set-account-name" data-set="accountName">
+                </div>
+              </div>
+              <div class="field">
+                <label for="set-account-number" data-i18n="field.accountNumber">Account Number</label>
+                <input type="text" id="set-account-number" data-set="accountNumber">
+              </div>
+              <div class="field">
+                <label for="set-qris" data-i18n="settings.qrisImage">QRIS Image</label>
+                <div class="logo-upload">
+                  <div class="logo-preview" data-set-qris-preview>No image</div>
+                  <div class="logo-upload-actions">
+                    <label class="btn btn-secondary logo-upload-btn">
+                      Upload QRIS
+                      <input type="file" accept="image/*" id="set-qris" data-set-qris-input hidden>
+                    </label>
+                    <button type="button" class="btn-link btn-link-danger" data-set-qris-remove hidden data-i18n="action.remove">Remove</button>
+                  </div>
+                </div>
+              </div>
+              <div class="field">
+                <label for="set-payment-instructions" data-i18n="field.paymentInstructions">Payment Instructions</label>
+                <textarea id="set-payment-instructions" rows="2" placeholder="Please transfer to the account above and send payment confirmation." data-set="paymentInstructions" data-i18n-placeholder="placeholder.settingsPaymentInstructions"></textarea>
+              </div>
+            </div>
+
+            <div class="calc-card calc-form-card">
+              <h3 class="section-title" data-i18n="settings.language.title">Language</h3>
+              <p class="section-subtitle" data-i18n="settings.language.desc">Choose the language used throughout the application interface.</p>
+              <div class="appearance-toggle settings-language-toggle" role="group" aria-label="Language">
+                <button type="button" class="appearance-option" data-language-set="en" aria-pressed="true">
+                  <span data-i18n="settings.language.english">English</span>
+                </button>
+                <button type="button" class="appearance-option" data-language-set="id" aria-pressed="false">
+                  <span data-i18n="settings.language.indonesian">Bahasa Indonesia</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="calc-card calc-form-card">
+              <h3 class="section-title" data-i18n="section.documentPreferences">Document Preferences</h3>
+              <p class="section-subtitle" data-i18n="section.documentPrefsSubtitle">Default values applied to new Quotations, Proposals, and Invoices.</p>
+              <div class="field-row">
+                <div class="field">
+                  <label for="set-default-tax" data-i18n="settings.defaultTax">Default Tax</label>
+                  <div class="input-wrap">
+                    <input type="number" id="set-default-tax" min="0" max="100" step="1" data-set="defaultTax">
+                    <span class="input-suffix">%</span>
+                  </div>
+                </div>
+                <div class="field">
+                  <label for="set-default-valid-until" data-i18n="settings.defaultValidUntil">Default Valid Until</label>
+                  <div class="input-wrap">
+                    <input type="number" id="set-default-valid-until" min="1" step="1" data-set="defaultValidUntil">
+                    <span class="input-suffix">days</span>
+                  </div>
+                </div>
+              </div>
+              <div class="field">
+                <label for="set-default-payment-terms" data-i18n="settings.defaultPaymentTerms">Default Payment Terms</label>
+                <select id="set-default-payment-terms" data-set="defaultPaymentTerms">
+                  <option value="50-50" data-i18n="terms.split5050Long">50% upfront / 50% completion</option>
+                  <option value="100-upfront" data-i18n="terms.split100UpfrontLong">100% upfront</option>
+                  <option value="30-70" data-i18n="terms.split3070Long">30% upfront / 70% completion</option>
+                  <option value="custom" data-i18n="terms.custom">Custom</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="set-currency" data-i18n="settings.currency">Currency</label>
+                <input type="text" id="set-currency" value="IDR" readonly data-set="currency">
+              </div>
+            </div>
+
+            <div class="calc-card calc-form-card" data-backup-card>
+              <h3 class="section-title" data-i18n="section.dataBackup">Data &amp; Backup</h3>
+
+              <div class="backup-grid">
+                <div>
+                  <p class="backup-block-title" data-i18n="backup.yourDataTitle">Backup Your Data</p>
+                  <p class="backup-block-text" data-i18n="backup.yourDataText">Download a copy of your saved data and keep it safe. You can use it to restore your data later or move it to another device.</p>
+                  <button type="button" class="btn btn-secondary" data-backup-download data-i18n="action.downloadBackup">Download Backup</button>
+                </div>
+
+                <div>
+                  <p class="backup-block-title" data-i18n="backup.restoreFromBackupTitle">Restore from Backup</p>
+                  <p class="backup-block-text" data-i18n="backup.restoreFromBackupText">Restore your saved data from a previously exported backup file.</p>
+                  <label class="btn btn-secondary logo-upload-btn">
+                    <span data-i18n="backup.chooseFile">Choose Backup File</span>
+                    <input type="file" accept="application/json,.json" hidden data-backup-file-input>
+                  </label>
+                  <p class="quo-validation-message" data-backup-error hidden></p>
+                </div>
+              </div>
+
+              <p class="backup-last" data-backup-last>Last backup created: Never</p>
+              <p class="field-help" data-i18n="backup.downloadHelp">Backups are downloaded as files. Keep your backup file somewhere safe.</p>
+
+              <div class="backup-preview" data-backup-preview hidden>
+                <!-- filled by backup.js once a valid backup file is chosen -->
+              </div>
+
+              <div class="data-storage-note">
+                <p data-i18n="settings.dataStoredLocally">Your data is stored locally in your browser.</p>
+                <p data-i18n="settings.dataStoredLocallyWarning">Clearing browser data or changing devices may remove access to your saved data. We recommend downloading a backup regularly.</p>
+              </div>
+            </div>
+
+            <div class="calc-card calc-form-card" data-sync-card hidden>
+              <h3 class="section-title" data-i18n="sync.title">Sync Across Devices (Optional)</h3>
+              <p class="backup-block-text" data-i18n="sync.text">Off by default — your data stays only on this device. Turn this on to keep the same data in sync on your phone, tablet and computer.</p>
+
+              <div data-sync-off-state>
+                <button type="button" class="btn btn-secondary" data-sync-enable data-i18n="sync.enable">Enable Sync</button>
+              </div>
+
+              <div data-sync-on-state hidden>
+                <p class="backup-last" data-sync-status></p>
+                <button type="button" class="btn btn-danger" data-sync-disable data-i18n="sync.disable">Turn Off Sync</button>
+              </div>
+
+              <p class="quo-validation-message" data-sync-error hidden></p>
+            </div>
+
+            <div class="calc-card settings-danger-zone">
+              <h3 class="section-title" data-i18n="section.dangerZone">Danger Zone</h3>
+              <div class="settings-danger-row">
+                <div>
+                  <p class="settings-danger-title" data-i18n="settings.resetBusinessProfileTitle">Reset Business Profile</p>
+                  <p class="settings-danger-text" data-i18n="settings.resetBusinessProfileText">Clears all Business Profile fields above. Documents you've already saved are not affected.</p>
+                </div>
+                <button type="button" class="btn btn-danger" data-set-reset data-i18n="action.resetProfile">Reset Profile</button>
+              </div>
+              <div class="detail-divider"></div>
+              <div class="settings-danger-row">
+                <div>
+                  <p class="settings-danger-title" data-i18n="settings.clearAllDataTitle">Clear All Data</p>
+                  <p class="settings-danger-text" data-i18n="settings.clearAllDataText">Permanently remove all saved projects, documents, rate cards, templates and settings from this browser. This cannot be undone unless you have a backup.</p>
+                </div>
+                <button type="button" class="btn btn-danger" data-backup-clear-all data-i18n="modal.deleteEverything">Delete Everything</button>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- RIGHT: ACTIONS + LIVE PREVIEW -->
+          <div class="quo-preview-col">
+
+            <div class="calc-card quo-summary-card">
+              <div class="quo-summary-header">
+                <h3 class="section-title" data-i18n="section.businessProfile">Business Profile</h3>
+                <span class="quo-save-status" data-set-save-status></span>
+              </div>
+              <p class="quo-validation-message" data-set-validation hidden></p>
+              <div class="calc-actions quo-summary-actions">
+                <button type="button" class="btn btn-primary" data-set-save data-i18n="action.saveChanges">Save Changes</button>
+              </div>
+              <p class="calc-save-feedback" data-set-save-feedback hidden></p>
+            </div>
+
+            <div class="identity-preview" data-set-preview>
+              <!-- filled by settings.js -->
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ===== REVISION CALCULATOR PAGE ===== -->
+      
+
+      <!-- ===== HELP PAGE ===== -->
+      <section class="page" data-page-panel="help" hidden>
+
+        <div class="help-search-bar">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="7.2" cy="7.2" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M11 11 14.5 14.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <input type="text" placeholder="Search for help..." data-help-search data-i18n-placeholder="help.searchPlaceholder">
+        </div>
+
+        <div data-help-content></div>
+
+      </section>
+
+      <!-- ===== RATE CARD GENERATOR PAGE ===== -->
+      <section class="page" data-page-panel="rate-card-generator" hidden>
+
+        <div class="quo-grid" data-rate-form>
+
+          <!-- LEFT: FORM -->
+          <div class="quo-form-col">
+
+            <div class="calc-card calc-form-card">
+              <h3 class="section-title" data-i18n="section.rateCardInformation">Rate Card Information</h3>
+              <div class="field">
+                <label for="rate-title" data-i18n="field.rateCardTitle">Rate Card Title</label>
+                <input type="text" id="rate-title" placeholder="2026 Service Rates" data-i18n-placeholder="placeholder.rateTitle" data-rate="title">
+              </div>
+              <div class="field-row">
+                <div class="field">
+                  <label for="rate-valid-from" data-i18n="field.validFrom">Valid From</label>
+                  <input type="date" id="rate-valid-from" data-rate="validFrom">
+                </div>
+                <div class="field">
+                  <label for="rate-valid-until" data-i18n="field.validUntilOptional">Valid Until (opsional)</label>
+                  <input type="date" id="rate-valid-until" data-rate="validUntil">
+                </div>
+              </div>
+            </div>
+
+            <div class="calc-card calc-form-card">
+              <h3 class="section-title" data-i18n="section.yourBusiness">Your Business</h3>
+              <button type="button" class="btn-link use-latest-btn" data-rate-use-latest-profile data-i18n="action.useLatestProfile">Use latest Business Profile</button>
+              <div class="field">
+                <label for="rate-biz-logo" data-i18n="field.logo">Logo</label>
+                <div class="logo-upload">
+                  <div class="logo-preview" data-rate-logo-preview>No logo</div>
+                  <div class="logo-upload-actions">
+                    <label class="btn btn-secondary logo-upload-btn">
+                      Upload Logo
+                      <input type="file" accept="image/*" id="rate-biz-logo" data-rate-logo-input hidden>
+                    </label>
+                    <button type="button" class="btn-link btn-link-danger" data-rate-logo-remove hidden data-i18n="action.remove">Remove</button>
+                  </div>
+                </div>
+              </div>
+              <div class="field">
+                <label for="rate-biz-name" data-i18n="field.businessName">Business Name</label>
+                <input type="text" id="rate-biz-name" data-rate="businessName">
+              </div>
+              <div class="field-row">
+                <div class="field">
+                  <label for="rate-biz-email" data-i18n="field.email">Email</label>
+                  <input type="text" id="rate-biz-email" data-rate="businessEmail">
+                </div>
+                <div class="field">
+                  <label for="rate-biz-phone" data-i18n="field.phoneWhatsapp">Phone / WhatsApp</label>
+                  <input type="text" id="rate-biz-phone" data-rate="businessPhone">
+                </div>
+              </div>
+              <div class="field">
+                <label for="rate-biz-website" data-i18n="field.website">Website</label>
+                <input type="text" id="rate-biz-website" data-rate="businessWebsite">
+              </div>
+            </div>
+
+            <div class="calc-card calc-form-card">
+              <h3 class="section-title" data-i18n="section.services">Services</h3>
+              <div class="rate-items" data-rate-items></div>
+              <button type="button" class="btn btn-secondary quo-add-item" data-rate-add-item data-i18n="action.addService">+ Add Service</button>
+            </div>
+
+            <div class="calc-card calc-form-card">
+              <h3 class="section-title" data-i18n="section.notes">Notes</h3>
+              <div class="field">
+                <textarea id="rate-notes" rows="2" placeholder="Harga dapat berubah sesuai kompleksitas project." data-rate="notes" data-i18n-placeholder="placeholder.rateCardNotes"></textarea>
+              </div>
+            </div>
+
+            <div class="calc-card calc-form-card">
+              <p class="quo-validation-message" data-rate-validation hidden></p>
+              <div class="calc-actions">
+                <button type="button" class="btn btn-primary" data-rate-save data-i18n="action.saveRateCard">Save Rate Card</button>
+                <button type="button" class="btn btn-secondary" data-rate-pdf data-i18n="action.exportPdf">Export PDF</button>
+              </div>
+              <p class="calc-save-feedback" data-rate-save-feedback hidden></p>
+            </div>
+
+          </div>
+
+          <!-- RIGHT: LIVE PREVIEW -->
+          <div class="quo-preview-col">
+            <div class="quo-preview-sheet" data-rate-preview>
+              <!-- filled by ratecard.js -->
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ===== MY RATE CARDS PAGE ===== -->
+      <section class="page" data-page-panel="my-rate-cards" hidden>
+
+        <div class="myp-summary" data-myrc-summary>
+          <!-- filled by ratecard.js -->
+        </div>
+
+        <div class="myp-controls">
+          <div class="myp-search">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="7.2" cy="7.2" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M11 11 14.5 14.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            <input type="text" placeholder="Search rate cards or services..." data-myrc-search data-i18n-placeholder="search.rateCards">
+          </div>
+          <select class="myp-filter" data-myrc-sort>
+            <option value="updated-desc" data-i18n="sort.recentlyUpdated">Sort: Recently Updated</option>
+            <option value="updated-asc" data-i18n="sort.oldestUpdated">Sort: Oldest Updated</option>
+            <option value="name-asc" data-i18n="sort.nameAZ">Sort: Name (A–Z)</option>
+          </select>
+        </div>
+
+        <div class="projects-panel myp-panel" data-myrc-panel>
+          <!-- filled by ratecard.js -->
+        </div>
+
+      </section>
+
+      <!-- ===== TEMPLATES PAGE ===== -->
+      <section class="page" data-page-panel="templates" hidden>
+
+        <p class="field-help tpl-page-helper" data-i18n="emptyState.templates.text">Save frequently used item sets and reuse them when creating documents.</p>
+
+        <div class="myp-summary" data-tpl-summary hidden>
+          <!-- filled by templates.js -->
+        </div>
+
+        <div class="myp-controls">
+          <div class="myp-search">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="7.2" cy="7.2" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M11 11 14.5 14.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            <input type="text" placeholder="Search templates..." data-tpl-search data-i18n-placeholder="search.templates">
+          </div>
+          <select class="myp-filter" data-tpl-sort>
+            <option value="updated-desc" data-i18n="sort.recentlyUpdated">Sort: Recently Updated</option>
+            <option value="updated-asc" data-i18n="sort.oldest">Sort: Oldest</option>
+            <option value="name-asc" data-i18n="sort.nameAZPlain">Sort: Name A–Z</option>
+          </select>
+        </div>
+
+        <div class="projects-panel myp-panel" data-tpl-panel>
+          <!-- filled by templates.js -->
+        </div>
+
+        <div class="calc-card calc-form-card tpl-form-panel" data-tpl-form-panel hidden>
+          <h3 class="section-title" data-tpl-form-title>Create Template</h3>
+
+          <div class="field">
+            <label for="tpl-name" data-i18n="field.templateName">Template Name</label>
+            <input type="text" id="tpl-name" placeholder="Website Package" data-i18n-placeholder="placeholder.tplName" data-tpl="name">
+          </div>
+
+          <div class="field">
+            <label data-i18n="field.items">Items</label>
+            <div class="quo-items" data-tpl-items></div>
+            <button type="button" class="btn btn-secondary quo-add-item" data-tpl-add-item data-i18n="action.addItem">+ Add Item</button>
+          </div>
+
+          <p class="quo-validation-message" data-tpl-validation hidden></p>
+          <div class="calc-actions">
+            <button type="button" class="btn btn-primary" data-tpl-save data-i18n="action.saveTemplate">Save Template</button>
+            <button type="button" class="btn btn-secondary" data-tpl-cancel data-i18n="action.cancel">Cancel</button>
+          </div>
+          <p class="calc-save-feedback" data-tpl-save-feedback hidden></p>
+        </div>
+
+      </section>
+
+      <!-- ===== PLACEHOLDER PAGES ===== -->
+      <section class="page" data-page-panel="placeholder" hidden>
+        <div class="placeholder">
+          <div class="placeholder-icon" data-placeholder-icon>
+            <svg width="26" height="26" viewBox="0 0 26 26" fill="none"><path d="M13 3v20M3 13h20" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </div>
+          <h2 class="placeholder-title" data-placeholder-title data-i18n="placeholder.comingSoon">Coming soon</h2>
+          <p class="placeholder-text" data-placeholder-text>Halaman ini sedang dibangun di sesi berikutnya.</p>
+          <button class="btn btn-secondary" data-page="dashboard" data-i18n="action.backToDashboard">Kembali ke Dashboard</button>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<!-- ============ PROJECT DETAIL MODAL ============ -->
+<div class="modal-overlay" data-detail-overlay hidden>
+  <div class="modal modal-detail" role="dialog" aria-modal="true" aria-label="Project Detail">
+    <div class="modal-head">
+      <span class="modal-eyebrow" data-i18n="modal.projectDetail">Project Detail</span>
+      <button class="icon-btn" data-detail-close aria-label="Tutup">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 4L14 14M14 4L4 14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+
+    <div class="modal-body" data-detail-body>
+      <!-- filled by projects.js -->
+    </div>
+  </div>
+</div>
+
+<!-- ============ DELETE CONFIRMATION MODAL ============ -->
+<div class="modal-overlay" data-delete-overlay hidden>
+  <div class="modal modal-delete" role="dialog" aria-modal="true" aria-label="Delete confirmation">
+    <h3 class="modal-delete-title" data-delete-title>Delete project?</h3>
+    <p class="modal-delete-text" data-delete-text>This project will be permanently removed. This action cannot be undone.</p>
+    <div class="modal-delete-actions">
+      <button class="btn btn-secondary" data-delete-cancel data-i18n="action.cancel">Cancel</button>
+      <button class="btn btn-danger" data-delete-confirm>Delete Project</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ RESTORE BACKUP CONFIRMATION MODAL ============ -->
+<div class="modal-overlay" data-restore-overlay hidden>
+  <div class="modal modal-delete" role="dialog" aria-modal="true" aria-label="Restore backup confirmation">
+    <h3 class="modal-delete-title" data-i18n="modal.restoreTitle">Restore backup?</h3>
+    <p class="modal-delete-text" data-i18n="modal.restoreText1">Your current data will be replaced by the data in this backup.</p>
+    <p class="modal-delete-text"><span data-i18n="modal.backupDateLabel">Backup date:</span> <strong data-restore-modal-date>—</strong></p>
+    <p class="modal-delete-text" data-i18n="modal.restoreText2">Current data will be overwritten.</p>
+    <div class="modal-delete-actions">
+      <button class="btn btn-secondary" data-restore-cancel data-i18n="action.cancel">Cancel</button>
+      <button class="btn btn-danger" data-restore-confirm data-i18n="backup.restoreData">Restore Data</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ CLEAR ALL DATA CONFIRMATION MODAL ============ -->
+<div class="modal-overlay" data-clear-overlay hidden>
+  <div class="modal modal-delete" role="dialog" aria-modal="true" aria-label="Delete all data confirmation">
+    <h3 class="modal-delete-title" data-i18n="modal.clearAllTitle">Delete all app data?</h3>
+    <p class="modal-delete-text" data-i18n="modal.clearAllText1">This will permanently remove all saved projects, documents, rate cards, templates and settings from this browser.</p>
+    <p class="modal-delete-text" data-i18n="modal.clearAllText2">This cannot be undone unless you have a backup.</p>
+    <div class="detail-field modal-delete-field-left">
+      <label for="clear-confirm-input" data-i18n="modal.typeDeleteToConfirm">Type DELETE to confirm</label>
+      <input type="text" id="clear-confirm-input" class="detail-client-input" data-clear-confirm-input placeholder="DELETE" autocomplete="off">
+    </div>
+    <div class="modal-delete-actions">
+      <button class="btn btn-secondary" data-clear-cancel data-i18n="action.cancel">Cancel</button>
+      <button class="btn btn-danger" data-clear-confirm disabled data-i18n="modal.deleteEverything">Delete Everything</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SYNC LOGIN MODAL ============ -->
+<div class="modal-overlay" data-sync-login-overlay hidden>
+  <div class="modal modal-delete" role="dialog" aria-modal="true" aria-label="Sync across devices">
+    <h3 class="modal-delete-title" data-i18n="sync.modalTitle">Sync Across Devices</h3>
+    <p class="modal-delete-text" data-i18n="sync.modalText">Sign in (or create an account) with an email and password. Use the same one on every device.</p>
+    <div class="detail-field modal-delete-field-left">
+      <label for="sync-login-email" data-i18n="sync.emailLabel">Email</label>
+      <input type="email" id="sync-login-email" class="detail-client-input" data-sync-login-email autocomplete="email">
+    </div>
+    <div class="detail-field modal-delete-field-left">
+      <label for="sync-login-password" data-i18n="sync.passwordLabel">Password</label>
+      <input type="password" id="sync-login-password" class="detail-client-input" data-sync-login-password autocomplete="current-password">
+    </div>
+    <p class="field-help" data-i18n="sync.passwordHelp">Use the same email &amp; password on every device you want to sync.</p>
+    <p class="quo-validation-message" data-sync-login-error hidden></p>
+    <div class="modal-delete-actions">
+      <button class="btn btn-secondary" data-sync-login-cancel data-i18n="sync.cancel">Cancel</button>
+      <button class="btn btn-primary" data-sync-login-submit data-i18n="sync.submit">Continue</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SYNC CONFLICT MODAL ============ -->
+<div class="modal-overlay" data-sync-conflict-overlay hidden>
+  <div class="modal modal-delete" role="dialog" aria-modal="true" aria-label="Existing cloud data found">
+    <h3 class="modal-delete-title" data-i18n="sync.conflictTitle">Existing Cloud Data Found</h3>
+    <p class="modal-delete-text" data-i18n="sync.conflictText">This account already has synced data from another device. Which data should be kept?</p>
+    <div class="modal-delete-actions">
+      <button class="btn btn-secondary" data-sync-keep-local data-i18n="sync.keepLocal">Use This Device's Data (replace cloud data)</button>
+      <button class="btn btn-primary" data-sync-keep-cloud data-i18n="sync.keepCloud">Use Cloud Data (replace this device's data)</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ TOAST NOTIFICATIONS ============ -->
+<div class="toast-stack" data-toast-stack aria-live="polite"></div>
+
+<!-- Print-only quotation sheet — deliberately a direct <body> child, outside
+     the sidebar/grid layout, so "width: 100%" during print means the full
+     A4 page rather than a narrow column inside the app's 2-column layout. -->
+<div class="quo-preview-sheet" id="quo-print-sheet"></div>
+
+<script src="js/data.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/quotation.js"></script>
+<script src="js/proposal.js"></script>
+<script src="js/invoice.js"></script>
+<script src="js/ratecard.js"></script>
+<script src="js/templates.js"></script>
+<script src="js/settings.js"></script>
+<script src="js/backup.js"></script>
+<script src="js/backup-reminder.js"></script>
+<script src="js/sync-config.js"></script>
+<script src="js/sync.js"></script>
+<script src="js/help.js"></script>
+<script src="js/package.js"></script>
+<script src="js/app.js"></script>
+<script>
+  // PWA install/offline support. Registering a service worker requires a
+  // secure context (https, or localhost) — it's skipped silently on a
+  // plain "file://" page (e.g. opened straight from a downloaded folder),
+  // since browsers don't allow service workers there. Everything else in
+  // the app keeps working as before either way.
+  if ("serviceWorker" in navigator && window.isSecureContext) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("./sw.js").catch(() => {});
+    });
+  }
+</script>
+</body>
+</html>

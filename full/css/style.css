@@ -1,0 +1,2289 @@
+/* ==========================================================================
+   FREELANCE KIT — DESIGN SYSTEM
+   ========================================================================== */
+
+:root {
+  /* --- Color: surfaces (neutral, no blue/purple tint) ---
+     --bg sits distinctly below --surface now (previously #F6F4F0,
+     only ~12/255 off pure white — too close to read as a separate
+     layer once a white card sits on it). Still warm/light, not gray,
+     not dark — just enough separation that background vs. card vs.
+     app chrome reads as three layers without leaning on shadow. --- */
+  --bg: #EDEAE2;
+  --surface: #FFFFFF;
+  --surface-2: #F6F6F7;
+  --border: #DEDCD5;
+  --border-strong: #CBC9C2;
+
+  /* --- Color: text (pure black, neutral grays) --- */
+  --text: #000000;
+  --text-muted: #6B6B6F;
+  --text-faint: #9A9A9E;
+  --text-on-dark: #FFFFFF;
+  --text-on-dark-muted: #A0A0A5;
+
+  /* --- Color: sidebar (kept pure black/white — no tint) --- */
+  --sidebar-surface: #FFFFFF;
+  --sidebar-surface-2: #F3F3F4;
+  --sidebar-border: #E4E4E6;
+  --sidebar-text: #000000;
+  --sidebar-text-muted: #000000;
+
+  /* --- Color: brand / semantic --- */
+  --primary: #025864;
+  --primary-hover: #01444D;
+  --primary-tint: #E1EEF0;
+  --primary-tint-dark: #10333A;
+  /* Used for teal text/icons sitting on a tint or plain surface (not
+     solid-fill buttons, which keep --primary). Same as --primary in
+     light mode; overridden to a brighter teal in dark mode so those
+     icons/labels don't disappear against near-black surfaces. */
+  --primary-accent: var(--primary);
+
+  --success: #17A768;
+  --success-tint: #E3F8EE;
+  --warning: #C4790A;
+  --warning-tint: #FDF1DC;
+  --error: #D93B3B;
+  --error-tint: #FBEAEA;
+  --info: #2E6FE0;
+  --info-tint: #E9F0FE;
+
+  /* --- Radius --- */
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 18px;
+  --r-full: 999px;
+
+  /* --- Spacing scale — used for new/consolidated rules so page ↔
+     page rhythm stays predictable instead of one-off pixel values
+     (e.g. a lone 17px or 26px turning up in one place only). Existing
+     rules aren't mass-migrated to these (too large a diff for a
+     visual-consistency pass), but anything touched in this pass uses
+     this scale, and it's here for future additions. --- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 32px;
+  --space-8: 40px;
+
+  /* --- Shadow — a touch more present than before (was barely
+     perceptible at 0.05 opacity with a 2px blur) so cards read as
+     lifted off the background without using a heavy/gimmicky shadow. --- */
+  --shadow-sm: 0 2px 5px -1px rgba(23, 27, 46, 0.09), 0 1px 2px rgba(23, 27, 46, 0.05);
+  --shadow-md: 0 8px 24px -8px rgba(23, 27, 46, 0.16);
+  --shadow-sidebar: 4px 0 24px -12px rgba(9, 11, 26, 0.3);
+
+  /* --- Type --- */
+  --font: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+  /* --- Layout --- */
+  --rail-w: 68px;
+  --panel-w: 224px;
+  --sidebar-w: calc(var(--rail-w) + var(--panel-w));
+  --rail-gap: 14px;
+  --topbar-h: 68px;
+  --content-max: 1180px;
+
+  /* --- Motion --- */
+  --ease: cubic-bezier(0.2, 0.6, 0.2, 1);
+}
+
+[data-theme="dark"] {
+  --bg: #000000;
+  --surface: #17171A;
+  --surface-2: #201F23;
+  --border: #313136;
+  --border-strong: #45454B;
+
+  --text: #FFFFFF;
+  --text-muted: #9A9A9E;
+  --text-faint: #6B6B6F;
+
+  --sidebar-surface: #000000;
+  --sidebar-surface-2: #17171A;
+  --sidebar-border: #232326;
+  --sidebar-text: #FFFFFF;
+  --sidebar-text-muted: #FFFFFF;
+
+  --primary-tint: #0F2A2F;
+  --primary-accent: #2FB4C4;
+  --success-tint: #10291F;
+  --warning-tint: #2E220C;
+  --error-tint: #2E1717;
+  --info-tint: #101E38;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 12px 28px -10px rgba(0, 0, 0, 0.6);
+}
+
+/* ==========================================================================
+   RESET
+   ========================================================================== */
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  transition: background 0.25s var(--ease), color 0.25s var(--ease);
+}
+h1, h2, h3, h4, p { margin: 0; }
+button { font-family: inherit; cursor: pointer; color: inherit; }
+a { text-decoration: none; color: inherit; }
+svg { display: block; flex-shrink: 0; }
+:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; border-radius: 4px; }
+
+/* ==========================================================================
+   TYPE SCALE
+   ========================================================================== */
+
+.brand-name        { font-size: 14.5px; font-weight: 700; letter-spacing: -0.01em; }
+.brand-sub         { font-size: 11.5px; font-weight: 500; color: var(--text-on-dark-muted); }
+.topbar-eyebrow    { font-size: 12px; font-weight: 500; color: var(--text); }
+.topbar-title      { font-size: 24px; font-weight: 700; letter-spacing: -0.015em; }
+.topbar-date       { font-size: 13px; color: var(--text); margin-top: 2px; }
+.page-title        { font-size: 26px; font-weight: 700; letter-spacing: -0.015em; }
+.page-subtitle     { font-size: 14.5px; color: var(--text); margin-top: 6px; }
+.section-title     { font-size: 17px; font-weight: 700; letter-spacing: -0.01em; }
+.section-subtitle  { font-size: 13.5px; color: var(--text); margin-top: 4px; margin-bottom: var(--space-3); }
+.quick-title        { font-size: 15px; font-weight: 700; }
+.quick-desc         { font-size: 13px; color: var(--text); line-height: 1.5; }
+
+/* ==========================================================================
+   APP SHELL
+   ========================================================================== */
+
+.app { display: flex; min-height: 100vh; }
+
+.main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  margin-left: calc(var(--sidebar-w) + var(--rail-gap) * 2);
+}
+
+/* ==========================================================================
+   SIDEBAR
+   ========================================================================== */
+
+.sidebar {
+  position: fixed;
+  top: var(--rail-gap); left: var(--rail-gap); bottom: var(--rail-gap);
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  width: var(--sidebar-w);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  z-index: 40;
+  transition: width 0.2s var(--ease);
+}
+
+/* ---- RAIL — permanent, floating card at the left edge ---- */
+
+.sidebar-rail {
+  width: var(--rail-w);
+  flex-shrink: 0;
+  height: 100%;
+  background: var(--sidebar-surface);
+  border-right: 1px solid var(--sidebar-border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 0;
+  overflow-y: auto;
+}
+
+.rail-menu-group { display: none; flex-direction: column; align-items: center; gap: 8px; }
+.rail-nav { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.rail-spacer { flex: 1; min-height: 12px; }
+.rail-utility { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+
+.brand-mark {
+  width: 34px; height: 34px;
+  border-radius: var(--r-sm);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12.5px; font-weight: 800; color: #fff;
+  letter-spacing: -0.02em;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+.brand-mark-img {
+  width: 100%; height: 100%;
+  object-fit: contain;
+}
+
+.rail-link, .rail-icon-btn {
+  width: 34px; height: 34px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: var(--r-sm);
+  color: var(--sidebar-text);
+  flex-shrink: 0;
+  transition: background 0.15s var(--ease);
+}
+.rail-link:hover, .rail-icon-btn:hover { background: var(--sidebar-surface-2); }
+.rail-icon-btn { border: none; background: transparent; }
+
+/* ---- PANEL — togglable, sits to the right of the rail ---- */
+
+.sidebar-panel {
+  width: var(--panel-w);
+  flex-shrink: 0;
+  height: 100%;
+  overflow: hidden;
+  background: var(--sidebar-surface);
+  display: flex;
+  flex-direction: column;
+  padding: 18px 14px 16px;
+  transition: width 0.2s var(--ease), padding 0.2s var(--ease), opacity 0.15s var(--ease);
+}
+
+.sidebar-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 4px 4px 18px;
+}
+
+.brand-text { display: flex; flex-direction: column; gap: 1px; white-space: nowrap; min-width: 0; }
+.brand-name { color: var(--sidebar-text); }
+.brand-sub { color: var(--sidebar-text-muted); }
+
+/* ---- Profile (inside panel) — plain row, no card/rectangle ---- */
+
+.sidebar-profile {
+  display: flex; align-items: center; gap: 10px;
+  padding: 6px 4px;
+  margin-bottom: 12px;
+}
+.sidebar-profile-avatar { flex-shrink: 0; }
+.sidebar-profile-text { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.sidebar-profile-name { font-size: 13px; font-weight: 600; color: var(--sidebar-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sidebar-profile-email { font-size: 11.5px; color: var(--sidebar-text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* ---- Nav (inside panel) ---- */
+
+.nav { display: flex; flex-direction: column; gap: 2px; overflow-y: auto; overflow-x: hidden; flex: 1; padding: 2px 0; }
+
+.nav-section-label {
+  font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--sidebar-text-muted);
+  padding: 12px 10px 6px;
+  white-space: nowrap;
+}
+.nav-section-label:first-child { padding-top: 2px; }
+
+.panel-link {
+  display: flex; align-items: center; gap: 11px;
+  padding: 9px 10px;
+  border-radius: var(--r-sm);
+  color: var(--sidebar-text-muted);
+  font-size: 13.5px;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: background 0.15s var(--ease), color 0.15s var(--ease);
+}
+.panel-link:hover { background: var(--sidebar-surface-2); color: var(--sidebar-text); }
+.nav-icon { display: flex; flex-shrink: 0; }
+
+.nav-link.is-active {
+  background: var(--primary);
+  color: #fff;
+  box-shadow: 0 4px 10px -2px rgba(2, 88, 100, 0.45);
+}
+.nav-link.is-active .nav-icon { opacity: 1; }
+
+/* ---- Appearance control (bottom of expanded panel) ----
+   Anchored below .nav, which is the only flex:1 child of
+   .sidebar-panel — so a long nav list scrolls internally instead of
+   pushing this out of view, and this never grows/shrinks itself. */
+
+.sidebar-appearance {
+  flex-shrink: 0;
+  margin-top: 8px;
+  padding: 12px 4px 2px;
+  border-top: 1px solid var(--sidebar-border);
+}
+.sidebar-appearance-label {
+  display: block;
+  font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--sidebar-text-muted);
+  padding: 0 6px 8px;
+}
+.appearance-toggle {
+  display: flex;
+  background: var(--sidebar-surface-2);
+  border-radius: var(--r-sm);
+  padding: 3px;
+  gap: 2px;
+}
+.appearance-option {
+  flex: 1;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 7px 8px;
+  border-radius: 6px;
+  border: none; background: transparent;
+  color: var(--sidebar-text-muted);
+  font-family: var(--font);
+  font-size: 12.5px; font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s var(--ease), color 0.15s var(--ease);
+}
+.appearance-option svg { flex-shrink: 0; }
+.appearance-option:hover { color: var(--sidebar-text); }
+.appearance-option.is-active {
+  background: var(--sidebar-surface);
+  color: var(--sidebar-text);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Same toggle component, reused in Settings (main content area) for
+   the Language control — swaps the sidebar-specific surface tokens
+   for the regular content ones, and caps the width so a two-word
+   option ("Bahasa Indonesia") doesn't stretch across the full card. */
+.settings-language-toggle { max-width: 360px; background: var(--surface-2); }
+.settings-language-toggle .appearance-option { color: var(--text); }
+.settings-language-toggle .appearance-option.is-active {
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--shadow-sm);
+}
+
+.avatar.rail-avatar,
+.avatar.sidebar-profile-avatar {
+  background: var(--primary);
+}
+
+.drawer-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 35;
+}
+
+/* ---- Collapsed state — panel closes, its menu icons move into the rail ---- */
+
+html.sidebar-collapsed { --sidebar-w: var(--rail-w); }
+html.sidebar-collapsed .sidebar-panel {
+  width: 0;
+  padding-left: 0;
+  padding-right: 0;
+  opacity: 0;
+}
+html.sidebar-collapsed .rail-menu-group { display: flex; }
+
+/* ==========================================================================
+   TOPBAR
+   ========================================================================== */
+
+.topbar {
+  position: sticky; top: 0; z-index: 20;
+  height: calc(var(--topbar-h) + var(--rail-gap));
+  display: flex; align-items: center; justify-content: space-between;
+  padding: var(--rail-gap) var(--space-5) 0;
+  background: var(--bg);
+}
+
+.topbar-left { display: flex; align-items: center; gap: 14px; }
+.topbar-title-group { display: flex; flex-direction: column; }
+
+.topbar-right { display: flex; align-items: center; gap: 10px; }
+
+.icon-btn {
+  position: relative;
+  width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  border: none; background: transparent; border-radius: var(--r-sm);
+  color: var(--text);
+  transition: background 0.15s var(--ease);
+}
+.icon-btn:hover { background: var(--surface-2); }
+
+.icon-btn.rail-icon-btn { color: var(--sidebar-text); }
+.icon-btn.rail-icon-btn:hover { color: var(--sidebar-text); }
+.icon-moon { display: none; }
+[data-theme="dark"] .icon-sun { display: none; }
+[data-theme="dark"] .icon-moon { display: block; }
+
+.profile { position: relative; }
+.profile-trigger {
+  display: flex; align-items: center; gap: 9px;
+  background: transparent; border: none;
+  padding: 6px 8px 6px 6px;
+  border-radius: var(--r-md);
+  transition: background 0.15s var(--ease);
+}
+.profile-trigger:hover { background: var(--surface-2); }
+
+.avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--primary);
+  color: #fff; font-size: 12px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.profile-text { display: flex; flex-direction: column; align-items: flex-start; gap: 1px; }
+.profile-name { font-size: 13px; font-weight: 600; color: var(--text); }
+.profile-role { font-size: 11.5px; color: var(--text); }
+.chev { color: var(--text-faint); transition: transform 0.18s var(--ease); }
+.profile.is-open .chev { transform: rotate(180deg); }
+
+.profile-menu {
+  position: absolute; top: calc(100% + 8px); right: 0;
+  min-width: 190px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-md);
+  padding: 6px;
+  display: flex; flex-direction: column; gap: 1px;
+  opacity: 0; visibility: hidden; transform: translateY(-4px);
+  transition: opacity 0.15s var(--ease), transform 0.15s var(--ease), visibility 0.15s;
+}
+.profile.is-open .profile-menu { opacity: 1; visibility: visible; transform: translateY(0); }
+
+.profile-menu-item {
+  padding: 8px 10px; border-radius: var(--r-sm);
+  font-size: 13px; font-weight: 500; color: var(--text);
+}
+.profile-menu-item:hover { background: var(--surface-2); }
+.profile-menu-item-danger { color: var(--error); }
+.profile-menu-divider { height: 1px; background: var(--border); margin: 5px 2px; }
+
+/* ==========================================================================
+   CONTENT
+   ========================================================================== */
+
+.content { flex: 1; padding: var(--space-5); }
+.page { width: 100%; }
+
+.page-header {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 20px; margin-bottom: var(--space-4); flex-wrap: wrap;
+}
+
+.section-header {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  margin: var(--space-6) 0 var(--space-4);
+}
+
+/* ==========================================================================
+   BUTTONS
+   ========================================================================== */
+
+.btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  border: none; border-radius: var(--r-sm);
+  font-family: inherit; font-size: 13.5px; font-weight: 600;
+  padding: 10px 16px;
+  transition: background 0.15s var(--ease), color 0.15s var(--ease), border-color 0.15s var(--ease), transform 0.1s var(--ease);
+  white-space: nowrap;
+}
+.btn:active { transform: translateY(1px); }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; pointer-events: none; }
+
+.btn-primary { background: var(--primary); color: #fff; box-shadow: 0 1px 2px rgba(2,88,100,0.18); }
+.btn-primary:hover { background: var(--primary-hover); }
+
+.btn-secondary { background: var(--surface); color: var(--text); border: 1px solid var(--border-strong); }
+.btn-secondary:hover { background: var(--surface-2); }
+
+.btn-ghost {
+  width: 100%; justify-content: center;
+  background: var(--surface-2); color: var(--text);
+  border: 1px solid var(--border);
+}
+.btn-ghost:hover { background: var(--primary-tint); color: var(--primary-accent); border-color: transparent; }
+
+.btn-text { background: transparent; color: var(--primary-accent); padding: 8px 6px; }
+.btn-text:hover { color: var(--primary-hover); }
+
+.btn-danger { background: var(--error); color: #fff; }
+.btn-danger:hover { filter: brightness(0.92); }
+
+.btn-link {
+  background: none; border: none; padding: 2px 0;
+  font-size: 12.5px; font-weight: 600; color: var(--primary-accent);
+}
+.btn-link:hover { color: var(--primary-hover); text-decoration: underline; }
+.btn-link-danger { color: var(--error); }
+.btn-link-danger:hover { color: var(--error); }
+
+/* ==========================================================================
+   DASHBOARD TOP ROW — hero card + upcoming deadlines rail
+   ========================================================================== */
+
+.dashboard-top-row {
+  display: grid;
+  grid-template-columns: 1fr 240px 320px;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+  align-items: stretch;
+}
+
+.dashboard-hero {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--r-lg);
+  padding: var(--space-5) var(--space-6);
+  background: linear-gradient(135deg, #025864 0%, #0C4E6E 45%, #4A3F87 100%);
+  color: #fff;
+  box-shadow: var(--shadow-md);
+  display: flex;
+  align-items: center;
+}
+.dashboard-hero-art {
+  position: absolute;
+  top: 50%; right: -20px;
+  transform: translateY(-50%);
+  opacity: 0.9;
+  pointer-events: none;
+}
+.dashboard-hero-content { position: relative; z-index: 1; max-width: 480px; }
+.dashboard-hero-greeting { font-size: 21px; font-weight: 700; letter-spacing: -0.015em; }
+.dashboard-hero-subtitle { font-size: 13px; color: rgba(255,255,255,0.82); margin-top: 5px; }
+.dashboard-hero-meta {
+  display: flex; align-items: center; flex-wrap: wrap;
+  gap: 6px 16px;
+  margin-top: 14px;
+}
+.dashboard-hero-date {
+  display: flex; align-items: center; gap: 7px;
+  font-size: 12px; color: rgba(255,255,255,0.85);
+  background: rgba(255,255,255,0.12);
+  padding: 5px 11px;
+  border-radius: var(--r-full);
+}
+.dashboard-hero-msg { font-size: 12px; color: rgba(255,255,255,0.7); }
+
+/* ==========================================================================
+   SIDE CARD — shared base for the right-rail utility cards
+   ========================================================================== */
+
+.side-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+}
+.side-card-title {
+  font-size: 12px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.04em;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+.side-card-empty {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 13px; color: var(--text);
+  padding: 4px 0;
+}
+.side-card-empty-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--success); flex-shrink: 0; }
+
+/* ---- Backup Data card (top row) ----
+   Reuses the exact same source of truth as Settings > Backup & Restore
+   and the Dashboard backup reminder (getLastBackupAt) — see
+   renderDashboardBackupCard in app.js. Calm, neutral tone even in the
+   "recommended" state: no red, no alarm icon, matching the rest of
+   the app's restrained warning language. */
+
+.dashboard-backup-card-status {
+  font-size: 15px; font-weight: 700; color: var(--text);
+  margin-top: 2px;
+}
+.dashboard-backup-card-status.is-warning { color: var(--warning); }
+.dashboard-backup-card-sub {
+  font-size: 12px; color: var(--text);
+  margin-top: 3px; line-height: 1.45;
+}
+.dashboard-backup-card-btn { width: 100%; justify-content: center; margin-top: 10px; }
+
+/* ==========================================================================
+   DASHBOARD WELCOME — first-use state, shown only with zero saved projects
+   ========================================================================== */
+
+.dashboard-welcome {
+  max-width: 480px;
+  margin: var(--space-7) auto 0;
+  padding: var(--space-2) var(--space-6) 0;
+  text-align: center;
+}
+.dashboard-welcome-icon {
+  width: 52px; height: 52px;
+  border-radius: var(--r-md);
+  background: var(--primary-tint);
+  color: var(--primary-accent);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto var(--space-4);
+}
+.dashboard-welcome-title { font-size: 19px; font-weight: 700; letter-spacing: -0.01em; }
+.dashboard-welcome-text { font-size: 13.5px; color: var(--text); margin-top: 10px; line-height: 1.6; }
+.dashboard-welcome-actions {
+  display: flex; align-items: center; justify-content: center;
+  flex-wrap: wrap; gap: 12px;
+  margin-top: var(--space-5);
+}
+
+/* ==========================================================================
+   SUMMARY CARDS — restrained, premium: whitespace and number hierarchy
+   do the work, decoration stays minimal.
+   ========================================================================== */
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+.summary-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.15s var(--ease);
+}
+.summary-card:hover { border-color: var(--border-strong); }
+
+.summary-icon {
+  width: 26px; height: 26px;
+  border-radius: var(--r-sm);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 6px;
+}
+.summary-icon svg { width: 14px; height: 14px; }
+.summary-icon-teal  { background: var(--primary-tint); color: var(--primary-accent); }
+.summary-icon-green { background: var(--success-tint); color: var(--success); }
+.summary-icon-amber { background: var(--warning-tint); color: var(--warning); }
+.summary-icon-blue  { background: var(--info-tint); color: var(--info); }
+
+.summary-label { font-size: 12px; font-weight: 500; color: var(--text); }
+.summary-metric { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; margin-top: 3px; }
+.summary-caption { font-size: 11.5px; color: var(--text); margin-top: 3px; }
+
+/* ==========================================================================
+   DASHBOARD SPLIT ROWS
+   ========================================================================== */
+
+.dashboard-split-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+  align-items: stretch;
+}
+.dashboard-split-row-bottom { grid-template-columns: 1fr 320px; }
+
+/* ==========================================================================
+   DASHBOARD BACKUP REMINDER — compact, conditional strip between the
+   summary cards and Needs Attention/Quick Actions. Contributes zero
+   height when hidden (no data yet, or nothing to say right now).
+   ========================================================================== */
+
+.dashboard-backup-reminder:not([hidden]) { margin-bottom: var(--space-3); }
+
+.backup-reminder-row {
+  display: flex; align-items: center; gap: 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: var(--space-3) var(--space-4);
+  box-shadow: var(--shadow-sm);
+  flex-wrap: wrap;
+}
+.backup-reminder-row.is-ok { padding: 9px var(--space-4); box-shadow: none; background: var(--surface-2); }
+
+.backup-reminder-icon {
+  width: 34px; height: 34px; flex-shrink: 0;
+  border-radius: var(--r-md);
+  display: flex; align-items: center; justify-content: center;
+}
+.backup-reminder-icon svg { width: 16px; height: 16px; }
+.backup-reminder-icon-info { background: var(--primary-tint); color: var(--primary-accent); }
+.backup-reminder-icon-warning { background: var(--warning-tint); color: var(--warning); }
+.backup-reminder-icon-ok { background: var(--success-tint); color: var(--success); }
+
+.backup-reminder-body { flex: 1; min-width: 220px; }
+.backup-reminder-title { font-size: 13px; font-weight: 700; }
+.backup-reminder-text { font-size: 12px; color: var(--text); margin-top: 2px; line-height: 1.5; }
+.backup-reminder-text strong { color: var(--text); font-weight: 600; }
+
+.backup-reminder-actions { display: flex; gap: 8px; flex-shrink: 0; }
+
+.btn-sm { padding: 7px 12px; font-size: 12.5px; }
+
+/* ==========================================================================
+   NEEDS ATTENTION
+   ========================================================================== */
+
+.needs-attention-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 6px 0;
+  text-align: left;
+  width: 100%;
+  background: none; border: none; cursor: default;
+  color: inherit; font: inherit;
+}
+.needs-attention-item + .needs-attention-item { border-top: 1px solid var(--border); }
+.needs-attention-item.is-actionable { cursor: pointer; }
+.needs-attention-icon {
+  width: 28px; height: 28px; flex-shrink: 0;
+  border-radius: var(--r-sm);
+  background: var(--warning-tint); color: var(--warning);
+  display: flex; align-items: center; justify-content: center;
+}
+.needs-attention-icon svg { width: 14px; height: 14px; }
+.needs-attention-item-ok .needs-attention-icon { background: var(--success-tint); color: var(--success); }
+.needs-attention-item-ok { flex: 1; }
+.needs-attention-text { flex: 1; min-width: 0; }
+.needs-attention-label { font-size: 13px; font-weight: 600; }
+.needs-attention-context { font-size: 11.5px; color: var(--text); margin-top: 1px; }
+.needs-attention-arrow { color: var(--text-faint); font-size: 18px; flex-shrink: 0; }
+
+/* ==========================================================================
+   QUICK ACTIONS — 2x2 tile grid
+   ========================================================================== */
+
+.quick-actions-card { display: flex; flex-direction: column; }
+.quick-actions-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.quick-action-tile {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px;
+  border-radius: var(--r-md);
+  border: 1px solid var(--border);
+  text-decoration: none;
+  color: var(--text);
+  transition: border-color 0.15s var(--ease), background 0.15s var(--ease);
+}
+.quick-action-tile:hover { background: var(--surface-2); border-color: var(--border-strong); }
+.quick-action-icon {
+  width: 32px; height: 32px; flex-shrink: 0;
+  border-radius: var(--r-sm);
+  background: var(--primary); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+}
+.quick-action-icon svg { width: 16px; height: 16px; }
+.quick-action-text { flex: 1; min-width: 0; }
+.quick-action-title { display: block; font-size: 12.5px; font-weight: 600; }
+.quick-action-desc { display: block; font-size: 11px; color: var(--text); margin-top: 1px; }
+.quick-action-arrow { color: var(--text-faint); font-size: 18px; flex-shrink: 0; }
+
+/* ==========================================================================
+   UPCOMING DEADLINES / RECENT ACTIVITY — right rail
+   ========================================================================== */
+
+.deadline-item, .activity-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 8px 0;
+  width: 100%;
+  text-align: left;
+  background: none; border: none;
+  color: inherit; font: inherit;
+}
+/* Every current usage is an actionable <button> (goes to a page); if a
+   non-clickable variant is ever needed, add an .is-actionable modifier
+   here the same way .needs-attention-item does. */
+.deadline-item { cursor: pointer; }
+.deadline-item + .deadline-item,
+.activity-item + .activity-item { border-top: 1px solid var(--border); }
+.deadline-badge {
+  flex-shrink: 0;
+  font-size: 10.5px; font-weight: 700;
+  padding: 3px 7px;
+  border-radius: var(--r-sm);
+  background: var(--surface-2); color: var(--text-muted);
+  white-space: nowrap;
+}
+.deadline-badge-soon { background: var(--warning-tint); color: var(--warning); }
+.deadline-badge-overdue { background: var(--error-tint); color: var(--error); }
+.deadline-text { flex: 1; min-width: 0; }
+.deadline-number { font-size: 12.5px; font-weight: 600; }
+.deadline-context { font-size: 11.5px; color: var(--text); margin-top: 1px; }
+
+/* ==========================================================================
+   RECENT PROJECTS — TABLE
+   ========================================================================== */
+
+.dashboard-projects-col { min-width: 0; margin-bottom: var(--space-3); }
+
+.projects-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.table { width: 100%; border-collapse: collapse; }
+.table th {
+  text-align: left; font-size: 11.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em;
+  color: var(--text);
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--border);
+}
+.table th.num, .table td.num { text-align: right; }
+.table td {
+  padding: 12px 18px;
+  font-size: 13.5px;
+  border-bottom: 1px solid var(--surface-2);
+  vertical-align: middle;
+}
+.table tr:last-child td { border-bottom: none; }
+.table tbody tr { transition: background 0.15s var(--ease); }
+.table tbody tr:hover { background: var(--surface-2); }
+tr.row-clickable, .project-card-item.row-clickable { cursor: pointer; }
+
+.cell-project { font-weight: 600; color: var(--text); }
+.cell-client, .cell-updated { color: var(--text); }
+.cell-price { font-weight: 600; font-variant-numeric: tabular-nums; }
+
+.badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 4px 10px; border-radius: var(--r-full);
+  font-size: 12px; font-weight: 600;
+}
+.badge::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.badge-sent    { background: var(--info-tint); color: var(--info); }
+.badge-approved{ background: var(--success-tint); color: var(--success); }
+.badge-draft   { background: var(--surface-2); color: var(--text-muted); border: 1px solid var(--border); }
+.badge-pending { background: var(--warning-tint); color: var(--warning); }
+.badge-rejected  { background: var(--error-tint); color: var(--error); }
+.badge-completed { background: var(--primary-tint); color: var(--primary-accent); }
+
+/* Mobile card list (hidden on desktop) */
+.project-cards { display: none; }
+.project-card-item {
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--border);
+  display: flex; flex-direction: column; gap: 8px;
+}
+.project-card-item:last-child { border-bottom: none; }
+.project-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+.project-card-name { font-size: 14px; font-weight: 700; }
+.project-card-client { font-size: 12.5px; color: var(--text); margin-top: 2px; }
+.project-card-bottom { display: flex; align-items: center; justify-content: space-between; }
+.project-card-price { font-size: 13.5px; font-weight: 700; }
+.project-card-updated { font-size: 12px; color: var(--text); }
+
+/* ==========================================================================
+   EMPTY STATE
+   ========================================================================== */
+
+.empty-state {
+  display: flex; flex-direction: column; align-items: center; text-align: center;
+  padding: var(--space-7) var(--space-6);
+}
+.empty-icon {
+  width: 44px; height: 44px; border-radius: var(--r-md);
+  background: var(--surface-2); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-faint);
+  margin-bottom: var(--space-3);
+}
+.empty-title { font-size: 15px; font-weight: 700; }
+.empty-text { font-size: 13.5px; color: var(--text); margin-top: 5px; max-width: 480px; line-height: 1.5; }
+.empty-state .btn-primary { margin-top: var(--space-4); }
+.empty-actions {
+  display: flex; align-items: center; justify-content: center;
+  flex-wrap: wrap; gap: 4px 16px;
+  margin-top: var(--space-4);
+}
+.empty-actions .btn-primary { margin-top: 0; }
+
+/* ==========================================================================
+   PRICING CALCULATOR
+   ========================================================================== */
+
+.calc-grid {
+  display: grid;
+  grid-template-columns: 55fr 45fr;
+  gap: var(--space-4);
+  align-items: start;
+}
+
+.calc-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.calc-form-card { padding: var(--space-4); }
+.calc-form-card .section-title { margin-bottom: var(--space-3); }
+
+/* ---- Fields ----
+   STANDARD density (per the app-wide density system: COMPACT for
+   tables/lists, STANDARD for forms/generators/settings, SPACIOUS for
+   dashboard/hero/empty states) — this is the one shared rhythm every
+   form in the app uses: Pricing Calculator, Revision Calculator,
+   Quotation/Proposal/Invoice/Rate Card Generator, and Settings alike,
+   so moving between them feels like the same product. ---- */
+
+.field { margin-bottom: var(--space-3); }
+.field:last-of-type { margin-bottom: 0; }
+
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+.field-row .field { margin-bottom: 0; }
+
+.field label {
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 13px; font-weight: 600; color: var(--text);
+  margin-bottom: 6px;
+}
+
+.field-value { font-weight: 700; color: var(--primary-accent); font-size: 13px; }
+
+.field input[type="text"],
+.field input[type="number"],
+.field input[type="date"],
+.field select,
+.field textarea {
+  width: 100%;
+  padding: 0 12px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-sm);
+  background-color: var(--surface);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 13.5px;
+  transition: border-color 0.15s var(--ease), box-shadow 0.15s var(--ease);
+}
+.field input[type="text"],
+.field input[type="number"],
+.field input[type="date"],
+.field select {
+  height: 38px;
+}
+.field textarea {
+  padding: 9px 12px;
+  line-height: 1.5;
+  resize: vertical;
+  min-height: 38px;
+}
+.field input[type="text"]:focus,
+.field input[type="number"]:focus,
+.field input[type="date"]:focus,
+.field select:focus,
+.field textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-tint);
+}
+.field select { cursor: pointer; }
+.field input[type="date"] { cursor: pointer; }
+/* The native calendar-picker icon otherwise sits almost flush against
+   the input's own right edge with no relation to our padding system —
+   give it the same breathing room text gets, and let it visually
+   align with the custom select arrow next to it in the same row. */
+.field input[type="date"]::-webkit-calendar-picker-indicator {
+  margin-left: 8px;
+  padding: 2px;
+  cursor: pointer;
+  opacity: 0.6;
+}
+.field input[type="date"]::-webkit-calendar-picker-indicator:hover { opacity: 1; }
+
+/* ---- Select arrow ----
+   Native select arrows render flush against the browser's own inset,
+   not the box's declared padding — the visible symptom is the caret
+   sitting almost on top of the right border with no breathing room,
+   and no guarantee it clears longer option text. Fixed the same way
+   everywhere in the app: turn off the native arrow, draw one custom
+   chevron with real, predictable spacing, and reserve enough right
+   padding that text can never run into it. Applies to every dropdown
+   that shares this system: form selects, list-page filter/sort
+   selects, and status selects (My Projects/Quotations/Proposals/
+   Invoices, Project/Document detail). */
+.field select,
+.myp-filter,
+.status-select,
+.tpl-load-field select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6' fill='none'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%239A9A9E' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px !important;
+}
+[data-theme="dark"] .field select,
+[data-theme="dark"] .myp-filter,
+[data-theme="dark"] .status-select,
+[data-theme="dark"] .tpl-load-field select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6' fill='none'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236B6B6F' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+.field input[type="range"] {
+  width: 100%;
+  height: 4px;
+  margin-top: 4px;
+  accent-color: var(--primary-accent);
+  cursor: pointer;
+}
+
+.field-help {
+  font-size: 12px; color: var(--text);
+  margin-top: 6px; line-height: 1.5;
+}
+/* Reused as a small "no items yet" note inside Project Detail's
+   Quotations/Proposals/Invoices sub-sections, sitting above a
+   "+ New ..." button — .field-help alone has no bottom margin since
+   its usual job is sitting *below* a field, so this adds the space
+   needed here instead of a one-off inline style. */
+.detail-empty-note { margin-bottom: 10px; }
+
+.input-wrap {
+  position: relative;
+  display: flex; align-items: center;
+  width: 100%; min-width: 0;
+}
+.input-wrap .input-prefix {
+  position: absolute; left: 12px;
+  font-size: 13.5px; color: var(--text-muted); font-weight: 500;
+  pointer-events: none;
+}
+/* width:100% + box-sizing here is the baseline every currency-prefixed
+   input needs. Inside a .field this duplicates what .field input
+   already sets (harmless) — but .input-wrap is also used bare inside
+   item-row grids (Quotation/Invoice/Proposal/Rate Card line items),
+   where there is no .field ancestor to provide it. Without this, the
+   input falls back to the browser's intrinsic default width, which
+   can exceed its grid column and visually spill into the next field
+   (e.g. the price input overlapping the unit field next to it). */
+.input-wrap input[type="text"],
+.input-wrap input[type="number"] {
+  width: 100%; min-width: 0; box-sizing: border-box;
+}
+.input-wrap input[type="text"] { padding-left: 32px; }
+.input-wrap .input-suffix {
+  position: absolute; right: 12px;
+  font-size: 12.5px; color: var(--text-faint); font-weight: 500;
+  pointer-events: none;
+}
+.input-wrap input[type="number"] { padding-right: 46px; }
+
+.calc-actions {
+  display: flex; flex-wrap: wrap; gap: 10px;
+  margin-top: var(--space-4);
+}
+.calc-actions .btn { flex: 1; justify-content: center; min-width: 140px; }
+
+.calc-save-feedback {
+  margin-top: var(--space-3);
+  font-size: 12.5px; color: var(--success);
+  font-weight: 500;
+}
+/* Save/update failures (storage write rejected, quota exceeded, etc.)
+   reuse the same element as the success message above, so this simply
+   swaps the color — never remove without also checking every place
+   that sets .save-feedback-error, since that's what stops a failed
+   save from reading as a green "saved" confirmation. */
+.calc-save-feedback.save-feedback-error {
+  color: var(--error);
+}
+
+/* ---- Result column ---- */
+
+.calc-result-col { display: flex; flex-direction: column; gap: var(--space-3); }
+
+.calc-result-card {
+  padding: var(--space-4);
+}
+
+.result-eyebrow {
+  font-size: 11.5px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
+  color: var(--primary-accent);
+}
+.result-price {
+  font-size: 32px; font-weight: 800; letter-spacing: -0.02em;
+  margin-top: 8px;
+}
+.result-range {
+  font-size: 13px; color: var(--text); margin-top: 4px;
+}
+
+.result-breakdown { margin-top: var(--space-4); display: flex; flex-direction: column; gap: 12px; }
+
+.breakdown-group { display: flex; flex-direction: column; }
+.breakdown-group + .breakdown-group { padding-top: 10px; border-top: 1px solid var(--border); }
+
+.breakdown-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 3px 0;
+  font-size: 13px;
+}
+.breakdown-row span { color: var(--text); }
+.breakdown-value { color: var(--text); font-weight: 500; }
+
+/* The one "headline" number per group (Total Project Cost, Profit,
+   Profit Margin) — set apart by weight and its own hairline instead
+   of every line in the breakdown getting identical divider/weight
+   treatment, so the card reads as a considered summary rather than a
+   flat, repeating stat list. */
+.breakdown-row-emphasis {
+  margin-top: 3px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+  font-size: 14px;
+}
+.breakdown-row-emphasis span { color: var(--text); }
+.breakdown-row-emphasis strong { font-weight: 800; color: var(--text); }
+
+.calc-mini-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+
+.calc-mini-card { padding: var(--space-4); }
+.mini-card-title { font-size: 13px; font-weight: 700; margin-bottom: 10px; }
+.mini-card-row {
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 12.5px; padding: 5px 0;
+}
+.mini-card-row span { color: var(--text); }
+.mini-card-row strong { font-weight: 700; color: var(--text); }
+
+.health-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 5px 12px; border-radius: var(--r-full);
+  font-size: 12.5px; font-weight: 600;
+}
+.health-badge::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.health-success { background: var(--success-tint); color: var(--success); }
+.health-warning { background: var(--warning-tint); color: var(--warning); }
+.health-error   { background: var(--error-tint); color: var(--error); }
+.health-neutral { background: var(--surface-2); color: var(--text-faint); }
+.health-note {
+  font-size: 12px; color: var(--text); line-height: 1.5;
+  margin-top: 10px;
+}
+
+/* ==========================================================================
+   PLACEHOLDER PAGES
+   ========================================================================== */
+
+.placeholder {
+  display: flex; flex-direction: column; align-items: center; text-align: center;
+  padding: var(--space-8) var(--space-6);
+  max-width: 380px; margin: 0 auto;
+}
+.placeholder-icon {
+  width: 48px; height: 48px; border-radius: var(--r-md);
+  background: var(--primary-tint); color: var(--primary-accent);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: var(--space-4);
+}
+.placeholder-title { font-size: 19px; font-weight: 700; }
+.placeholder-text { font-size: 14px; color: var(--text); margin-top: 8px; line-height: 1.55; }
+.placeholder .btn-secondary { margin-top: 22px; }
+
+/* ==========================================================================
+   MY PROJECTS
+   ========================================================================== */
+
+.myp-header { margin-bottom: var(--space-4); justify-content: space-between; }
+
+.myp-summary {
+  display: flex; align-items: center;
+  gap: var(--space-5);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: var(--space-3) var(--space-4);
+  margin-bottom: var(--space-3);
+  box-shadow: var(--shadow-sm);
+  flex-wrap: wrap;
+}
+.myp-summary-item { display: flex; flex-direction: column; gap: 3px; }
+.myp-summary-label { font-size: 12px; color: var(--text); }
+.myp-summary-value { font-size: 16px; font-weight: 700; letter-spacing: -0.01em; }
+.myp-summary-divider { width: 1px; height: 28px; background: var(--border); }
+
+.myp-controls {
+  display: flex; gap: 12px; flex-wrap: wrap;
+  margin-bottom: var(--space-3);
+}
+
+.myp-search {
+  position: relative;
+  flex: 1; min-width: 220px;
+  display: flex; align-items: center;
+}
+.myp-search svg {
+  position: absolute; left: 12px;
+  color: var(--text-faint); pointer-events: none;
+}
+.myp-search input {
+  width: 100%; height: 38px;
+  padding: 0 12px 0 36px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-sm);
+  background: var(--surface);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 13.5px;
+}
+.myp-search input:focus {
+  outline: none; border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-tint);
+}
+
+.myp-filter {
+  height: 38px;
+  padding: 0 12px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-sm);
+  background-color: var(--surface);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 13.5px;
+  cursor: pointer;
+}
+.myp-filter:focus { outline: none; border-color: var(--primary); }
+
+.cell-project-name { font-size: 13.5px; font-weight: 600; }
+.cell-project-sub { font-size: 12px; color: var(--text); margin-top: 1px; }
+
+.myp-row-actions { white-space: nowrap; }
+.myp-card-actions {
+  display: flex; justify-content: flex-end;
+  padding: 8px 18px 12px;
+  border-top: 1px solid var(--border);
+}
+
+/* Row actions dropdown ("•••" menu) */
+.row-menu { position: relative; display: inline-flex; }
+.row-menu-trigger { color: var(--text-muted); }
+/* No position/top/right here — positioned via JS as `position: fixed`
+   (see positionRowMenuDropdown in app.js) so it isn't clipped by the
+   table panel's `overflow: hidden` rounded-corner mask. */
+/* position: fixed is a permanent base declaration, not something JS
+   toggles on open. This matters for measurement accuracy: JS reads
+   dropdown.offsetHeight (see positionRowMenuDropdown in app.js) right
+   after un-hiding it, and *before* that read happens is exactly when
+   the height needs to already reflect its real, un-clipped layout —
+   if position here were still the default `static`, the dropdown
+   would render squished as a flex sibling inside `.row-menu`
+   (`display: inline-flex`) for that one measurement, giving a wrong
+   height and throwing off the "flip upward near the bottom of the
+   table" decision. */
+.row-menu-dropdown {
+  position: fixed;
+  min-width: 150px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-md);
+  padding: 6px;
+  display: flex; flex-direction: column; gap: 1px;
+  z-index: 100;
+}
+.row-menu-item {
+  display: block; width: 100%; text-align: left;
+  padding: 7px 10px;
+  border-radius: var(--r-sm);
+  border: none; background: none;
+  font-family: var(--font); font-size: 13px; color: var(--text);
+  cursor: pointer;
+}
+.row-menu-item:hover { background: var(--surface-2); }
+.row-menu-item-danger { color: var(--error); }
+.row-menu-item-danger:hover { background: var(--error-tint); }
+
+/* ==========================================================================
+   TOAST
+   ========================================================================== */
+
+.toast-stack {
+  position: fixed; left: 50%; bottom: 24px;
+  transform: translateX(-50%);
+  z-index: 100;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  pointer-events: none;
+}
+.toast {
+  background: var(--text);
+  color: var(--surface);
+  font-size: 13px; font-weight: 500;
+  padding: 10px 18px;
+  border-radius: var(--r-full);
+  box-shadow: var(--shadow-md);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.2s var(--ease), transform 0.2s var(--ease);
+}
+[data-theme="dark"] .toast { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
+.toast.is-visible { opacity: 1; transform: translateY(0); }
+
+.toast-detailed {
+  border-radius: var(--r-lg);
+  padding: 12px 16px;
+  display: flex; flex-direction: column; gap: 2px;
+  max-width: 320px;
+  text-align: left;
+}
+.toast-title { font-size: 13px; font-weight: 700; }
+.toast-detail { font-size: 12px; font-weight: 400; line-height: 1.45; opacity: 0.85; }
+
+/* ==========================================================================
+   MODALS
+   ========================================================================== */
+
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 60;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+}
+.modal-overlay[hidden] { display: none; }
+
+.modal {
+  background: var(--surface);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-md);
+  width: 100%;
+  max-height: 88vh;
+  overflow-y: auto;
+}
+
+.modal-detail { max-width: 460px; padding: 0; }
+.modal-head {
+  position: sticky; top: 0;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 18px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+.modal-eyebrow { font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text); }
+.modal-body { padding: var(--space-4); }
+
+.detail-title { font-size: 18px; font-weight: 700; margin-bottom: var(--space-3); }
+
+.detail-field { margin-bottom: var(--space-3); }
+.detail-field label { display: block; font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 5px; }
+.detail-client-input {
+  width: 100%; height: 38px; padding: 0 12px;
+  border: 1px solid var(--border-strong); border-radius: var(--r-sm);
+  background: var(--surface); color: var(--text); font-family: var(--font); font-size: 13.5px;
+}
+.detail-client-input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-tint); }
+
+.detail-row {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+  margin-bottom: var(--space-3);
+}
+.detail-label { font-size: 12px; color: var(--text); margin-bottom: 4px; }
+.detail-price { font-size: 20px; font-weight: 700; }
+
+.status-select {
+  width: 100%; height: 36px; padding: 0 10px;
+  border: 1px solid var(--border-strong); border-radius: var(--r-sm);
+  background-color: var(--surface); color: var(--text); font-family: var(--font); font-size: 13px; font-weight: 600;
+  cursor: pointer;
+}
+.status-select:focus { outline: none; border-color: var(--primary); }
+
+.detail-divider { height: 1px; background: var(--border); margin: var(--space-3) 0; }
+.detail-section-title { font-size: 13px; font-weight: 700; margin-bottom: 10px; }
+
+.detail-actions { display: flex; flex-direction: column; gap: 8px; }
+.detail-actions .btn { justify-content: center; }
+
+.modal-delete { max-width: 380px; padding: var(--space-5); text-align: center; }
+.modal-delete-title { font-size: 17px; font-weight: 700; }
+.modal-delete-text { font-size: 13.5px; color: var(--text); margin-top: 8px; line-height: 1.5; }
+.modal-delete-actions { display: flex; gap: 10px; margin-top: 20px; }
+.modal-delete-actions .btn { flex: 1; justify-content: center; }
+
+.detail-doc-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+.detail-doc-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+}
+.detail-doc-number { font-size: 13px; font-weight: 700; }
+.detail-doc-created { font-size: 11.5px; color: var(--text); margin-top: 2px; }
+.detail-doc-actions { display: flex; gap: 12px; }
+.detail-doc-new { width: 100%; justify-content: center; }
+
+/* ==========================================================================
+   QUOTATION GENERATOR
+   ========================================================================== */
+
+.quo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+  align-items: start;
+}
+
+.quo-form-col { display: flex; flex-direction: column; gap: var(--space-3); }
+.quo-form-col .calc-form-card .section-title { margin-bottom: var(--space-3); }
+
+/* display:flex + column here (not just `position: sticky`) so the
+   preview card can stretch to match the form column's height —
+   applies to every generator that shares this class (Quotation,
+   Proposal, Invoice, Rate Card) and to Settings. */
+.quo-preview-col {
+  position: sticky; top: calc(var(--topbar-h) + var(--rail-gap) + var(--space-3));
+  display: flex; flex-direction: column; gap: var(--space-3);
+}
+
+.quo-section-header-row {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; margin-bottom: var(--space-3);
+}
+.quo-section-header-row .section-title { margin-bottom: 0; }
+
+/* ---- Summary card (right column, above the live document preview) ---- */
+
+.quo-summary-card { padding: var(--space-4); }
+.quo-summary-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 10px;
+}
+.quo-summary-header .section-title { margin-bottom: 0; }
+
+.quo-save-status {
+  font-size: 11.5px; font-weight: 600;
+  padding: 3px 9px;
+  border-radius: var(--r-full);
+}
+.quo-save-status.is-dirty { color: var(--warning); background: var(--warning-tint); }
+.quo-save-status.is-saved { color: var(--success); background: var(--success-tint); }
+
+.quo-summary-card .quo-total-row { font-size: 13px; padding: 6px 0; color: var(--text); }
+.quo-total-row-grand {
+  display: flex; justify-content: space-between;
+  border-top: 1px solid var(--border);
+  margin-top: 6px; padding-top: 10px;
+  font-size: 17px; font-weight: 700; color: var(--text);
+}
+
+.quo-summary-actions { margin-top: 14px; }
+.quo-summary-card .calc-save-feedback { margin-top: 10px; }
+.quo-summary-card .quo-validation-message { margin-top: 12px; margin-bottom: 0; }
+
+.quo-preview-sheet {
+  background: #fff;
+  color: #17181c;
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border);
+  width: 100%;
+  max-width: 620px;
+  aspect-ratio: 210 / 297;
+  margin: 0 auto;
+  padding: 7.5%;
+  box-sizing: border-box;
+  font-size: 12.5px;
+  line-height: 1.5;
+  overflow-y: auto;
+}
+
+.quo-doc-head { text-align: left; margin-bottom: 18px; }
+.quo-doc-logo { max-height: 44px; max-width: 160px; object-fit: contain; margin-bottom: 8px; display: block; }
+.quo-doc-business-name { font-size: 15px; font-weight: 800; }
+.quo-doc-business-line { font-size: 11.5px; color: #17181c; margin-top: 2px; }
+
+.quo-doc-title-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; }
+.quo-doc-title { font-size: 20px; font-weight: 800; letter-spacing: 0.02em; }
+.quo-doc-number { font-size: 12px; color: #17181c; margin-top: 2px; }
+.quo-doc-dates { text-align: right; font-size: 11.5px; }
+.quo-doc-dates p { margin-top: 4px; }
+.quo-doc-dates span { display: block; color: #17181c; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.04em; }
+
+.quo-doc-divider { height: 1px; background: #e4e4e6; margin: 14px 0; }
+.quo-doc-section-label {
+  font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;
+  color: #17181c; margin-bottom: 4px; margin-top: 12px;
+}
+.quo-doc-section-label:first-of-type { margin-top: 0; }
+.quo-doc-bill-name { font-weight: 700; font-size: 13px; }
+
+.quo-doc-table { width: 100%; border-collapse: collapse; margin-top: 4px; }
+.quo-doc-table th {
+  text-align: left; font-size: 10px; text-transform: uppercase; letter-spacing: 0.04em;
+  color: #17181c; padding: 6px 0; border-bottom: 1px solid #e4e4e6;
+}
+.quo-doc-table td { padding: 7px 0; border-bottom: 1px solid #f0f0f1; font-size: 12px; }
+.quo-doc-table .num, .quo-doc-table th.num { text-align: right; }
+.quo-doc-empty { text-align: center; color: #9a9a9e; padding: 14px 0; }
+
+.quo-doc-totals { margin-top: 10px; max-width: 260px; margin-left: auto; }
+.quo-total-row { display: flex; justify-content: space-between; padding: 4px 0; font-size: 12px; }
+.quo-total-grand { border-top: 1px solid #17181c; margin-top: 6px; padding-top: 8px; font-weight: 800; font-size: 14px; }
+
+.quo-doc-pre { white-space: pre-wrap; font-size: 11.5px; color: #17181c; }
+.quo-doc-footer { text-align: center; font-size: 11px; font-weight: 700; color: #17181c; }
+
+/* ---- Line items editor ---- */
+
+.quo-item-row {
+  display: grid;
+  grid-template-columns: 1fr 56px 130px 100px 28px;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.quo-item-desc, .quo-item-qty {
+  height: 36px; padding: 0 10px;
+  border: 1px solid var(--border-strong); border-radius: var(--r-sm);
+  background-color: var(--surface); color: var(--text); font-family: var(--font); font-size: 12.5px;
+}
+.quo-item-desc:focus, .quo-item-qty:focus, .quo-item-price input:focus {
+  outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-tint);
+}
+.quo-item-price input {
+  height: 36px; font-size: 12.5px;
+  border: 1px solid var(--border-strong); border-radius: var(--r-sm);
+  background-color: var(--surface); color: var(--text); font-family: var(--font);
+}
+.quo-item-price .input-prefix { font-size: 12px; }
+.quo-item-total { font-size: 12.5px; font-weight: 700; text-align: right; }
+.quo-item-remove {
+  width: 28px; height: 28px; border: none; background: transparent; border-radius: var(--r-sm);
+  color: var(--text-faint); display: flex; align-items: center; justify-content: center;
+}
+.quo-item-remove:hover { background: var(--error-tint); color: var(--error); }
+.quo-add-item { width: 100%; justify-content: center; margin-top: 4px; }
+
+.quo-items-empty {
+  text-align: center;
+  padding: 20px 16px;
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--r-md);
+}
+.quo-items-empty-title { font-size: 13.5px; font-weight: 700; }
+.quo-items-empty-text { font-size: 12.5px; color: var(--text); margin-top: 4px; margin-bottom: 14px; }
+
+/* ---- Logo upload ---- */
+
+.logo-upload { display: flex; align-items: center; gap: 14px; }
+.logo-preview {
+  width: 64px; height: 64px;
+  border: 1px dashed var(--border-strong); border-radius: var(--r-sm);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10.5px; color: var(--text-faint); text-align: center;
+  overflow: hidden; flex-shrink: 0;
+}
+.logo-preview img { width: 100%; height: 100%; object-fit: contain; }
+.logo-upload-actions { display: flex; flex-direction: column; gap: 6px; align-items: flex-start; }
+.logo-upload-btn { cursor: pointer; }
+
+.quo-validation-message {
+  background: var(--error-tint); color: var(--error);
+  padding: 10px 12px; border-radius: var(--r-sm);
+  font-size: 12.5px; font-weight: 500; margin-bottom: 14px;
+}
+
+/* ---- Print-only sheet (#quo-print-sheet) is hidden on screen; only
+   shown, full width, during an actual print/PDF export. ---- */
+
+#quo-print-sheet { display: none; }
+
+/* Table column proportions inside the quotation document — matters
+   both on screen and in print so Preview \u2248 PDF. */
+.quo-doc-table th:nth-child(1), .quo-doc-table td:nth-child(1) { width: 50%; }
+.quo-doc-table th:nth-child(2), .quo-doc-table td:nth-child(2) { width: 10%; }
+.quo-doc-table th:nth-child(3), .quo-doc-table td:nth-child(3) { width: 20%; }
+.quo-doc-table th:nth-child(4), .quo-doc-table td:nth-child(4) { width: 20%; }
+
+/* ---- Print (Export PDF) ----
+   #quo-print-sheet sits directly under <body>, with no sidebar/grid
+   ancestor, so "width: 100%" here resolves to the true A4 printable
+   width rather than a narrow column inside the app's 2-column layout.
+   @page margin is 0 and the sheet carries its own 15-18mm padding, per
+   the recommended pattern for reliable single-page HTML-to-PDF output. */
+
+@media print {
+  @page { size: A4 portrait; margin: 0; }
+
+  html, body { background: #fff !important; height: auto; }
+  body > *:not(#quo-print-sheet) { display: none !important; }
+
+  #quo-print-sheet {
+    display: block;
+    position: static;
+    width: 210mm;
+    min-height: 297mm;
+    max-width: none;
+    margin: 0;
+    padding: 16mm 17mm;
+    box-sizing: border-box;
+    background: #fff;
+    box-shadow: none; border: none; border-radius: 0;
+    font-size: 10px;
+    line-height: 1.5;
+    color: #17181c;
+  }
+
+  .quo-doc-head { margin-bottom: 12px; }
+  .quo-doc-logo { max-height: 38px; }
+  .quo-doc-business-name { font-size: 18px; }
+  .quo-doc-business-line { font-size: 9px; margin-top: 1px; }
+
+  .quo-doc-title-row { margin-bottom: 10px; }
+  .quo-doc-title { font-size: 24px; }
+  .quo-doc-number { font-size: 10px; }
+  .quo-doc-dates { font-size: 9px; }
+  .quo-doc-dates span { font-size: 8px; }
+
+  .quo-doc-divider { margin: 10px 0; }
+  .quo-doc-section-label { font-size: 8.5px; margin-top: 9px; }
+  .quo-doc-bill-name { font-size: 11px; }
+
+  .quo-doc-table th { font-size: 8px; padding: 5px 0; }
+  .quo-doc-table td { font-size: 9.5px; padding: 5px 0; }
+
+  .quo-doc-totals { margin-top: 8px; }
+  .quo-total-row { font-size: 9.5px; padding: 3px 0; }
+  .quo-total-grand { font-size: 13px; padding-top: 6px; margin-top: 4px; }
+
+  .quo-doc-pre { font-size: 9px; }
+  .quo-doc-footer { font-size: 9px; margin-top: 10px; }
+
+  .prop-doc-check { font-size: 9.5px; margin-top: 3px; }
+  .prop-doc-scope-item { margin-top: 6px; }
+  .prop-doc-scope-num { font-size: 8.5px; }
+  .prop-doc-scope-title { font-size: 10px; }
+  .prop-doc-scope-desc { font-size: 8.5px; }
+  .prop-doc-investment { font-size: 16px; }
+  .prop-doc-timeline-item { font-size: 9.5px; }
+}
+
+/* ==========================================================================
+   PROPOSAL GENERATOR
+   ========================================================================== */
+
+/* ---- Form: simple string list rows (Objectives, Deliverables) ---- */
+
+.prop-list-row {
+  display: flex; gap: 8px; align-items: center;
+  margin-bottom: 8px;
+}
+.prop-list-input {
+  flex: 1; height: 36px; padding: 0 10px;
+  border: 1px solid var(--border-strong); border-radius: var(--r-sm);
+  background: var(--surface); color: var(--text); font-family: var(--font); font-size: 12.5px;
+}
+
+/* ---- Form: Scope of Work rows (title + description) ---- */
+
+.prop-scope-row {
+  display: grid;
+  grid-template-columns: 28px 1fr 28px;
+  gap: 10px;
+  align-items: start;
+  margin-bottom: 12px;
+}
+.prop-scope-number {
+  width: 28px; height: 28px;
+  border-radius: var(--r-sm);
+  background: var(--primary-tint); color: var(--primary-accent);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700;
+  margin-top: 4px;
+}
+.prop-scope-fields { display: flex; flex-direction: column; gap: 6px; }
+.prop-scope-desc {
+  width: 100%; padding: 8px 10px;
+  border: 1px solid var(--border-strong); border-radius: var(--r-sm);
+  background: var(--surface); color: var(--text); font-family: var(--font); font-size: 12px;
+  resize: vertical;
+}
+
+/* ---- Form: Timeline rows (description + duration) ---- */
+
+.prop-timeline-row {
+  display: grid;
+  grid-template-columns: 28px 1fr 28px;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.prop-timeline-fields { display: grid; grid-template-columns: 1fr 110px; gap: 8px; }
+.prop-timeline-duration { text-align: center; }
+
+/* ---- Document preview: Objectives / Deliverables checklist ---- */
+
+.prop-doc-check {
+  font-size: 11.5px; color: #17181c;
+  margin-top: 4px;
+}
+
+/* ---- Document preview: Scope of Work ---- */
+
+.prop-doc-scope-item {
+  display: flex; gap: 10px; align-items: flex-start;
+  margin-top: 8px;
+}
+.prop-doc-scope-num {
+  font-size: 10px; font-weight: 700; color: #17181c;
+  min-width: 20px;
+}
+.prop-doc-scope-title { font-size: 12px; font-weight: 700; }
+.prop-doc-scope-desc { font-size: 11px; color: #17181c; margin-top: 2px; }
+
+/* ---- Document preview: Timeline ---- */
+
+.prop-doc-timeline-item {
+  display: flex; justify-content: space-between;
+  font-size: 12px; padding: 4px 0;
+}
+
+/* ---- Document preview: Investment ---- */
+
+.prop-doc-investment { font-size: 22px; font-weight: 800; }
+.prop-doc-payment-terms { margin-top: 4px; }
+
+/* ---- Document preview: cover-style header ---- */
+
+.prop-doc-kicker {
+  font-size: 10.5px; font-weight: 700; letter-spacing: 0.08em;
+  color: #17181c; margin-top: 16px;
+}
+.prop-doc-title { font-size: 23px; font-weight: 800; line-height: 1.25; letter-spacing: -0.01em; margin-top: 4px; }
+
+/* ---- Document preview: numbered section labels ---- */
+
+.prop-doc-numbered-label { display: flex; align-items: baseline; gap: 8px; }
+.prop-doc-num { color: var(--primary-accent); font-weight: 800; }
+
+/* ---- Editor: collapsible Proposal Content accordion ---- */
+
+.prop-accordion-card { padding: var(--space-4); }
+.prop-accordion { display: flex; flex-direction: column; gap: 8px; }
+.prop-accordion-item {
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  overflow: hidden;
+}
+.prop-accordion-header {
+  width: 100%;
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 14px;
+  background: none; border: none; cursor: pointer;
+  text-align: left;
+  font-family: var(--font);
+}
+.prop-accordion-header:hover { background: var(--surface-2); }
+.prop-accordion-title { font-size: 13px; font-weight: 700; color: var(--text); flex-shrink: 0; }
+.prop-accordion-summary {
+  flex: 1; min-width: 0;
+  font-size: 12px; color: var(--text);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.prop-accordion-chevron { color: var(--text-faint); flex-shrink: 0; transition: transform 0.15s var(--ease); }
+.prop-accordion-item.is-open .prop-accordion-chevron { transform: rotate(180deg); }
+.prop-accordion-body {
+  padding: 4px 14px 14px;
+  border-top: 1px solid var(--border);
+}
+.prop-accordion-item:not(.is-open) .prop-accordion-body { display: none; }
+.prop-accordion-body .field:last-child { margin-bottom: 0; }
+
+/* ==========================================================================
+   BUSINESS SETTINGS
+   ========================================================================== */
+
+.field-required { color: var(--error); }
+
+.use-latest-btn {
+  display: inline-block;
+  margin: -6px 0 14px;
+  font-size: 12px;
+}
+
+.color-field {
+  display: flex; align-items: center; gap: 10px;
+}
+.color-field input[type="color"] {
+  width: 40px; height: 36px;
+  padding: 2px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-sm);
+  background: var(--surface);
+  cursor: pointer;
+}
+.color-field-value {
+  font-size: 12.5px; font-weight: 600; color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- Live identity preview (business card, not a document) ---- */
+
+.identity-preview {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-sm);
+  padding: var(--space-5);
+}
+.identity-preview-inner {
+  border-top: 4px solid var(--primary);
+  padding-top: var(--space-3);
+  text-align: center;
+}
+.identity-preview-logo {
+  max-height: 56px; max-width: 180px; object-fit: contain;
+  margin: 0 auto 10px;
+  display: block;
+}
+.identity-preview-name {
+  font-size: 19px; font-weight: 800; color: var(--primary-accent);
+}
+.identity-preview-line {
+  font-size: 13px; color: var(--text);
+  margin-top: 4px;
+}
+
+/* ---- Settings: subsection grouping within Business Identity ---- */
+
+.settings-subsection-divider { border-top: 1px solid var(--border); margin: var(--space-3) 0 12px; }
+.settings-subsection-label {
+  font-size: 11.5px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.04em;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+
+/* ---- Settings: Data & Backup ---- */
+
+.backup-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+.backup-block-title { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+.backup-block-text { font-size: 12px; color: var(--text); line-height: 1.5; margin-bottom: 10px; }
+.backup-last { font-size: 11.5px; color: var(--text); margin-top: 8px; }
+
+.backup-preview {
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  margin-bottom: var(--space-3);
+}
+.backup-preview-title { font-size: 12.5px; font-weight: 700; margin-bottom: 2px; }
+.backup-preview-meta { font-size: 11.5px; color: var(--text); margin-bottom: 8px; }
+.backup-preview-counts {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px 12px;
+  margin-bottom: 12px;
+}
+.backup-preview-count-label { display: block; font-size: 11px; color: var(--text); }
+.backup-preview-count-value { display: block; font-size: 14px; font-weight: 700; }
+.backup-preview-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+.data-storage-note {
+  margin-top: var(--space-3);
+  padding: 10px 14px;
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+}
+.data-storage-note p { font-size: 12px; color: var(--text); line-height: 1.55; }
+.data-storage-note p:first-child { color: var(--text); font-weight: 600; margin-bottom: 3px; }
+
+.modal-delete-field-left { text-align: left; margin-top: var(--space-3); }
+
+/* ---- Settings: Danger Zone ---- */
+
+.settings-danger-zone {
+  padding: var(--space-4);
+  border: 1px solid var(--error-tint);
+}
+.settings-danger-zone .section-title { margin-bottom: var(--space-3); }
+.settings-danger-row {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; flex-wrap: wrap;
+}
+.settings-danger-title { font-size: 13px; font-weight: 700; }
+.settings-danger-text { font-size: 12px; color: var(--text); margin-top: 2px; max-width: 440px; }
+
+/* ---- Dashboard: Business Profile card ---- */
+
+.profile-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-sm);
+  padding: var(--space-3) var(--space-4);
+  margin-bottom: 0;
+}
+.profile-card-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; flex-wrap: wrap;
+}
+.profile-card-title { font-size: 14px; font-weight: 700; }
+.profile-card-name { font-size: 15px; font-weight: 700; }
+.profile-card-text { font-size: 12.5px; color: var(--text); margin-top: 3px; max-width: 640px; }
+.profile-card-info { flex: 1; min-width: 180px; }
+
+.profile-card-progress {
+  display: flex; align-items: center; gap: 10px;
+  flex: 1; min-width: 140px;
+}
+.profile-card-bar {
+  flex: 1; height: 6px; border-radius: var(--r-full);
+  background: var(--surface-2); overflow: hidden;
+}
+.profile-card-bar-fill {
+  height: 100%; border-radius: var(--r-full);
+  background: var(--primary);
+}
+.profile-card-percent { font-size: 13px; font-weight: 700; color: var(--primary-accent); min-width: 36px; text-align: right; }
+
+/* ==========================================================================
+   REVISION CALCULATOR
+   ========================================================================== */
+
+.revc-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+  align-items: start;
+}
+.revc-result-card { display: flex; flex-direction: column; }
+
+/* Reset is a secondary utility action, not a page-level primary
+   action — it stays at its natural (non-stretched) width and sits
+   bottom-right of the form, separated from the fields above by a
+   divider, so it reads as a distinct "clear this form" control
+   instead of another field-like element in the same vertical stack. */
+.revc-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: var(--space-4);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--border);
+}
+
+/* ==========================================================================
+   HELP
+   ========================================================================== */
+
+.help-search-bar {
+  position: relative;
+  display: flex; align-items: center;
+  margin-bottom: var(--space-4);
+}
+.help-search-bar svg { position: absolute; left: 14px; color: var(--text-faint); pointer-events: none; }
+.help-search-bar input {
+  width: 100%; height: 42px;
+  padding: 0 14px 0 40px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 14px;
+}
+.help-search-bar input:focus {
+  outline: none; border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-tint);
+}
+
+.help-section { margin-bottom: var(--space-5); }
+.help-section:last-child { margin-bottom: 0; }
+.help-section-title { font-size: 15px; font-weight: 700; margin-bottom: 10px; }
+.help-section-sub { font-size: 12.5px; color: var(--text); margin: -6px 0 10px; }
+
+/* Getting Started + Feature Guide cards — same tile pattern as Quick Actions */
+.help-tile-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+.help-tile {
+  display: flex; align-items: center; gap: 10px;
+  width: 100%;
+  padding: 12px;
+  border-radius: var(--r-md);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.15s var(--ease), background 0.15s var(--ease);
+}
+.help-tile:hover { background: var(--surface-2); border-color: var(--border-strong); }
+.help-tile-badge {
+  width: 30px; height: 30px; flex-shrink: 0;
+  border-radius: var(--r-sm);
+  background: var(--primary-tint); color: var(--primary-accent);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700;
+}
+.help-tile-badge svg { width: 15px; height: 15px; }
+.help-tile-text { flex: 1; min-width: 0; }
+.help-tile-title { display: block; font-size: 13px; font-weight: 600; }
+.help-tile-desc { display: block; font-size: 11.5px; color: var(--text); margin-top: 1px; }
+.help-tile-arrow { color: var(--text-faint); font-size: 18px; flex-shrink: 0; }
+
+/* Search results */
+.help-result-card {
+  display: block; width: 100%;
+  padding: 12px 14px;
+  border-radius: var(--r-md);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  text-align: left;
+  cursor: pointer;
+  margin-bottom: 8px;
+}
+/* FAQ/Troubleshooting results reuse this card's look but open inline
+   (via the accordion right below) rather than navigating anywhere, so
+   they render as a plain, non-clickable <div> instead of a <button>. */
+.help-result-card.is-static { cursor: default; }
+.help-result-card:hover { background: var(--surface-2); border-color: var(--border-strong); }
+.help-result-category {
+  display: inline-block;
+  font-size: 10.5px; font-weight: 700; letter-spacing: 0.02em; text-transform: uppercase;
+  color: var(--primary-accent); margin-bottom: 3px;
+}
+.help-result-title { font-size: 13.5px; font-weight: 600; }
+.help-result-snippet { font-size: 12px; color: var(--text); margin-top: 3px; line-height: 1.5; }
+.help-empty-search { font-size: 13px; color: var(--text); padding: 8px 2px; }
+
+/* Article detail */
+.help-article-back {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: none; border: none; cursor: pointer;
+  color: var(--text); font-size: 12.5px; font-weight: 600;
+  padding: 0; margin-bottom: 14px;
+}
+.help-article-back:hover { color: var(--text); }
+.help-article-category {
+  display: inline-block;
+  font-size: 10.5px; font-weight: 700; letter-spacing: 0.02em; text-transform: uppercase;
+  color: var(--primary-accent); margin-bottom: 6px;
+}
+.help-article-title { font-size: 19px; font-weight: 700; letter-spacing: -0.01em; margin-bottom: var(--space-3); }
+.help-article-block { margin-bottom: var(--space-3); }
+.help-article-block:last-child { margin-bottom: 0; }
+.help-article-heading { font-size: 13px; font-weight: 700; margin-bottom: 6px; }
+.help-article-block p { font-size: 13px; color: var(--text); line-height: 1.65; }
+.help-article-block ul, .help-article-block ol {
+  margin: 0; padding-left: 18px;
+  font-size: 13px; color: var(--text); line-height: 1.7;
+}
+.help-article-block li + li { margin-top: 2px; }
+.help-article-related {
+  margin-top: 20px; padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+.help-article-related-title { font-size: 11.5px; font-weight: 700; color: var(--text); text-transform: uppercase; letter-spacing: 0.02em; margin-bottom: 8px; }
+.help-related-link {
+  display: inline-flex; align-items: center;
+  font-size: 12.5px; font-weight: 600; color: var(--primary-accent);
+  background: none; border: none; cursor: pointer; padding: 0;
+  margin-right: 16px; margin-bottom: 4px;
+}
+.help-related-link:hover { text-decoration: underline; }
+
+/* Data & Troubleshooting intro card */
+.help-data-card { padding: 16px; margin-bottom: 12px; }
+.help-data-card p { font-size: 13px; color: var(--text); line-height: 1.65; margin-bottom: 8px; }
+.help-data-card p:last-child { margin-bottom: 0; }
+.help-data-card ul { margin: 8px 0 0; padding-left: 18px; font-size: 13px; color: var(--text); line-height: 1.7; }
+
+.help-item { border-top: 1px solid var(--border); }
+.help-item:first-of-type { border-top: none; }
+
+.help-question {
+  width: 100%;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px;
+  padding: 14px 2px;
+  background: none; border: none;
+  text-align: left;
+  font-size: 13.5px; font-weight: 600; color: var(--text);
+  cursor: pointer;
+}
+/* Flex items default to min-width: auto, not 0 — without this, a long
+   question can refuse to shrink inside the flex row and push past the
+   button/card edge instead of wrapping onto a second line. */
+.help-question-text { min-width: 0; overflow-wrap: break-word; }
+.help-chevron { color: var(--text-faint); flex-shrink: 0; transition: transform 0.15s var(--ease); }
+.help-item.is-open .help-chevron { transform: rotate(180deg); }
+
+.help-answer {
+  display: none;
+  font-size: 13px; color: var(--text); line-height: 1.6;
+  padding: 0 2px 16px;
+  overflow-wrap: break-word;
+}
+.help-item.is-open .help-answer { display: block; }
+
+/* ==========================================================================
+   RATE CARD GENERATOR
+   ========================================================================== */
+
+.rate-item-row {
+  display: grid;
+  grid-template-columns: 1fr 140px 90px 28px;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.rate-item-price input {
+  height: 36px; font-size: 12.5px;
+  border: 1px solid var(--border-strong); border-radius: var(--r-sm);
+  background-color: var(--surface); color: var(--text); font-family: var(--font);
+}
+.rate-item-price .input-prefix { font-size: 12px; }
+.rate-item-unit {
+  height: 36px; padding: 0 10px;
+  border: 1px solid var(--border-strong); border-radius: var(--r-sm);
+  background-color: var(--surface); color: var(--text); font-family: var(--font); font-size: 12.5px;
+}
+.rate-item-unit:focus, .rate-item-price input:focus {
+  outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-tint);
+}
+.rate-doc-unit { font-size: 10px; color: #17181c; }
+.rate-doc-table td { padding: 8px 0; }
+
+/* ==========================================================================
+   TEMPLATES
+   ========================================================================== */
+
+.tpl-page-helper { margin-bottom: 16px; }
+
+/* Create/Edit form — hidden until "+ New Template" or an Edit action
+   opens it, so it sits below the list in normal document flow rather
+   than permanently occupying the top of the page. */
+.tpl-form-panel { margin-top: 20px; }
+
+/* Load-from-template select, used inside Quotation/Invoice items section */
+.tpl-load-field { margin-bottom: 14px; }
+.tpl-load-field select {
+  width: 100%; height: 38px; padding: 0 10px;
+  border: 1px solid var(--border-strong); border-radius: var(--r-sm);
+  background-color: var(--surface); color: var(--text); font-family: var(--font); font-size: 12.5px;
+  cursor: pointer;
+}
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+
+@media (max-width: 1080px) {
+  .summary-grid { grid-template-columns: repeat(2, 1fr); }
+  .quick-grid { grid-template-columns: repeat(2, 1fr); }
+  .quick-secondary-grid { grid-template-columns: repeat(2, 1fr); }
+  .dashboard-top-row { grid-template-columns: 1fr; }
+  .dashboard-split-row, .dashboard-split-row-bottom { grid-template-columns: 1fr; }
+  .dashboard-hero-art { display: none; }
+  .calc-grid { grid-template-columns: 1fr; }
+  .quo-grid { grid-template-columns: minmax(0, 1fr); }
+  .quo-preview-col { position: static; }
+  .revc-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 860px) {
+  /* Rail always stays visible, floating at the left edge, same as desktop. */
+  .main { margin-left: calc(var(--rail-w) + var(--rail-gap) * 2); }
+
+  /* Panel overlays the content instead of pushing it, since the
+     screen is too narrow to show both side by side. */
+  .sidebar { width: var(--rail-w); }
+  .sidebar-panel {
+    position: fixed;
+    top: var(--rail-gap); bottom: var(--rail-gap);
+    left: calc(var(--rail-gap) * 2 + var(--rail-w));
+    width: var(--panel-w) !important;
+    padding: 18px 14px 16px !important;
+    opacity: 1 !important;
+    border-radius: var(--r-lg);
+    transform: translateX(calc(-100% - (var(--rail-gap) * 2) - var(--rail-w)));
+    transition: transform 0.2s var(--ease);
+    box-shadow: var(--shadow-md);
+  }
+  html:not(.sidebar-collapsed) .sidebar-panel { transform: translateX(0); }
+  .drawer-overlay.is-open { display: block; }
+
+  .topbar { padding: 0 16px; gap: 8px; }
+  .topbar-right { gap: 4px; }
+  .profile-trigger { padding: 6px 4px 6px 6px; }
+  .profile-text { display: none; }
+  .content { padding: 20px 16px; }
+
+  .table { display: none; }
+  .project-cards { display: block; }
+}
+
+@media (max-width: 600px) {
+  .summary-grid { grid-template-columns: 1fr; }
+  .quick-grid { grid-template-columns: 1fr; }
+  .quick-secondary-grid { grid-template-columns: 1fr; }
+  .quick-actions-grid { grid-template-columns: 1fr; }
+  .dashboard-hero { padding: 24px 20px; }
+  .dashboard-hero-greeting { font-size: 20px; }
+  .dashboard-hero-content { max-width: none; }
+  .topbar { height: auto; flex-wrap: wrap; row-gap: 10px; padding: 12px 16px; }
+  .topbar-date { display: none; }
+  .page-header { flex-direction: column; align-items: stretch; }
+  .page-header .btn-primary { justify-content: center; }
+  .page-title { font-size: 22px; }
+
+  .field-row { grid-template-columns: 1fr; gap: 18px; }
+  .calc-mini-grid { grid-template-columns: 1fr; }
+  .calc-actions .btn { min-width: 100%; }
+  .calc-result-card { padding: 18px; }
+  .result-price { font-size: 27px; }
+
+  .myp-controls { flex-direction: column; }
+  .myp-filter { width: 100%; }
+  .detail-row { grid-template-columns: 1fr; }
+  .help-tile-grid { grid-template-columns: 1fr; }
+  .backup-grid { grid-template-columns: 1fr; }
+  .backup-preview-counts { grid-template-columns: repeat(2, 1fr); }
+  .backup-reminder-row { padding: 14px 16px; }
+  .backup-reminder-actions { width: 100%; }
+  .backup-reminder-actions .btn { flex: 1; justify-content: center; }
+
+  .quo-preview-sheet { padding: 20px 16px; font-size: 11.5px; }
+  .quo-item-row { grid-template-columns: 1fr; gap: 6px; }
+  .rate-item-row { grid-template-columns: 1fr; gap: 6px; }
+  .quo-item-total { text-align: left; }
+  .logo-upload { flex-wrap: wrap; }
+
+  .prop-scope-row, .prop-timeline-row { grid-template-columns: 1fr; }
+  .prop-scope-number { margin-top: 0; }
+  .prop-timeline-fields { grid-template-columns: 1fr; }
+
+  .profile-card-inner { flex-direction: column; align-items: stretch; }
+  .profile-card-progress { order: 2; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}

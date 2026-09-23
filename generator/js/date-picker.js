@@ -13,11 +13,20 @@
    language they picked inside the app itself - which looks exactly
    like a bug even though nothing in the app's own layout is wrong.
 
-   The real <input type="date"> element is kept in the DOM completely
-   unchanged (same id, same data-* attributes, same "YYYY-MM-DD" value,
-   same "input"/"change" events on every commit) - only how its value
-   gets SET by the user changes. Every bit of existing app code that
-   reads or writes these fields keeps working exactly as before.
+   IMPORTANT - how the native picker is actually blocked:
+   `readonly` on the real <input type="date"> is NOT enough - Chrome
+   honors it (no native picker), but Safari on iPad/iPhone still opens
+   its own native calendar on top of ours even when the field is
+   readonly, giving two calendars stacked on top of each other. The
+   only fully reliable fix is to never let the real <input type="date">
+   receive a user gesture at all: it's kept in the DOM completely
+   unchanged (same id, same data-* attribute, same ISO "YYYY-MM-DD"
+   value, same input/change events on every commit - every bit of
+   existing app code that reads or writes it keeps working exactly as
+   before) but made invisible and inert, while a separate real
+   <button> is the ONLY thing the user can see or click. No user
+   gesture ever reaches the native input, so its native picker never
+   has a chance to open.
    ========================================================================== */
 
 (function () {
@@ -63,14 +72,15 @@
 
   function refreshDisplay(input) {
     const span = input.__fkDpDisplay;
+    const btn = input.__fkDpButton;
     if (!span) return;
     const parsed = parseISO(input.value);
     if (parsed) {
       span.textContent = formatDisplay(parsed.y, parsed.mo, parsed.d);
-      span.classList.remove("fk-dp-placeholder");
+      if (btn) btn.classList.remove("fk-dp-placeholder");
     } else {
       span.textContent = locale().placeholder;
-      span.classList.add("fk-dp-placeholder");
+      if (btn) btn.classList.add("fk-dp-placeholder");
     }
   }
 
@@ -82,20 +92,25 @@
     style.id = "fk-dp-style";
     style.textContent = `
       .fk-dp-wrap { position: relative; display: block; width: 100%; }
-      .fk-dp-wrap input[type="date"] {
-        color: transparent !important;
-        caret-color: transparent;
+      .fk-dp-hidden-input {
+        position: absolute !important; opacity: 0 !important; pointer-events: none !important;
+        width: 1px !important; height: 1px !important; margin: 0 !important; padding: 0 !important;
+        border: 0 !important; overflow: hidden !important; clip: rect(0,0,0,0) !important;
+        white-space: nowrap !important;
       }
-      .fk-dp-wrap input[type="date"]::-webkit-calendar-picker-indicator {
-        display: none !important;
+      .fk-dp-display-btn {
+        width: 100%; height: 38px; display: flex; align-items: center; justify-content: space-between;
+        padding: 0 12px; border: 1px solid var(--border-strong, #d8d6cf); border-radius: var(--r-sm, 8px);
+        background: var(--surface, #fff); font-family: var(--font, inherit); font-size: 13.5px;
+        color: var(--text, #1a1a1a); cursor: pointer; text-align: left;
+        transition: border-color 0.15s ease, box-shadow 0.15s ease;
       }
-      .fk-dp-display {
-        position: absolute; inset: 0;
-        display: flex; align-items: center; justify-content: space-between;
-        padding: 0 12px; pointer-events: none;
-        font-family: var(--font, inherit); font-size: 13.5px; color: var(--text, #1a1a1a);
+      .fk-dp-display-btn:hover { border-color: var(--primary, #025864); }
+      .fk-dp-display-btn:focus-visible {
+        outline: none; border-color: var(--primary, #025864);
+        box-shadow: 0 0 0 3px var(--primary-tint, rgba(2,88,100,0.15));
       }
-      .fk-dp-display.fk-dp-placeholder { color: var(--text-muted, #9a9a9e); }
+      .fk-dp-display-btn.fk-dp-placeholder { color: var(--text-muted, #9a9a9e); }
       .fk-dp-display-icon { font-size: 13px; opacity: 0.55; margin-left: 8px; flex-shrink: 0; }
 
       .fk-dp-popover {
@@ -150,7 +165,7 @@
   }
 
   function handleOutsideClick(e) {
-    if (activePopover && !activePopover.contains(e.target) && e.target !== activeInput) {
+    if (activePopover && !activePopover.contains(e.target) && e.target !== activeInput.__fkDpButton) {
       closePopover();
     }
   }
@@ -224,7 +239,7 @@
       if (isToday) btn.setAttribute("data-dp-today", "");
       btn.addEventListener("click", () => {
         commitValue(input, viewY, viewMo, d);
-        closePopover();
+        closePopoverAndRefocus(input);
       });
       grid.appendChild(btn);
     }
@@ -234,12 +249,12 @@
     footer.className = "fk-dp-footer";
     const clearBtn = document.createElement("button");
     clearBtn.type = "button"; clearBtn.textContent = loc.clear;
-    clearBtn.addEventListener("click", () => { commitValue(input, null); closePopover(); });
+    clearBtn.addEventListener("click", () => { commitValue(input, null); closePopoverAndRefocus(input); });
     const todayBtn = document.createElement("button");
     todayBtn.type = "button"; todayBtn.textContent = loc.today;
     todayBtn.addEventListener("click", () => {
       commitValue(input, todayY, todayMo, todayD);
-      closePopover();
+      closePopoverAndRefocus(input);
     });
     footer.appendChild(clearBtn); footer.appendChild(todayBtn);
     pop.appendChild(footer);
@@ -258,8 +273,14 @@
     return pop;
   }
 
+  function closePopoverAndRefocus(input) {
+    closePopover();
+    if (input.__fkDpButton) input.__fkDpButton.focus();
+  }
+
   function positionPopover(pop, input) {
-    const rect = input.getBoundingClientRect();
+    const anchor = input.__fkDpButton || input;
+    const rect = anchor.getBoundingClientRect();
     const popWidth = 268;
     let left = rect.left;
     if (left + popWidth > window.innerWidth - 8) left = window.innerWidth - popWidth - 8;
@@ -298,41 +319,40 @@
     input.dataset.fkDpEnhanced = "1";
     injectStyle();
 
-    // readonly blocks the browser's own native date-picker UI from
-    // opening at all (the whole reason this exists) while still
-    // letting us set input.value from JS below exactly like a normal
-    // date input - every bit of app code that reads this field's
-    // value keeps working completely unchanged.
-    input.setAttribute("readonly", "readonly");
+    // The real <input type="date"> is kept in the DOM completely
+    // unchanged data-wise (same id, same data-* attribute, same ISO
+    // value) but made invisible and unreachable by any user gesture -
+    // see the file header for why that has to be this strict on
+    // Safari/iPadOS. A real <button> is the only visible, clickable,
+    // focusable element from here on.
+    input.setAttribute("tabindex", "-1");
+    input.setAttribute("aria-hidden", "true");
+    input.classList.add("fk-dp-hidden-input");
 
     const wrap = document.createElement("span");
     wrap.className = "fk-dp-wrap";
     input.parentNode.insertBefore(wrap, input);
     wrap.appendChild(input);
 
-    const display = document.createElement("span");
-    display.className = "fk-dp-display";
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "fk-dp-display-btn";
     const text = document.createElement("span");
     const icon = document.createElement("span");
     icon.className = "fk-dp-display-icon";
     icon.textContent = "\u{1F4C5}";
     icon.setAttribute("aria-hidden", "true");
-    display.appendChild(text);
-    display.appendChild(icon);
-    wrap.appendChild(display);
+    button.appendChild(text);
+    button.appendChild(icon);
+    wrap.appendChild(button);
+
     input.__fkDpDisplay = text;
+    input.__fkDpButton = button;
     refreshDisplay(input);
 
-    input.addEventListener("click", (e) => {
-      e.preventDefault();
+    button.addEventListener("click", () => {
       if (activeInput === input) { closePopover(); return; }
       openForInput(input);
-    });
-    input.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
-        openForInput(input);
-      }
     });
   }
 

@@ -193,10 +193,26 @@
   }
 
   function friendlyAuthError(err) {
-    switch (err && err.code) {
+    const code = err && err.code;
+    switch (code) {
       case "auth/invalid-email": return t("sync.error.invalidEmail");
       case "auth/weak-password": return t("sync.error.weakPassword");
-      default: return t("sync.error.generic");
+      case "auth/unauthorized-domain":
+        // This device's domain isn't in the Firebase project's Authentication
+        // > Settings > Authorized domains list yet — every sign-in from here
+        // fails until the shop owner adds it there, even with a correct
+        // email/password. Surfaced with the exact code so this is easy to
+        // tell apart from a real wrong-password case.
+        return `${t("sync.error.generic")} (auth/unauthorized-domain — add this domain in Firebase Console > Authentication > Settings > Authorized domains)`;
+      case "auth/network-request-failed":
+        return `${t("sync.error.generic")} (auth/network-request-failed — check internet connection)`;
+      case "auth/wrong-password":
+      case "auth/invalid-credential":
+        return `${t("sync.error.generic")} (${code} — wrong password for this email)`;
+      default:
+        // Always include the raw code — "Could not connect" alone isn't
+        // enough to tell a wrong password apart from a config problem.
+        return code ? `${t("sync.error.generic")} (${code})` : t("sync.error.generic");
     }
   }
 

@@ -121,6 +121,23 @@
     return SYNC_SECTIONS.some((s) => Array.isArray(data[s.key]) && data[s.key].length > 0);
   }
 
+  // Human-readable "what's actually in here" summary for the conflict
+  // modal, so picking cloud-vs-local isn't a blind guess — e.g.
+  // "3 project(s), 2 invoice(s)" instead of nothing at all.
+  function summarizeData(data) {
+    if (!data) return t("sync.conflictEmpty");
+    const parts = [];
+    if (data.businessProfile && Object.keys(data.businessProfile).length > 0) {
+      parts.push(t("sync.section.businessProfile"));
+    }
+    SYNC_SECTIONS.forEach((s) => {
+      const list = data[s.key];
+      const count = Array.isArray(list) ? list.length : 0;
+      if (count > 0) parts.push(`${count} ${t("sync.section." + s.key)}`);
+    });
+    return parts.length ? parts.join(", ") : t("sync.conflictEmpty");
+  }
+
   function applyRemoteData(data) {
     applyingRemote = true;
     SYNC_SECTIONS.forEach((s) => s.write(data[s.key] || []));
@@ -193,7 +210,12 @@
 
     if (remoteHasData && localHasData) {
       // Both sides have real data — let the person choose rather than
-      // silently discarding either one.
+      // silently discarding either one. Show what's actually in each side
+      // first, so the choice isn't blind.
+      const localSummaryEl = document.querySelector('[data-sync-conflict-local-summary]');
+      const cloudSummaryEl = document.querySelector('[data-sync-conflict-cloud-summary]');
+      if (localSummaryEl) localSummaryEl.textContent = summarizeData(local);
+      if (cloudSummaryEl) cloudSummaryEl.textContent = summarizeData(remote);
       conflictOverlay.hidden = false;
       return new Promise((resolve) => {
         function cleanup() {

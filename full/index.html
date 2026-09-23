@@ -2041,7 +2041,9 @@
 <div class="modal-overlay" data-sync-conflict-overlay hidden>
   <div class="modal modal-delete" role="dialog" aria-modal="true" aria-label="Existing cloud data found">
     <h3 class="modal-delete-title" data-i18n="sync.conflictTitle">Existing Cloud Data Found</h3>
-    <p class="modal-delete-text" data-i18n="sync.conflictText">This account already has synced data from another device. Which data should be kept?</p>
+    <p class="modal-delete-text" data-i18n="sync.conflictText">This account already has synced data from another device. Pick which one to keep — the other will be permanently deleted.</p>
+    <p class="modal-delete-text"><strong data-i18n="sync.conflictThisDevice">This device:</strong> <span data-sync-conflict-local-summary>—</span></p>
+    <p class="modal-delete-text"><strong data-i18n="sync.conflictCloud">Cloud (other device):</strong> <span data-sync-conflict-cloud-summary>—</span></p>
     <div class="modal-delete-actions">
       <button class="btn btn-secondary" data-sync-keep-local data-i18n="sync.keepLocal">Use This Device's Data (replace cloud data)</button>
       <button class="btn btn-primary" data-sync-keep-cloud data-i18n="sync.keepCloud">Use Cloud Data (replace this device's data)</button>

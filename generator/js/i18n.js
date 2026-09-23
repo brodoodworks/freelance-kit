@@ -184,6 +184,16 @@ const TRANSLATIONS = {
     "sync.enabledToast": "Sync turned on — your data will now stay in sync across devices",
     "sync.disabledToast": "Sync turned off — this device now keeps its data locally only",
     "sync.pulledToast": "Data updated from another device",
+    "sync.conflictThisDevice": "This device:",
+    "sync.conflictCloud": "Cloud (other device):",
+    "sync.conflictEmpty": "No data",
+    "sync.section.businessProfile": "business profile",
+    "sync.section.projects": "project(s)",
+    "sync.section.quotations": "quotation(s)",
+    "sync.section.proposals": "proposal(s)",
+    "sync.section.invoices": "invoice(s)",
+    "sync.section.rateCards": "rate card(s)",
+    "sync.section.templates": "template(s)",
 
     // ---- Save status indicator (Quotation/Proposal/Invoice/Settings) ----
     "saveStatus.unsaved": "\u25cf Unsaved changes",
@@ -980,6 +990,16 @@ const TRANSLATIONS = {
     "sync.enabledToast": "Sync dinyalakan — data kamu sekarang akan tersinkron di semua device",
     "sync.disabledToast": "Sync dimatikan — device ini sekarang cuma nyimpen data lokal",
     "sync.pulledToast": "Data diperbarui dari device lain",
+    "sync.conflictThisDevice": "Device ini:",
+    "sync.conflictCloud": "Cloud (device lain):",
+    "sync.conflictEmpty": "Belum ada data",
+    "sync.section.businessProfile": "profil bisnis",
+    "sync.section.projects": "project",
+    "sync.section.quotations": "quotation",
+    "sync.section.proposals": "proposal",
+    "sync.section.invoices": "invoice",
+    "sync.section.rateCards": "rate card",
+    "sync.section.templates": "template",
 
     // ---- Save status indicator ----
     "saveStatus.unsaved": "\u25cf Perubahan belum disimpan",

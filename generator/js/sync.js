@@ -266,9 +266,27 @@
     } catch (err) {
       if (err.code === "auth/user-not-found") {
         await auth.createUserWithEmailAndPassword(email, password);
-      } else {
-        throw err;
+        return;
       }
+      if (err.code === "auth/invalid-credential") {
+        // Newer Firebase Auth deliberately merges "no account with this
+        // email" and "wrong password" into one generic code (a privacy
+        // measure, so a bad actor can't use the error to probe which
+        // emails have accounts) — it no longer tells us which case this
+        // is. Try creating the account instead of giving up: a brand-new
+        // email succeeds here. If the email actually already exists,
+        // creation itself fails with "email-already-in-use", which DOES
+        // confirm this was really a wrong password — surface the
+        // original error in that case, not this secondary one.
+        try {
+          await auth.createUserWithEmailAndPassword(email, password);
+          return;
+        } catch (createErr) {
+          if (createErr.code === "auth/email-already-in-use") throw err;
+          throw createErr;
+        }
+      }
+      throw err;
     }
   }
 

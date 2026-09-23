@@ -630,6 +630,10 @@ const TRANSLATIONS = {
     "dashboard.quickActions.title": "Quick Actions",
     "dashboard.recentProjects.title": "Recent Projects",
 
+    // ---- Settings: Appearance ----
+    "settings.appearance.title": "Appearance",
+    "settings.appearance.desc": "Choose how Freelance Kit looks on this device.",
+
     // ---- Settings: Language ----
     "settings.language.title": "Language",
     "settings.language.desc": "Choose the language used throughout the application interface.",
@@ -1374,6 +1378,10 @@ const TRANSLATIONS = {
     "dashboard.needsAttention.allCaughtUp": "Semua sudah beres.",
     "dashboard.quickActions.title": "Aksi Cepat",
     "dashboard.recentProjects.title": "Proyek Terbaru",
+
+    // ---- Settings: Appearance ----
+    "settings.appearance.title": "Tampilan",
+    "settings.appearance.desc": "Pilih tampilan Freelance Kit di perangkat ini.",
 
     // ---- Settings: Language ----
     "settings.language.title": "Bahasa",

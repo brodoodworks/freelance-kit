@@ -235,11 +235,29 @@ overlay.addEventListener("click", closePanel);
    --------------------------------------------------------------------- */
 
 const COLLAPSE_KEY = "freelance-kit-sidebar-collapsed";
-const collapseToggleBtn = document.querySelector('[data-collapse-toggle]');
+// Two buttons share this behavior: the rail's own toggle (desktop) and
+// the hamburger button that replaces the rail entirely on mobile.
+const collapseToggleBtns = document.querySelectorAll('[data-collapse-toggle]');
+const sidebarPanelEl = document.querySelector('[data-sidebar-panel]');
+const topbarEl = document.querySelector('.topbar');
+
+// On mobile the panel drops down from directly under the topbar, whose
+// own height changes (it wraps to a taller, auto-height bar at very
+// narrow widths), so its resting position is measured live rather than
+// hard-coded.
+function positionMobileDrawer() {
+  if (!topbarEl) return;
+  const rect = topbarEl.getBoundingClientRect();
+  document.documentElement.style.setProperty("--mobile-drawer-top", `${Math.round(rect.bottom)}px`);
+}
+positionMobileDrawer();
+window.addEventListener("resize", positionMobileDrawer);
+window.addEventListener("orientationchange", positionMobileDrawer);
 
 function applyCollapse(collapsed) {
   document.documentElement.classList.toggle("sidebar-collapsed", collapsed);
   overlay.classList.toggle("is-open", !collapsed && window.innerWidth <= 860);
+  if (!collapsed && window.innerWidth <= 860) positionMobileDrawer();
   try { localStorage.setItem(COLLAPSE_KEY, collapsed ? "1" : "0"); } catch (err) { /* ignore */ }
 }
 
@@ -253,8 +271,10 @@ function applyCollapse(collapsed) {
   applyCollapse(saved !== null ? saved === "1" : defaultCollapsed);
 })();
 
-collapseToggleBtn.addEventListener("click", () => {
-  applyCollapse(!document.documentElement.classList.contains("sidebar-collapsed"));
+collapseToggleBtns.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    applyCollapse(!document.documentElement.classList.contains("sidebar-collapsed"));
+  });
 });
 
 /* ---------------------------------------------------------------------

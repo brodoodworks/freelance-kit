@@ -12,6 +12,7 @@ const ASSETS = [
   "./js/data.js",
   "./js/help.js",
   "./js/i18n.js",
+  "./js/install-prompt.js",
   "./js/invoice.js",
   "./js/package.js",
   "./js/proposal.js",
@@ -41,12 +42,8 @@ self.addEventListener("activate", (event) => {
   );
 });
 
-// App shell files: cache-first (works offline, instant load).
-// Anything else (there is no backend — this app makes zero network calls):
-// try the network, fall back to cache if present.
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
-
   event.respondWith(
     caches.match(event.request).then((cached) => {
       if (cached) return cached;

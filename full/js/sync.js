@@ -265,6 +265,12 @@
   }
   function closeLoginModal() { loginOverlay.hidden = true; }
 
+  // Exposed so onboarding.js can open this exact same modal from the
+  // first-run welcome screen instead of duplicating any auth UI/logic.
+  // Only defined when sync is actually configured (this line only runs
+  // past the two early-returns at the top of this file).
+  window.__freelanceOpenSyncLogin = openLoginModal;
+
   if (enableBtn) enableBtn.addEventListener("click", openLoginModal);
   if (loginCancelBtn) loginCancelBtn.addEventListener("click", closeLoginModal);
   if (loginOverlay) loginOverlay.addEventListener("click", (e) => { if (e.target === loginOverlay) closeLoginModal(); });

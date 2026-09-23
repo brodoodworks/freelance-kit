@@ -55,6 +55,42 @@ function setAppLanguage(lang) {
   return normalized;
 }
 
+// Document language — independent of the UI language above. Lets
+// generated Quotations/Proposals/Invoices/Rate Cards be in a different
+// language than the app interface itself (e.g. Bahasa Indonesia UI,
+// English documents for international clients). "app" (the default,
+// nothing saved) means "follow the UI language".
+const DOC_LANGUAGE_KEY = "freelance-kit-doc-language";
+
+function getDocLanguagePref() {
+  try {
+    const saved = localStorage.getItem(DOC_LANGUAGE_KEY);
+    return saved === "en" || saved === "id" ? saved : "app";
+  } catch (err) {
+    return "app";
+  }
+}
+
+function getDocLanguage() {
+  const pref = getDocLanguagePref();
+  return pref === "app" ? getAppLanguage() : pref;
+}
+
+function setDocLanguagePref(pref) {
+  const normalized = pref === "en" || pref === "id" ? pref : "app";
+  try {
+    if (normalized === "app") localStorage.removeItem(DOC_LANGUAGE_KEY);
+    else localStorage.setItem(DOC_LANGUAGE_KEY, normalized);
+  } catch (err) { /* ignore */ }
+  // Unlike the UI language (which needs a full reload to re-render
+  // every data-i18n element), document previews already re-render on
+  // every keystroke — this event just asks whichever generator is
+  // currently open to redraw its preview with the new language, live,
+  // with no reload.
+  window.dispatchEvent(new Event("freelance-doc-language-changed"));
+  return normalized;
+}
+
 // Applied immediately (not deferred to DOMContentLoaded) so the <html
 // lang> attribute is correct from the very first paint, same timing
 // as the theme's data-theme attribute.
@@ -598,7 +634,11 @@ const TRANSLATIONS = {
     "settings.language.title": "Language",
     "settings.language.desc": "Choose the language used throughout the application interface.",
     "settings.language.english": "English",
-    "settings.language.indonesian": "Bahasa Indonesia",
+    "settings.docLanguage.title": "Document Language",
+    "settings.docLanguage.desc": "Language used in generated Quotations, Proposals, Invoices, and Rate Cards — can be different from the app language above.",
+    "settings.docLanguage.sameAsApp": "Same as App",
+    "settings.docLanguage.english": "English",
+    "settings.docLanguage.indonesian": "Bahasa Indonesia",
 
     // ---- Toasts / confirmations (common) ----
     "toast.savedSuccessfully": "Saved successfully",
@@ -714,6 +754,14 @@ const TRANSLATIONS = {
     "doc.serviceRates": "Service Rates",
     "doc.service": "Service",
     "doc.noServicesYet": "No services yet",
+    "doc.discount": "Discount",
+    "doc.bank": "Bank",
+    "doc.accountName": "Account Name",
+    "doc.accountNumber": "Account Number",
+    "doc.discount": "Discount",
+    "doc.bank": "Bank",
+    "doc.accountName": "Account Name",
+    "doc.accountNumber": "Account Number",
 
     // ---- Dashboard: Business Profile prompt card ----
     "profileCard.title": "Business Profile",
@@ -1330,7 +1378,11 @@ const TRANSLATIONS = {
     "settings.language.title": "Bahasa",
     "settings.language.desc": "Pilih bahasa yang digunakan pada seluruh antarmuka aplikasi.",
     "settings.language.english": "English",
-    "settings.language.indonesian": "Bahasa Indonesia",
+    "settings.docLanguage.title": "Bahasa Dokumen",
+    "settings.docLanguage.desc": "Bahasa yang dipakai di Quotation, Proposal, Invoice, dan Rate Card yang dibuat — bisa beda dari bahasa aplikasi di atas.",
+    "settings.docLanguage.sameAsApp": "Sama Seperti Aplikasi",
+    "settings.docLanguage.english": "English",
+    "settings.docLanguage.indonesian": "Bahasa Indonesia",
 
     // ---- Toasts / confirmations ----
     "toast.savedSuccessfully": "Berhasil disimpan",
@@ -1446,6 +1498,10 @@ const TRANSLATIONS = {
     "doc.serviceRates": "Daftar Harga Layanan",
     "doc.service": "Layanan",
     "doc.noServicesYet": "Belum ada layanan",
+    "doc.discount": "Diskon",
+    "doc.bank": "Bank",
+    "doc.accountName": "Nama Rekening",
+    "doc.accountNumber": "Nomor Rekening",
 
     // ---- Dashboard: Business Profile prompt card ----
     "profileCard.title": "Profil Bisnis",
@@ -1540,6 +1596,26 @@ function t(key, vars) {
   return str;
 }
 
+// Same lookup as t(), for an explicit language rather than the UI
+// language — used to render document previews/PDFs in the Document
+// Language setting above, independent of what language the app chrome
+// itself is currently showing.
+function tFor(lang, key, vars) {
+  const dict = TRANSLATIONS[lang] || TRANSLATIONS.en;
+  let str = dict[key];
+  if (str === undefined) str = TRANSLATIONS.en[key];
+  if (str === undefined) return key;
+  if (vars) {
+    Object.keys(vars).forEach((k) => {
+      str = str.replace(new RegExp(`{{${k}}}`, "g"), vars[k]);
+    });
+  }
+  return str;
+}
+function td(key, vars) {
+  return tFor(getDocLanguage(), key, vars);
+}
+
 // Count-aware phrasing: English inflects ("1 project" / "2 projects"),
 // Bahasa Indonesia doesn't ("1 proyek" / "2 proyek" — same word). Only
 // a plain-English noun is needed per call site since Indonesian never
@@ -1590,3 +1666,22 @@ document.querySelectorAll('[data-language-set]').forEach((btn) => {
 });
 
 syncLanguageButtons();
+
+function syncDocLanguageButtons() {
+  const active = getDocLanguagePref();
+  document.querySelectorAll('[data-doc-language-set]').forEach((btn) => {
+    const isActive = btn.dataset.docLanguageSet === active;
+    btn.classList.toggle("is-active", isActive);
+    btn.setAttribute("aria-pressed", isActive ? "true" : "false");
+  });
+}
+
+document.querySelectorAll('[data-doc-language-set]').forEach((btn) => {
+  btn.addEventListener("click", () => {
+    if (btn.dataset.docLanguageSet === getDocLanguagePref()) return;
+    setDocLanguagePref(btn.dataset.docLanguageSet);
+    syncDocLanguageButtons();
+  });
+});
+
+syncDocLanguageButtons();

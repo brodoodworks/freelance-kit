@@ -361,6 +361,13 @@ svg { display: block; flex-shrink: 0; }
   box-shadow: var(--shadow-sm);
 }
 
+/* Document Language reuses the same toggle but has a third option, so
+   it needs more room than the two-way Language control above it. */
+.settings-doclang-toggle { max-width: 460px; }
+@media (max-width: 480px) {
+  .settings-doclang-toggle { flex-direction: column; max-width: none; }
+}
+
 .avatar.rail-avatar,
 .avatar.sidebar-profile-avatar {
   background: var(--primary);

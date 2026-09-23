@@ -83,7 +83,8 @@ if (invPanel) {
   function formatDateID(dateStr) {
     if (!dateStr) return "\u2014";
     try {
-      return new Date(dateStr + "T00:00:00").toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" });
+      const locale = getDocLanguage() === "en" ? "en-US" : "id-ID";
+      return new Date(dateStr + "T00:00:00").toLocaleDateString(locale, { day: "numeric", month: "long", year: "numeric" });
     } catch (err) { return dateStr; }
   }
 
@@ -333,7 +334,7 @@ if (invPanel) {
     `).join("");
 
     const discountRow = totals.discountAmount > 0 ? `
-      <div class="quo-total-row"><span>Discount</span><span>-${formatIDR(totals.discountAmount)}</span></div>
+      <div class="quo-total-row"><span>${td("doc.discount")}</span><span>-${formatIDR(totals.discountAmount)}</span></div>
     ` : "";
 
     const businessLines = [];
@@ -349,32 +350,32 @@ if (invPanel) {
       : "";
 
     const paymentInfoRows = [];
-    if (fields.bankName.value.trim()) paymentInfoRows.push(["Bank", fields.bankName.value.trim()]);
-    if (fields.accountName.value.trim()) paymentInfoRows.push(["Account Name", fields.accountName.value.trim()]);
-    if (fields.accountNumber.value.trim()) paymentInfoRows.push(["Account Number", fields.accountNumber.value.trim()]);
+    if (fields.bankName.value.trim()) paymentInfoRows.push([td("doc.bank"), fields.bankName.value.trim()]);
+    if (fields.accountName.value.trim()) paymentInfoRows.push([td("doc.accountName"), fields.accountName.value.trim()]);
+    if (fields.accountNumber.value.trim()) paymentInfoRows.push([td("doc.accountNumber"), fields.accountNumber.value.trim()]);
 
     previewEl.innerHTML = `
       <div class="quo-doc-head">
         ${logoDataUrl ? `<img src="${logoDataUrl}" class="quo-doc-logo" alt="Logo">` : ""}
-        <p class="quo-doc-business-name">${escapeHtml(fields.businessName.value) || t("doc.yourBusinessName")}</p>
+        <p class="quo-doc-business-name">${escapeHtml(fields.businessName.value) || td("doc.yourBusinessName")}</p>
         ${businessLines.map((line) => `<p class="quo-doc-business-line">${escapeHtml(line)}</p>`).join("")}
       </div>
 
       <div class="quo-doc-title-row">
         <div>
-          <p class="quo-doc-title">${t("doc.invoiceTitle")}</p>
+          <p class="quo-doc-title">${td("doc.invoiceTitle")}</p>
           <p class="quo-doc-number">${escapeHtml(fields.invoiceNumber.value)}</p>
         </div>
         <div class="quo-doc-dates">
-          <p><span>${t("doc.date")}</span>${formatDateID(fields.date.value)}</p>
-          <p><span>${t("doc.due")}</span>${formatDateID(fields.dueDate.value)}</p>
+          <p><span>${td("doc.date")}</span>${formatDateID(fields.date.value)}</p>
+          <p><span>${td("doc.due")}</span>${formatDateID(fields.dueDate.value)}</p>
         </div>
       </div>
 
       <div class="quo-doc-divider"></div>
 
-      <p class="quo-doc-section-label">${t("doc.billTo")}</p>
-      <p class="quo-doc-bill-name">${escapeHtml(fields.clientCompany.value) || escapeHtml(fields.clientName.value) || t("doc.clientNamePlaceholder")}</p>
+      <p class="quo-doc-section-label">${td("doc.billTo")}</p>
+      <p class="quo-doc-bill-name">${escapeHtml(fields.clientCompany.value) || escapeHtml(fields.clientName.value) || td("doc.clientNamePlaceholder")}</p>
       ${fields.clientCompany.value && fields.clientName.value ? `<p>${escapeHtml(fields.clientName.value)}</p>` : ""}
       ${clientAddressLines}
       ${[fields.clientEmail.value, fields.clientPhone.value].filter(Boolean).length
@@ -382,7 +383,7 @@ if (invPanel) {
 
       ${currentProjectSnapshot ? `
         <div class="quo-doc-divider"></div>
-        <p class="quo-doc-section-label">${t("doc.project")}</p>
+        <p class="quo-doc-section-label">${td("doc.project")}</p>
         <p class="quo-doc-bill-name">${escapeHtml(currentProjectSnapshot.projectName)}</p>
       ` : ""}
 
@@ -390,36 +391,36 @@ if (invPanel) {
 
       <table class="quo-doc-table">
         <thead>
-          <tr><th>${t("doc.description")}</th><th class="num">${t("doc.qty")}</th><th class="num">${t("doc.price")}</th><th class="num">${t("doc.total")}</th></tr>
+          <tr><th>${td("doc.description")}</th><th class="num">${td("doc.qty")}</th><th class="num">${td("doc.price")}</th><th class="num">${td("doc.total")}</th></tr>
         </thead>
-        <tbody>${rows || `<tr><td colspan="4" class="quo-doc-empty">${t("doc.noItemsYet")}</td></tr>`}</tbody>
+        <tbody>${rows || `<tr><td colspan="4" class="quo-doc-empty">${td("doc.noItemsYet")}</td></tr>`}</tbody>
       </table>
 
       <div class="quo-doc-totals">
-        <div class="quo-total-row"><span>${t("doc.subtotal")}</span><span>${formatIDR(totals.subtotal)}</span></div>
+        <div class="quo-total-row"><span>${td("doc.subtotal")}</span><span>${formatIDR(totals.subtotal)}</span></div>
         ${discountRow}
-        <div class="quo-total-row"><span>${t("doc.tax")} (${totals.taxPercent}%)</span><span>${formatIDR(totals.taxAmount)}</span></div>
-        <div class="quo-total-row quo-total-grand"><span>${t("doc.grandTotal")}</span><span>${formatIDR(totals.grandTotal)}</span></div>
+        <div class="quo-total-row"><span>${td("doc.tax")} (${totals.taxPercent}%)</span><span>${formatIDR(totals.taxAmount)}</span></div>
+        <div class="quo-total-row quo-total-grand"><span>${td("doc.grandTotal")}</span><span>${formatIDR(totals.grandTotal)}</span></div>
       </div>
 
       ${paymentInfoRows.length || fields.paymentMethod.value ? `
         <div class="quo-doc-divider"></div>
-        <p class="quo-doc-section-label">${t("doc.paymentInformation")}</p>
+        <p class="quo-doc-section-label">${td("doc.paymentInformation")}</p>
         ${fields.paymentMethod.value ? `<p class="quo-doc-pre">${escapeHtml(fields.paymentMethod.value)}</p>` : ""}
         ${paymentInfoRows.map(([label, value]) => `<div class="quo-total-row"><span>${label}</span><span>${escapeHtml(value)}</span></div>`).join("")}
         ${fields.paymentInstructions.value.trim() ? `<p class="quo-doc-pre">${escapeHtml(fields.paymentInstructions.value)}</p>` : ""}
       ` : ""}
 
-      <p class="quo-doc-section-label">${t("doc.paymentTerms")}</p>
+      <p class="quo-doc-section-label">${td("doc.paymentTerms")}</p>
       <p class="quo-doc-pre">${escapeHtml(paymentTermsLabel())}</p>
 
       ${fields.notes.value.trim() ? `
-        <p class="quo-doc-section-label">${t("doc.notes")}</p>
+        <p class="quo-doc-section-label">${td("doc.notes")}</p>
         <p class="quo-doc-pre">${escapeHtml(fields.notes.value)}</p>
       ` : ""}
 
       <div class="quo-doc-divider"></div>
-      <p class="quo-doc-footer">${escapeHtml(fields.businessName.value) || t("doc.yourBusinessName")}</p>
+      <p class="quo-doc-footer">${escapeHtml(fields.businessName.value) || td("doc.yourBusinessName")}</p>
     `;
 
     return totals;
@@ -893,6 +894,10 @@ if (invPanel) {
   }
 
   window.FreelanceInvoice = { startNew, loadInvoice, renderMyInvoicesPage, addTemplateItems };
+
+  // Document Language (Settings) can change independently of the UI
+  // language - redraw this invoice's live preview immediately, no reload.
+  window.addEventListener("freelance-doc-language-changed", () => { if (typeof renderPreview === "function") renderPreview(); });
 
   startNew(null);
 }

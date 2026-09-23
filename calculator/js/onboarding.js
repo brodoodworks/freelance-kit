@@ -308,7 +308,68 @@
     }
   }
 
+  /* -----------------------------------------------------------------
+     LANGUAGE PICKER — shown before the welcome screen, only the very
+     first time (i.e. only if the person has never explicitly chosen a
+     language — the app defaults to English otherwise, silently). This
+     matters more than it looks: the language setting also drives the
+     language of every generated Quotation/Proposal/Invoice/Rate Card
+     (see Settings > Document Language for overriding that separately
+     later), so it's worth asking up front instead of leaving it to a
+     silent default the person may not notice until a client-facing
+     document comes out in the wrong language.
+     --------------------------------------------------------------- */
+  const LANGUAGE_KEY = "freelance-kit-language"; // must match i18n.js's own key
+
+  function showLanguagePicker(onDone) {
+    const overlay = document.createElement("div");
+    overlay.className = "fkob-overlay";
+    overlay.innerHTML = `
+      <div class="fkob-card fkob-lang-card" role="dialog" aria-modal="true" aria-label="Choose language / Pilih bahasa">
+        <div class="fkob-lang-body">
+          <h1 class="fkob-lang-title">Choose your language<br>Pilih bahasa kamu</h1>
+          <p class="fkob-lang-sub">This also sets the language used in your Quotations, Proposals and Invoices. You can change it anytime in Settings.<br>Ini juga dipakai untuk bahasa Quotation, Proposal, dan Invoice kamu. Bisa diganti kapan aja di Settings.</p>
+          <div class="fkob-lang-options">
+            <button type="button" class="fkob-lang-btn" data-fkob-lang="id">Bahasa Indonesia</button>
+            <button type="button" class="fkob-lang-btn" data-fkob-lang="en">English</button>
+          </div>
+        </div>
+      </div>`;
+    document.body.appendChild(overlay);
+
+    overlay.querySelectorAll("[data-fkob-lang]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        if (typeof setAppLanguage === "function") setAppLanguage(btn.dataset.fkobLang);
+        // A language switch re-renders every data-i18n element via a
+        // full reload elsewhere in the app (see i18n.js) — follow the
+        // same pattern here so the welcome screen that comes right
+        // after opens already in the chosen language, not a stale one.
+        location.reload();
+      });
+    });
+  }
+
+  const langStyle = document.createElement("style");
+  langStyle.textContent = `
+    .fkob-lang-card { flex-direction: column; max-width: 480px; }
+    .fkob-lang-body { padding: 40px 32px; text-align: center; display: flex; flex-direction: column; gap: 18px; align-items: center; }
+    .fkob-lang-title { margin: 0; font-size: 20px; line-height: 1.4; color: var(--text, #000); }
+    .fkob-lang-sub { margin: 0; font-size: 13px; line-height: 1.6; color: var(--text-muted, #6B6B6F); }
+    .fkob-lang-options { display: flex; gap: 10px; width: 100%; }
+    .fkob-lang-btn { flex: 1; border: 1px solid var(--border, #DEDCD5); background: var(--surface, #fff); color: var(--text, #000);
+      border-radius: 12px; padding: 14px 10px; font-size: 14px; font-weight: 600; cursor: pointer; }
+    .fkob-lang-btn:hover { border-color: var(--primary, #025864); color: var(--primary, #025864); }
+  `;
+  document.head.appendChild(langStyle);
+
   // Give the rest of app.js a tick to finish its own init (routeFromHash,
   // package gating) before showing anything on top of it.
-  window.addEventListener("load", () => { setTimeout(showWelcome, 250); });
+  window.addEventListener("load", () => {
+    setTimeout(() => {
+      let languageChosen = true;
+      try { languageChosen = localStorage.getItem(LANGUAGE_KEY) !== null; } catch (err) { /* ignore */ }
+      if (!languageChosen) { showLanguagePicker(); return; }
+      showWelcome();
+    }, 250);
+  });
 })();

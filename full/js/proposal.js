@@ -104,7 +104,8 @@ if (propPanel) {
   function formatDateID(dateStr) {
     if (!dateStr) return "\u2014";
     try {
-      return new Date(dateStr + "T00:00:00").toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" });
+      const locale = getDocLanguage() === "en" ? "en-US" : "id-ID";
+      return new Date(dateStr + "T00:00:00").toLocaleDateString(locale, { day: "numeric", month: "long", year: "numeric" });
     } catch (err) { return dateStr; }
   }
   function uid(prefix) { return prefix + "_" + Date.now() + "_" + Math.random().toString(36).slice(2, 7); }
@@ -342,9 +343,9 @@ if (propPanel) {
 
   function paymentTermsText() {
     const type = fields.paymentTermsType.value;
-    if (type === "50-50") return t("proposal.paymentTerms.5050");
-    if (type === "100-upfront") return t("proposal.paymentTerms.100upfront");
-    if (type === "30-70") return t("proposal.paymentTerms.3070");
+    if (type === "50-50") return td("proposal.paymentTerms.5050");
+    if (type === "100-upfront") return td("proposal.paymentTerms.100upfront");
+    if (type === "30-70") return td("proposal.paymentTerms.3070");
     return fields.paymentTermsCustom.value || "";
   }
 
@@ -374,7 +375,7 @@ if (propPanel) {
     const deliverablesHtml = deliverables.filter((d) => d.trim()).map((d) => `<div class="prop-doc-check">\u2713 ${escapeHtml(d)}</div>`).join("");
     const timelineHtml = timeline.map((phaseItem, i) => `
       <div class="prop-doc-timeline-item">
-        <span>${t("doc.phase")} ${i + 1} \u2014 ${escapeHtml(phaseItem.description) || "\u2014"}</span>
+        <span>${td("doc.phase")} ${i + 1} \u2014 ${escapeHtml(phaseItem.description) || "\u2014"}</span>
         <strong>${escapeHtml(phaseItem.duration) || "\u2014"}</strong>
       </div>
     `).join("");
@@ -390,26 +391,26 @@ if (propPanel) {
     previewEl.innerHTML = `
       <div class="quo-doc-head">
         ${logoDataUrl ? `<img src="${logoDataUrl}" class="quo-doc-logo" alt="Logo">` : ""}
-        <p class="quo-doc-business-name">${escapeHtml(fields.businessName.value) || t("doc.yourBusinessName")}</p>
+        <p class="quo-doc-business-name">${escapeHtml(fields.businessName.value) || td("doc.yourBusinessName")}</p>
         ${businessLines.map((line) => `<p class="quo-doc-business-line">${escapeHtml(line)}</p>`).join("")}
       </div>
 
-      <p class="prop-doc-kicker">${t("doc.projectProposalKicker")}</p>
+      <p class="prop-doc-kicker">${td("doc.projectProposalKicker")}</p>
       <div class="quo-doc-title-row">
         <div>
-          <p class="quo-doc-title prop-doc-title">${escapeHtml(fields.title.value) || t("doc.projectTitlePlaceholder")}</p>
+          <p class="quo-doc-title prop-doc-title">${escapeHtml(fields.title.value) || td("doc.projectTitlePlaceholder")}</p>
         </div>
         <div class="quo-doc-dates">
-          <p><span>${t("doc.proposalLabel")}</span>${escapeHtml(fields.proposalNumber.value)}</p>
-          <p><span>${t("doc.date")}</span>${formatDateID(fields.date.value)}</p>
-          <p><span>${t("doc.validUntil")}</span>${formatDateID(fields.validUntil.value)}</p>
+          <p><span>${td("doc.proposalLabel")}</span>${escapeHtml(fields.proposalNumber.value)}</p>
+          <p><span>${td("doc.date")}</span>${formatDateID(fields.date.value)}</p>
+          <p><span>${td("doc.validUntil")}</span>${formatDateID(fields.validUntil.value)}</p>
         </div>
       </div>
 
       <div class="quo-doc-divider"></div>
 
-      <p class="quo-doc-section-label">${t("doc.preparedFor")}</p>
-      <p class="quo-doc-bill-name">${escapeHtml(fields.clientCompany.value) || escapeHtml(fields.clientName.value) || t("doc.clientNamePlaceholder")}</p>
+      <p class="quo-doc-section-label">${td("doc.preparedFor")}</p>
+      <p class="quo-doc-bill-name">${escapeHtml(fields.clientCompany.value) || escapeHtml(fields.clientName.value) || td("doc.clientNamePlaceholder")}</p>
       ${fields.clientCompany.value && fields.clientName.value ? `<p>${escapeHtml(fields.clientName.value)}</p>` : ""}
       ${fields.clientAddress.value.trim()
         ? fields.clientAddress.value.trim().split("\n").filter((line) => line.trim())
@@ -422,34 +423,34 @@ if (propPanel) {
       <div class="quo-doc-divider"></div>
 
       ${fields.overview.value.trim() ? `
-        ${numberedLabel(t("doc.introduction"))}
+        ${numberedLabel(td("doc.introduction"))}
         <p class="quo-doc-pre">${escapeHtml(fields.overview.value)}</p>
       ` : ""}
 
-      ${objectivesHtml ? `${numberedLabel(t("doc.objectives"))}${objectivesHtml}` : ""}
+      ${objectivesHtml ? `${numberedLabel(td("doc.objectives"))}${objectivesHtml}` : ""}
 
-      ${scope.length ? `${numberedLabel(t("doc.scopeOfWork"))}${scopeHtml}` : ""}
+      ${scope.length ? `${numberedLabel(td("doc.scopeOfWork"))}${scopeHtml}` : ""}
 
-      ${deliverablesHtml ? `${numberedLabel(t("doc.deliverables"))}${deliverablesHtml}` : ""}
+      ${deliverablesHtml ? `${numberedLabel(td("doc.deliverables"))}${deliverablesHtml}` : ""}
 
-      ${timeline.length ? `${numberedLabel(t("doc.timeline"))}${timelineHtml}` : ""}
+      ${timeline.length ? `${numberedLabel(td("doc.timeline"))}${timelineHtml}` : ""}
 
-      ${numberedLabel(t("doc.investment"))}
+      ${numberedLabel(td("doc.investment"))}
       <p class="prop-doc-investment">${formatIDR(investment)}</p>
       <p class="quo-doc-pre prop-doc-payment-terms">${escapeHtml(paymentTermsText())}</p>
 
       ${fields.nextSteps.value.trim() ? `
-        ${numberedLabel(t("doc.nextSteps"))}
+        ${numberedLabel(td("doc.nextSteps"))}
         <p class="quo-doc-pre">${escapeHtml(fields.nextSteps.value)}</p>
       ` : ""}
 
       ${fields.terms.value.trim() ? `
-        ${numberedLabel(t("doc.termsConditions"))}
+        ${numberedLabel(td("doc.termsConditions"))}
         <p class="quo-doc-pre">${escapeHtml(fields.terms.value)}</p>
       ` : ""}
 
       <div class="quo-doc-divider"></div>
-      <p class="quo-doc-footer">${t("doc.thankYou")} \u2014 ${escapeHtml(fields.businessName.value) || t("doc.yourBusinessName")}</p>
+      <p class="quo-doc-footer">${td("doc.thankYou")} \u2014 ${escapeHtml(fields.businessName.value) || td("doc.yourBusinessName")}</p>
     `;
 
     return { investment };
@@ -932,6 +933,10 @@ if (propPanel) {
   }
 
   window.FreelanceProposal = { startNew, loadProposal, renderMyProposalsPage };
+
+  // Document Language (Settings) can change independently of the UI
+  // language - redraw this proposal's live preview immediately, no reload.
+  window.addEventListener("freelance-doc-language-changed", () => { if (typeof renderPreview === "function") renderPreview(); });
 
   /* ---- Init ---- */
 

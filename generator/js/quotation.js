@@ -321,15 +321,16 @@ if (quoPanel) {
   function formatDateID(dateStr) {
     if (!dateStr) return "\u2014";
     try {
-      return new Date(dateStr + "T00:00:00").toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" });
+      const locale = getDocLanguage() === "en" ? "en-US" : "id-ID";
+      return new Date(dateStr + "T00:00:00").toLocaleDateString(locale, { day: "numeric", month: "long", year: "numeric" });
     } catch (err) { return dateStr; }
   }
 
   function paymentTermsText() {
     const type = fields.paymentTermsType.value;
-    if (type === "50-50") return t("proposal.paymentTerms.5050");
-    if (type === "100-upfront") return t("proposal.paymentTerms.100upfront");
-    if (type === "30-70") return t("proposal.paymentTerms.3070");
+    if (type === "50-50") return td("proposal.paymentTerms.5050");
+    if (type === "100-upfront") return td("proposal.paymentTerms.100upfront");
+    if (type === "30-70") return td("proposal.paymentTerms.3070");
     return fields.paymentTermsCustom.value || "";
   }
 
@@ -364,7 +365,7 @@ if (quoPanel) {
     `).join("");
 
     const discountRow = totals.discountAmount > 0 ? `
-      <div class="quo-total-row"><span>Discount</span><span>-${formatIDR(totals.discountAmount)}</span></div>
+      <div class="quo-total-row"><span>${td("doc.discount")}</span><span>-${formatIDR(totals.discountAmount)}</span></div>
     ` : "";
 
     const businessLines = [];
@@ -380,32 +381,32 @@ if (quoPanel) {
     previewEl.innerHTML = `
       <div class="quo-doc-head">
         ${logoDataUrl ? `<img src="${logoDataUrl}" class="quo-doc-logo" alt="Logo">` : ""}
-        <p class="quo-doc-business-name">${escapeHtml(fields.businessName.value) || t("doc.yourBusinessName")}</p>
+        <p class="quo-doc-business-name">${escapeHtml(fields.businessName.value) || td("doc.yourBusinessName")}</p>
         ${businessLines.map((line) => `<p class="quo-doc-business-line">${escapeHtml(line)}</p>`).join("")}
       </div>
 
       <div class="quo-doc-title-row">
         <div>
-          <p class="quo-doc-title">${t("doc.quotationTitle")}</p>
+          <p class="quo-doc-title">${td("doc.quotationTitle")}</p>
           <p class="quo-doc-number">${escapeHtml(fields.quotationNumber.value)}</p>
         </div>
         <div class="quo-doc-dates">
-          <p><span>${t("doc.date")}</span>${formatDateID(fields.date.value)}</p>
-          <p><span>${t("doc.validUntil")}</span>${formatDateID(fields.validUntil.value)}</p>
+          <p><span>${td("doc.date")}</span>${formatDateID(fields.date.value)}</p>
+          <p><span>${td("doc.validUntil")}</span>${formatDateID(fields.validUntil.value)}</p>
         </div>
       </div>
 
       <div class="quo-doc-divider"></div>
 
-      <p class="quo-doc-section-label">${t("doc.billTo")}</p>
-      <p class="quo-doc-bill-name">${escapeHtml(fields.clientCompany.value) || escapeHtml(fields.clientName.value) || t("doc.clientNamePlaceholder")}</p>
+      <p class="quo-doc-section-label">${td("doc.billTo")}</p>
+      <p class="quo-doc-bill-name">${escapeHtml(fields.clientCompany.value) || escapeHtml(fields.clientName.value) || td("doc.clientNamePlaceholder")}</p>
       ${fields.clientCompany.value && fields.clientName.value ? `<p>${escapeHtml(fields.clientName.value)}</p>` : ""}
       <p>${[fields.clientEmail.value, fields.clientPhone.value].filter(Boolean).map(escapeHtml).join(" \u00b7 ")}</p>
       ${fields.clientAddress.value ? `<p>${escapeHtml(fields.clientAddress.value)}</p>` : ""}
 
       ${currentProjectSnapshot ? `
         <div class="quo-doc-divider"></div>
-        <p class="quo-doc-section-label">${t("doc.project")}</p>
+        <p class="quo-doc-section-label">${td("doc.project")}</p>
         <p class="quo-doc-bill-name">${escapeHtml(currentProjectSnapshot.projectName)}</p>
       ` : ""}
 
@@ -413,31 +414,31 @@ if (quoPanel) {
 
       <table class="quo-doc-table">
         <thead>
-          <tr><th>${t("doc.description")}</th><th class="num">${t("doc.qty")}</th><th class="num">${t("doc.price")}</th><th class="num">${t("doc.total")}</th></tr>
+          <tr><th>${td("doc.description")}</th><th class="num">${td("doc.qty")}</th><th class="num">${td("doc.price")}</th><th class="num">${td("doc.total")}</th></tr>
         </thead>
-        <tbody>${rows || `<tr><td colspan="4" class="quo-doc-empty">${t("doc.noItemsYet")}</td></tr>`}</tbody>
+        <tbody>${rows || `<tr><td colspan="4" class="quo-doc-empty">${td("doc.noItemsYet")}</td></tr>`}</tbody>
       </table>
 
       <div class="quo-doc-totals">
-        <div class="quo-total-row"><span>${t("doc.subtotal")}</span><span>${formatIDR(totals.subtotal)}</span></div>
+        <div class="quo-total-row"><span>${td("doc.subtotal")}</span><span>${formatIDR(totals.subtotal)}</span></div>
         ${discountRow}
-        <div class="quo-total-row"><span>${t("doc.tax")} (${totals.taxPercent}%)</span><span>${formatIDR(totals.taxAmount)}</span></div>
-        <div class="quo-total-row quo-total-grand"><span>${t("doc.grandTotal")}</span><span>${formatIDR(totals.grandTotal)}</span></div>
+        <div class="quo-total-row"><span>${td("doc.tax")} (${totals.taxPercent}%)</span><span>${formatIDR(totals.taxAmount)}</span></div>
+        <div class="quo-total-row quo-total-grand"><span>${td("doc.grandTotal")}</span><span>${formatIDR(totals.grandTotal)}</span></div>
       </div>
 
       <div class="quo-doc-divider"></div>
 
-      <p class="quo-doc-section-label">${t("doc.paymentTerms")}</p>
+      <p class="quo-doc-section-label">${td("doc.paymentTerms")}</p>
       <p class="quo-doc-pre">${escapeHtml(paymentTermsText())}</p>
 
-      <p class="quo-doc-section-label">${t("doc.notes")}</p>
+      <p class="quo-doc-section-label">${td("doc.notes")}</p>
       <p class="quo-doc-pre">${escapeHtml(fields.notes.value)}</p>
 
-      <p class="quo-doc-section-label">${t("doc.termsConditions")}</p>
+      <p class="quo-doc-section-label">${td("doc.termsConditions")}</p>
       <p class="quo-doc-pre">${escapeHtml(fields.terms.value)}</p>
 
       <div class="quo-doc-divider"></div>
-      <p class="quo-doc-footer">${escapeHtml(fields.businessName.value) || t("doc.yourBusinessName")}</p>
+      <p class="quo-doc-footer">${escapeHtml(fields.businessName.value) || td("doc.yourBusinessName")}</p>
     `;
 
     return totals;
@@ -935,6 +936,10 @@ if (quoPanel) {
   }
 
   window.FreelanceQuotation = { startNew, loadQuotation, renderMyQuotationsPage, addTemplateItems };
+
+  // Document Language (Settings) can change independently of the UI
+  // language - redraw this quotation's live preview immediately, no reload.
+  window.addEventListener("freelance-doc-language-changed", () => { if (typeof renderPreview === "function") renderPreview(); });
 
   /* ---- Init ---- */
 

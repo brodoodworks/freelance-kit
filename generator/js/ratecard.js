@@ -39,7 +39,8 @@ if (ratePanel) {
   function formatDateID(dateStr) {
     if (!dateStr) return "\u2014";
     try {
-      return new Date(dateStr + "T00:00:00").toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" });
+      const locale = getDocLanguage() === "en" ? "en-US" : "id-ID";
+      return new Date(dateStr + "T00:00:00").toLocaleDateString(locale, { day: "numeric", month: "long", year: "numeric" });
     } catch (err) { return dateStr; }
   }
 
@@ -171,38 +172,38 @@ if (ratePanel) {
     if (fields.businessWebsite.value.trim()) businessLines.push(fields.businessWebsite.value.trim());
 
     const validityLine = fields.validFrom.value
-      ? `<p class="quo-doc-pre">${t("doc.validFrom")} ${formatDateID(fields.validFrom.value)}${fields.validUntil.value ? ` ${t("doc.to")} ${formatDateID(fields.validUntil.value)}` : ""}</p>`
+      ? `<p class="quo-doc-pre">${td("doc.validFrom")} ${formatDateID(fields.validFrom.value)}${fields.validUntil.value ? ` ${td("doc.to")} ${formatDateID(fields.validUntil.value)}` : ""}</p>`
       : "";
 
     previewEl.innerHTML = `
       <div class="quo-doc-head">
         ${logoDataUrl ? `<img src="${logoDataUrl}" class="quo-doc-logo" alt="Logo">` : ""}
-        <p class="quo-doc-business-name">${escapeHtml(fields.businessName.value) || t("doc.yourBusinessName")}</p>
+        <p class="quo-doc-business-name">${escapeHtml(fields.businessName.value) || td("doc.yourBusinessName")}</p>
         ${businessLines.map((line) => `<p class="quo-doc-business-line">${escapeHtml(line)}</p>`).join("")}
       </div>
 
       <div class="quo-doc-divider"></div>
 
-      <p class="quo-doc-title">${escapeHtml(fields.title.value) || t("doc.serviceRates")}</p>
+      <p class="quo-doc-title">${escapeHtml(fields.title.value) || td("doc.serviceRates")}</p>
       ${validityLine}
 
       <div class="quo-doc-divider"></div>
 
       <table class="quo-doc-table rate-doc-table">
         <thead>
-          <tr><th>${t("doc.service")}</th><th class="num">${t("doc.price")}</th></tr>
+          <tr><th>${td("doc.service")}</th><th class="num">${td("doc.price")}</th></tr>
         </thead>
-        <tbody>${rows || `<tr><td colspan="2" class="quo-doc-empty">${t("doc.noServicesYet")}</td></tr>`}</tbody>
+        <tbody>${rows || `<tr><td colspan="2" class="quo-doc-empty">${td("doc.noServicesYet")}</td></tr>`}</tbody>
       </table>
 
       ${fields.notes.value.trim() ? `
         <div class="quo-doc-divider"></div>
-        <p class="quo-doc-section-label">${t("doc.notes")}</p>
+        <p class="quo-doc-section-label">${td("doc.notes")}</p>
         <p class="quo-doc-pre">${escapeHtml(fields.notes.value)}</p>
       ` : ""}
 
       <div class="quo-doc-divider"></div>
-      <p class="quo-doc-footer">${escapeHtml(fields.businessName.value) || t("doc.yourBusinessName")}</p>
+      <p class="quo-doc-footer">${escapeHtml(fields.businessName.value) || td("doc.yourBusinessName")}</p>
     `;
   }
 
@@ -232,7 +233,7 @@ if (ratePanel) {
     persistBusinessProfile();
 
     const payload = {
-      title: fields.title.value || t("doc.serviceRates"),
+      title: fields.title.value || td("doc.serviceRates"),
       validFrom: fields.validFrom.value,
       validUntil: fields.validUntil.value,
       business: {
@@ -542,6 +543,10 @@ if (ratePanel) {
   }
 
   window.FreelanceRateCard = { startNew, loadRateCard, renderMyRateCardsPage };
+
+  // Document Language (Settings) can change independently of the UI
+  // language - redraw this rate card's live preview immediately, no reload.
+  window.addEventListener("freelance-doc-language-changed", () => { if (typeof renderPreview === "function") renderPreview(); });
 
   startNew();
 }

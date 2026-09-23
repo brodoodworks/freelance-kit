@@ -1011,6 +1011,15 @@ tr.row-clickable, .project-card-item.row-clickable { cursor: pointer; }
 }
 .field select { cursor: pointer; }
 .field input[type="date"] { cursor: pointer; }
+/* iOS/iPadOS Safari auto-zooms the whole page on focus for any input
+   whose font-size is under 16px. Our fields use 13.5px, so tapping a
+   date field on a real iPhone/iPad snaps the viewport in and shoves
+   whatever was in that field-row, which reads as "the layout is
+   broken" even though nothing about the CSS layout itself is wrong.
+   This has to apply at EVERY width, not just narrow ones - an iPad
+   in landscape is a touch device too, and still hits this at 1000px+
+   where the page otherwise looks like desktop. */
+.field input[type="date"] { font-size: 16px; }
 /* The native calendar-picker icon otherwise sits almost flush against
    the input's own right edge with no relation to our padding system —
    give it the same breathing room text gets, and let it visually
@@ -1953,6 +1962,14 @@ tr.row-clickable, .project-card-item.row-clickable { cursor: pointer; }
 .settings-sync-text { max-width: 440px; margin-bottom: 0; }
 .settings-sync-row [data-sync-off-state],
 .settings-sync-row [data-sync-on-state] { flex-shrink: 0; }
+/* The "sync is on" state packs a status line + a button into the same
+   slot as the lone "Enable Sync" button in the off state — without its
+   own gap, that status text sat flush against the button below it
+   (no other card in Settings stacks two elements with zero gap). */
+.settings-sync-row [data-sync-on-state] {
+  display: flex; flex-direction: column; gap: 10px;
+}
+.settings-sync-row [data-sync-on-state] [data-sync-status] { margin: 0; }
 @media (max-width: 480px) {
   .settings-sync-row { gap: 14px; }
 }
@@ -2234,16 +2251,6 @@ tr.row-clickable, .project-card-item.row-clickable { cursor: pointer; }
   .quo-grid { grid-template-columns: minmax(0, 1fr); }
   .quo-preview-col { position: static; }
   .revc-grid { grid-template-columns: 1fr; }
-
-  /* iOS/iPadOS Safari auto-zooms the whole page on focus for any input
-     whose font-size is under 16px — our fields use 13.5px. Tapping a
-     date field (or any field) on a real iPhone/iPad then snaps the
-     viewport in, shoving/overlapping whatever was in a field-row right
-     as the native date picker opens, which reads as "the layout is
-     broken" even though nothing about the CSS layout itself is wrong.
-     Bumping date inputs to 16px on tablet/phone widths stops the zoom
-     from firing in the first place. */
-  .field input[type="date"] { font-size: 16px; }
 }
 
 @media (max-width: 860px) {

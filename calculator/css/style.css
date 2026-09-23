@@ -950,11 +950,18 @@ tr.row-clickable, .project-card-item.row-clickable { cursor: pointer; }
 
 .field-row {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  /* minmax(0, 1fr), not plain 1fr: a bare 1fr track still respects each
+     grid item's default min-width:auto, which for native controls like
+     input[type=date] resolves to their intrinsic content size. On
+     tablet-width screens (where .field-row is still 2 columns but the
+     column is narrower than on desktop) that intrinsic size can exceed
+     the track, so the row overflows/overlaps instead of the input
+     simply shrinking to fit — worst on iOS Safari's date control. */
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: var(--space-3);
   margin-bottom: var(--space-3);
 }
-.field-row .field { margin-bottom: 0; }
+.field-row .field { margin-bottom: 0; min-width: 0; }
 
 .field label {
   display: flex; align-items: center; justify-content: space-between;
@@ -970,6 +977,7 @@ tr.row-clickable, .project-card-item.row-clickable { cursor: pointer; }
 .field select,
 .field textarea {
   width: 100%;
+  min-width: 0;
   padding: 0 12px;
   border: 1px solid var(--border-strong);
   border-radius: var(--r-sm);
@@ -978,6 +986,7 @@ tr.row-clickable, .project-card-item.row-clickable { cursor: pointer; }
   font-family: var(--font);
   font-size: 13.5px;
   transition: border-color 0.15s var(--ease), box-shadow 0.15s var(--ease);
+  box-sizing: border-box;
 }
 .field input[type="text"],
 .field input[type="number"],
@@ -1935,6 +1944,18 @@ tr.row-clickable, .project-card-item.row-clickable { cursor: pointer; }
 }
 .settings-danger-title { font-size: 13px; font-weight: 700; }
 .settings-danger-text { font-size: 12px; color: var(--text); margin-top: 2px; max-width: 440px; }
+
+/* ---- Settings: Sync Across Devices ----
+   Reuses the Danger Zone's row layout (text left, action right, wraps on
+   narrow screens) so this card breathes the same as the others instead of
+   stacking its text and button tight together. */
+.settings-sync-row { align-items: flex-start; }
+.settings-sync-text { max-width: 440px; margin-bottom: 0; }
+.settings-sync-row [data-sync-off-state],
+.settings-sync-row [data-sync-on-state] { flex-shrink: 0; }
+@media (max-width: 480px) {
+  .settings-sync-row { gap: 14px; }
+}
 
 /* ---- Dashboard: Business Profile card ---- */
 

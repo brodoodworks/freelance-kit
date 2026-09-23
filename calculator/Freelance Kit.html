@@ -813,15 +813,19 @@
 
             <div class="calc-card calc-form-card" data-sync-card hidden>
               <h3 class="section-title" data-i18n="sync.title">Sync Across Devices (Optional)</h3>
-              <p class="backup-block-text" data-i18n="sync.text">Off by default — your data stays only on this device. Turn this on to keep the same data in sync on your phone, tablet and computer.</p>
+              <div class="settings-danger-row settings-sync-row">
+                <div>
+                  <p class="backup-block-text settings-sync-text" data-i18n="sync.text">Off by default — your data stays only on this device. Turn this on to keep the same data in sync on your phone, tablet and computer.</p>
+                </div>
 
-              <div data-sync-off-state>
-                <button type="button" class="btn btn-secondary" data-sync-enable data-i18n="sync.enable">Enable Sync</button>
-              </div>
+                <div data-sync-off-state>
+                  <button type="button" class="btn btn-secondary" data-sync-enable data-i18n="sync.enable">Enable Sync</button>
+                </div>
 
-              <div data-sync-on-state hidden>
-                <p class="backup-last" data-sync-status></p>
-                <button type="button" class="btn btn-danger" data-sync-disable data-i18n="sync.disable">Turn Off Sync</button>
+                <div data-sync-on-state hidden>
+                  <p class="backup-last" data-sync-status></p>
+                  <button type="button" class="btn btn-danger" data-sync-disable data-i18n="sync.disable">Turn Off Sync</button>
+                </div>
               </div>
 
               <p class="quo-validation-message" data-sync-error hidden></p>

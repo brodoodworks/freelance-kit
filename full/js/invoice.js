@@ -39,6 +39,13 @@ if (invPanel) {
   let logoDataUrl = null;
   let editingInvoiceId = null;
   let currentProjectSnapshot = null;
+  // Real (non name-matching) link back to the Quotation/Proposal this
+  // invoice was generated from via "Buat Invoice dari Penawaran/Proposal"
+  // (startNewFromQuotation/startNewFromProposal below). Saved on the
+  // invoice record and used by data.js's getSummary() to group Dashboard
+  // deals by ID instead of by (possibly re-typed) client name.
+  let currentSourceQuotationId = null;
+  let currentSourceProposalId = null;
   let invDirty = false;
 
   /* ---- Section include/exclude toggles ----
@@ -417,6 +424,52 @@ if (invPanel) {
     }
   }
 
+  // Copies a Quotation's client + items straight across so the Invoice
+  // it becomes is guaranteed to have the exact same client identity —
+  // no re-typing, so no risk of the typo that used to split one client's
+  // Dashboard numbers into two "deals" (see startNewFromQuotation below).
+  function applyQuotationData(quotation) {
+    if (!quotation) return;
+    const client = quotation.client || {};
+    fields.clientName.value = client.name || "";
+    fields.clientCompany.value = client.company || "";
+    fields.clientEmail.value = client.email || "";
+    fields.clientPhone.value = client.phone || "";
+    fields.clientAddress.value = client.address || "";
+
+    items = (quotation.items || []).map((it, i) => {
+      const item = { id: "item_" + i + "_" + Date.now(), description: it.description || "", qty: it.qty || 1, unitPrice: it.unitPrice || 0 };
+      item.subItems = (it.subItems || []).map((s, si) => ({
+        id: "sub_" + i + "_" + si + "_" + Date.now(),
+        description: s.description || "",
+        qty: s.qty || "",
+        unitPrice: s.unitPrice || 0,
+      }));
+      return item;
+    });
+  }
+
+  // Same idea for a Proposal: a Proposal has no priced line items (just
+  // scope/deliverables text) so it becomes a single invoice line using
+  // the proposal's investment figure.
+  function applyProposalData(proposal) {
+    if (!proposal) return;
+    const client = proposal.client || {};
+    fields.clientName.value = client.name || "";
+    fields.clientCompany.value = client.company || "";
+    fields.clientEmail.value = client.email || "";
+    fields.clientPhone.value = client.phone || "";
+    fields.clientAddress.value = client.address || "";
+
+    items = [{
+      id: "item_" + Date.now(),
+      description: proposal.title || t("invoice.itemFromProposal") || "Sesuai Proposal",
+      qty: 1,
+      unitPrice: Number(proposal.investment) || 0,
+      subItems: [],
+    }];
+  }
+
   function loadBusinessProfile() {
     const profile = getBusinessProfile();
     if (!profile) return;
@@ -474,6 +527,17 @@ if (invPanel) {
     if (type === "14-days") return t("terms.net14days");
     if (type === "30-days") return t("terms.net30days");
     return fields.paymentTermsCustom.value || "";
+  }
+
+  function invoiceStatusBadgeHTML() {
+    const status = fields.status.value;
+    if (status === "paid") {
+      return `<span class="inv-doc-status-badge is-paid">${td("doc.statusPaid")}</span>`;
+    }
+    if (status === "overdue") {
+      return `<span class="inv-doc-status-badge is-overdue">${td("doc.statusOverdue")}</span>`;
+    }
+    return `<span class="inv-doc-status-badge is-unpaid">${td("doc.statusUnpaid")}</span>`;
   }
 
   function renderPreview() {
@@ -562,6 +626,7 @@ if (invPanel) {
         <div>
           <p class="quo-doc-title">${td("doc.invoiceTitle")}</p>
           <p class="quo-doc-number">${escapeHtml(fields.invoiceNumber.value)}</p>
+          ${invoiceStatusBadgeHTML()}
         </div>
         <div class="quo-doc-dates">
           <p><span>${td("doc.date")}</span>${formatDateID(fields.date.value)}</p>
@@ -658,6 +723,8 @@ if (invPanel) {
       invoiceNumber: fields.invoiceNumber.value,
       projectId: projectSelect.value || null,
       projectSnapshot: currentProjectSnapshot,
+      sourceQuotationId: currentSourceQuotationId,
+      sourceProposalId: currentSourceProposalId,
       date: fields.date.value,
       dueDate: fields.dueDate.value,
       status: fields.status.value,
@@ -756,6 +823,8 @@ if (invPanel) {
 
     populateProjectSelect(invoice.projectId);
     currentProjectSnapshot = invoice.projectSnapshot || null;
+    currentSourceQuotationId = invoice.sourceQuotationId || null;
+    currentSourceProposalId = invoice.sourceProposalId || null;
 
     // Defensive fallbacks: an invoice restored from an older/partial
     // backup could be missing nested objects entirely — fall back to
@@ -835,6 +904,8 @@ if (invPanel) {
     items = [];
     logoDataUrl = null;
     currentProjectSnapshot = null;
+    currentSourceQuotationId = null;
+    currentSourceProposalId = null;
 
     const profileDefaults = getBusinessProfile() || {};
     const validDays = Number(profileDefaults.defaultValidUntil) || 14;
@@ -881,6 +952,32 @@ if (invPanel) {
     renderItems();
     saveFeedbackEl.hidden = true;
     validationEl.hidden = true;
+    setInvDirty(true);
+    renderPreview();
+  }
+
+  // "Buat Invoice dari Penawaran/Proposal" — opens a fresh Invoice
+  // pre-filled with the exact client data and items from an existing
+  // Quotation/Proposal, and remembers a real ID link back to it
+  // (currentSourceQuotationId/currentSourceProposalId, saved onto the
+  // invoice record on Save). This is what lets the Dashboard group them
+  // as one deal with certainty, instead of re-matching by client name.
+  function startNewFromQuotation(quotation) {
+    startNew(null);
+    if (!quotation) return;
+    currentSourceQuotationId = quotation.id;
+    applyQuotationData(quotation);
+    renderItems();
+    setInvDirty(true);
+    renderPreview();
+  }
+
+  function startNewFromProposal(proposal) {
+    startNew(null);
+    if (!proposal) return;
+    currentSourceProposalId = proposal.id;
+    applyProposalData(proposal);
+    renderItems();
     setInvDirty(true);
     renderPreview();
   }
@@ -1132,7 +1229,7 @@ if (invPanel) {
     myiSortSelect.addEventListener("change", () => { myiSortOrder = myiSortSelect.value; renderMyInvoicesPage(); });
   }
 
-  window.FreelanceInvoice = { startNew, loadInvoice, renderMyInvoicesPage, addTemplateItems };
+  window.FreelanceInvoice = { startNew, startNewFromQuotation, startNewFromProposal, loadInvoice, renderMyInvoicesPage, addTemplateItems };
 
   // Document Language (Settings) can change independently of the UI
   // language - redraw this invoice's live preview immediately, no reload.

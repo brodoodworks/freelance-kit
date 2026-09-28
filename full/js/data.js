@@ -470,11 +470,53 @@ function clientKeyFromObject(client) {
 // Total Proyek, and contributes AT MOST one figure to Total Pendapatan -
 // taken from whichever single record best represents that deal
 // (Project > Quotation > Proposal > Invoice, preferring the most
-// recently updated one within the same type). This is a name-matching
-// heuristic, not a real link, so two records for the same company typed
-// with a noticeably different spelling/company name won't merge - but it
-// covers the normal case of sending a Proposal/Quotation/Invoice to the
-// same client without creating a Project for them first.
+// recently updated one within the same type).
+//
+// Two safety nets on top of plain name-matching:
+//  1. An Invoice created via the "Buat Invoice dari Penawaran/Proposal"
+//     action (js/invoice.js `startNewFromQuotation`/`startNewFromProposal`)
+//     carries a real `sourceQuotationId`/`sourceProposalId` back to the
+//     document it was generated from. When present, that invoice joins
+//     the SAME deal group as its source document directly by ID - no
+//     name comparison involved, so it can never be split off by a typo.
+//  2. For everything else, client identity is still matched by name, but
+//     with a little tolerance for near-identical spelling (a dropped
+//     letter, a typo) via `namesSimilar()` below, so e.g. "Early Coffe
+//     Batam" and "Early Coffee Batam" still fold into one deal. This is
+//     still a heuristic, not a real link: names that are short or that
+//     differ by more than a letter or two are deliberately left
+//     unmerged, to avoid accidentally combining two different clients
+//     that just happen to have similar-sounding names.
+function levenshteinDistance(a, b) {
+  if (a === b) return 0;
+  const la = a.length, lb = b.length;
+  if (!la) return lb;
+  if (!lb) return la;
+  let prev = new Array(lb + 1);
+  let curr = new Array(lb + 1);
+  for (let j = 0; j <= lb; j++) prev[j] = j;
+  for (let i = 1; i <= la; i++) {
+    curr[0] = i;
+    for (let j = 1; j <= lb; j++) {
+      const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+      curr[j] = Math.min(curr[j - 1] + 1, prev[j] + 1, prev[j - 1] + cost);
+    }
+    [prev, curr] = [curr, prev];
+  }
+  return prev[lb];
+}
+function namesSimilar(a, b) {
+  if (!a || !b) return false;
+  if (a === b) return true;
+  const maxLen = Math.max(a.length, b.length);
+  // Short names are risky to fuzzy-match (e.g. "PT ABC" vs "PT ABD" is
+  // one typo away from a totally different company) - require an exact
+  // match below this length.
+  if (maxLen < 10) return false;
+  const distance = levenshteinDistance(a, b);
+  const threshold = maxLen < 16 ? 1 : 2;
+  return distance <= threshold;
+}
 function getSummary() {
   const projects = getSavedProjects();
   const standaloneQuotations = readSavedQuotationsRaw().filter((q) => !q.projectId);
@@ -496,10 +538,31 @@ function getSummary() {
   const deals = new Map();
   let anonN = 0;
   function pushDeal(key, entry) {
-    const k = key || `__anon_${anonN++}__`; // no client name at all -> never merges with anything else
-    if (!deals.has(k)) deals.set(k, []);
-    deals.get(k).push(entry);
+    if (!key) {
+      // no client name at all -> never merges with anything else
+      const k = `__anon_${anonN++}__`;
+      deals.set(k, [entry]);
+      return k;
+    }
+    if (deals.has(key)) {
+      deals.get(key).push(entry);
+      return key;
+    }
+    // No exact key yet - see if an existing group's key is a near
+    // match (small typo) before opening a brand-new group for it.
+    for (const existingKey of deals.keys()) {
+      if (existingKey.startsWith("__anon_")) continue;
+      if (namesSimilar(key, existingKey)) {
+        deals.get(existingKey).push(entry);
+        return existingKey;
+      }
+    }
+    deals.set(key, [entry]);
+    return key;
   }
+
+  const quotationKeyById = new Map();
+  const proposalKeyById = new Map();
 
   projects.forEach((p) => {
     const won = p.status === "approved" || p.status === "completed";
@@ -512,32 +575,44 @@ function getSummary() {
   });
   standaloneQuotations.forEach((q) => {
     const won = q.status === "closing" || q.status === "accepted";
-    pushDeal(clientKeyFromObject(q.client), {
+    const usedKey = pushDeal(clientKeyFromObject(q.client), {
       stage: won ? "won" : (q.status === "sent" || q.status === "negotiation") ? "pending" : "none",
       priority: 3,
       revenue: getQuotationDisplayTotal(q),
       updatedAt: q.updatedAt,
     });
+    quotationKeyById.set(q.id, usedKey);
   });
   standaloneProposals.forEach((p) => {
     const won = p.status === "accepted";
-    pushDeal(clientKeyFromObject(p.client), {
+    const usedKey = pushDeal(clientKeyFromObject(p.client), {
       stage: won ? "won" : p.status === "sent" ? "pending" : "none",
       priority: 2,
       revenue: Number(p.investment) || 0,
       updatedAt: p.updatedAt,
     });
+    proposalKeyById.set(p.id, usedKey);
   });
   standaloneInvoices.forEach((inv) => {
     // An invoice existing at all means the deal was already won - you
     // bill after the work is agreed, not before - so it always counts as
     // "won" for the deal it belongs to, regardless of paid/unpaid status.
-    pushDeal(clientKeyFromObject(inv.client), {
+    const entry = {
       stage: "won",
       priority: 1,
       revenue: Number(inv.total) || 0,
       updatedAt: inv.updatedAt,
-    });
+    };
+    // Invoice generated via "Buat Invoice dari Penawaran/Proposal" carries
+    // a real link back to its source document - join that exact deal
+    // group instead of re-matching by (possibly re-typed) client name.
+    const linkedKey = (inv.sourceQuotationId && quotationKeyById.get(inv.sourceQuotationId)) ||
+      (inv.sourceProposalId && proposalKeyById.get(inv.sourceProposalId)) || null;
+    if (linkedKey && deals.has(linkedKey)) {
+      deals.get(linkedKey).push(entry);
+    } else {
+      pushDeal(clientKeyFromObject(inv.client), entry);
+    }
   });
 
   let totalRevenue = 0;

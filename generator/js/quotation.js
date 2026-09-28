@@ -1005,6 +1005,7 @@ if (quoPanel) {
         <div class="row-menu-dropdown" data-row-menu-dropdown hidden>
           <button type="button" class="row-menu-item" data-myq-open="${id}">${t("action.open")}</button>
           <button type="button" class="row-menu-item" data-myq-download="${id}">${t("action.exportPdf")}</button>
+          <button type="button" class="row-menu-item" data-myq-create-invoice="${id}">${t("action.createInvoice")}</button>
           <button type="button" class="row-menu-item row-menu-item-danger" data-myq-delete="${id}">${t("action.delete")}</button>
         </div>
       </div>`;
@@ -1044,6 +1045,20 @@ if (quoPanel) {
         navigateTo("quotation-generator");
         history.replaceState(null, "", "#quotation-generator");
         setTimeout(() => document.querySelector('[data-quo-pdf]').click(), 150);
+      });
+    });
+
+    // "Buat Invoice" — opens the Invoice Generator pre-filled with this
+    // Quotation's exact client + items, and links the new invoice back
+    // to it by ID (see js/invoice.js startNewFromQuotation) so the
+    // Dashboard counts them as one deal, not two.
+    panel.querySelectorAll('[data-myq-create-invoice]').forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const q = getQuotationById(btn.dataset.myqCreateInvoice);
+        if (!q || !window.FreelanceInvoice) return;
+        window.FreelanceInvoice.startNewFromQuotation(q);
+        navigateTo("invoice-generator");
+        history.replaceState(null, "", "#invoice-generator");
       });
     });
 

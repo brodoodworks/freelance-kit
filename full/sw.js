@@ -1,6 +1,6 @@
 // Freelance Kit — offline cache (app shell). Bump CACHE_NAME when files change
 // so returning users get the update instead of a stale cached copy.
-const CACHE_NAME = "freelance-kit-v13";
+const CACHE_NAME = "freelance-kit-v15";
 
 // The app shell can be requested under more than one URL: "Freelance
 // Kit.html" is the entry file inside the downloadable zip, while a

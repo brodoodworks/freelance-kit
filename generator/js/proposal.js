@@ -1157,6 +1157,7 @@ if (propPanel) {
         <div class="row-menu-dropdown" data-row-menu-dropdown hidden>
           <button type="button" class="row-menu-item" data-myr-open="${id}">${t("action.open")}</button>
           <button type="button" class="row-menu-item" data-myr-download="${id}">${t("action.exportPdf")}</button>
+          <button type="button" class="row-menu-item" data-myr-create-invoice="${id}">${t("action.createInvoice")}</button>
           <button type="button" class="row-menu-item row-menu-item-danger" data-myr-delete="${id}">${t("action.delete")}</button>
         </div>
       </div>`;
@@ -1195,6 +1196,20 @@ if (propPanel) {
         navigateTo("proposal-generator");
         history.replaceState(null, "", "#proposal-generator");
         setTimeout(() => document.querySelector('[data-prop-pdf]').click(), 150);
+      });
+    });
+
+    // "Buat Invoice" — opens the Invoice Generator pre-filled with this
+    // Proposal's exact client + investment amount, and links the new
+    // invoice back to it by ID (see js/invoice.js startNewFromProposal)
+    // so the Dashboard counts them as one deal, not two.
+    panel.querySelectorAll('[data-myr-create-invoice]').forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const p = getProposalById(btn.dataset.myrCreateInvoice);
+        if (!p || !window.FreelanceInvoice) return;
+        window.FreelanceInvoice.startNewFromProposal(p);
+        navigateTo("invoice-generator");
+        history.replaceState(null, "", "#invoice-generator");
       });
     });
     panel.querySelectorAll('[data-myr-delete]').forEach((btn) => {

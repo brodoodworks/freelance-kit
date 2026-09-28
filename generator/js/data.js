@@ -9,6 +9,11 @@
 const STATUS_META = {
   "draft":         { get label() { return t("status.draft"); },         badgeClass: "badge-draft" },
   "proposal-sent": { get label() { return t("status.proposalSent"); },  badgeClass: "badge-sent" },
+  // Also used by the Dashboard's merged Recent Projects list when the
+  // row is actually a Quotation (see getProjects()) - kept here too so
+  // that badge looks right there, not just in My Quotations.
+  "negotiation":   { get label() { return t("status.negotiation"); },   badgeClass: "badge-sent" },
+  "closing":       { get label() { return t("status.closing"); },       badgeClass: "badge-approved" },
   "approved":      { get label() { return t("status.approved"); },      badgeClass: "badge-approved" },
   "rejected":      { get label() { return t("status.rejected"); },      badgeClass: "badge-rejected" },
   "completed":     { get label() { return t("status.completed"); },     badgeClass: "badge-completed" },
@@ -147,6 +152,21 @@ function formatSavedDate(isoString) {
     const d = new Date(isoString);
     return d.toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" }) +
       ", " + d.toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" });
+  } catch (err) {
+    return "";
+  }
+}
+
+function formatRelativeDate(isoString) {
+  try {
+    const d = new Date(isoString);
+    const now = new Date();
+    const startOfDay = (date) => new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    const diffDays = Math.round((startOfDay(now) - startOfDay(d)) / (1000 * 60 * 60 * 24));
+    if (diffDays === 0) return "Today";
+    if (diffDays === 1) return "Yesterday";
+    if (diffDays > 1 && diffDays < 7) return `${diffDays} days ago`;
+    return d.toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" });
   } catch (err) {
     return "";
   }
@@ -390,7 +410,7 @@ function getProjects() {
     docType: "quotation",
     name: q.quotationNumber || "Quotation",
     client: clientLabel(q),
-    price: Number(q.total) || 0,
+    price: getQuotationDisplayTotal(q),
     status: q.status || "draft",
     updatedAt: q.updatedAt,
   }));
@@ -522,16 +542,30 @@ function generateQuotationNumber() {
 }
 
 const QUOTATION_STATUS_META = {
-  "draft":    { get label() { return t("status.draft"); },    badgeClass: "badge-draft" },
-  "sent":     { get label() { return t("status.sent"); },     badgeClass: "badge-sent" },
-  "accepted": { get label() { return t("status.accepted"); }, badgeClass: "badge-approved" },
-  "rejected": { get label() { return t("status.rejected"); }, badgeClass: "badge-rejected" },
-  "expired":  { get label() { return t("status.expired"); },  badgeClass: "badge-completed" },
+  "draft":       { get label() { return t("status.draft"); },       badgeClass: "badge-draft" },
+  "sent":        { get label() { return t("status.sent"); },        badgeClass: "badge-sent" },
+  // "negotiation" - client came back with a different number than the
+  // one on the document. "closing" - deal is won, at whatever number
+  // was last agreed (the negotiated total, if one was ever entered).
+  "negotiation": { get label() { return t("status.negotiation"); }, badgeClass: "badge-sent" },
+  "closing":     { get label() { return t("status.closing"); },     badgeClass: "badge-approved" },
+  "accepted":    { get label() { return t("status.accepted"); },    badgeClass: "badge-approved" },
+  "rejected":    { get label() { return t("status.rejected"); },    badgeClass: "badge-rejected" },
+  "expired":     { get label() { return t("status.expired"); },     badgeClass: "badge-completed" },
 };
-const QUOTATION_STATUS_ORDER = ["draft", "sent", "accepted", "rejected", "expired"];
+const QUOTATION_STATUS_ORDER = ["draft", "sent", "negotiation", "closing", "accepted", "rejected", "expired"];
 
 function getQuotationStatusMeta(statusKey) {
   return QUOTATION_STATUS_META[statusKey] || { label: statusKey, badgeClass: "badge-draft" };
+}
+
+// The number to actually SHOW/use for a quotation - its original
+// computed total, unless a negotiated number has been entered (see
+// "negotiation"/"closing" status above), in which case that overrides
+// it everywhere: My Quotations, the Dashboard, and the quotation's own
+// summary card - without ever touching the original document's items.
+function getQuotationDisplayTotal(q) {
+  return (q && q.negotiatedTotal != null && q.negotiatedTotal !== "") ? Number(q.negotiatedTotal) || 0 : Number(q && q.total) || 0;
 }
 
 function saveQuotation(quotation) {

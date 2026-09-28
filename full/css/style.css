@@ -866,6 +866,19 @@ tr.row-clickable, .project-card-item.row-clickable { cursor: pointer; }
 .cell-client, .cell-updated { color: var(--text); }
 .cell-price { font-weight: 600; font-variant-numeric: tabular-nums; }
 
+/* ---- Negotiation: editable price cell in My Quotations ---- */
+.myq-price-cell { display: flex; align-items: baseline; justify-content: flex-end; gap: 6px; flex-wrap: wrap; }
+.myq-price-original { font-size: 11.5px; font-weight: 500; color: var(--text-faint); text-decoration: line-through; }
+.myq-price-current { font-weight: 600; font-variant-numeric: tabular-nums; }
+.myq-price-edit-btn { width: 22px; height: 22px; color: var(--text-faint); flex-shrink: 0; }
+.myq-price-input {
+  width: 110px; box-sizing: border-box; padding: 5px 8px; border: 1px solid var(--teal-deep);
+  border-radius: var(--r-sm); font-size: 13px; text-align: right; font-variant-numeric: tabular-nums;
+  font-family: var(--font); color: var(--text);
+}
+.myq-price-save-btn { width: 24px; height: 24px; color: var(--teal-deep); flex-shrink: 0; }
+.project-card-bottom .myq-price-cell { justify-content: flex-start; }
+
 .badge {
   display: inline-flex; align-items: center; gap: 5px;
   padding: 4px 10px; border-radius: var(--r-full);

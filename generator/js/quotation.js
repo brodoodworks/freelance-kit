@@ -967,8 +967,8 @@ if (quoPanel) {
     }
     el.hidden = false;
 
-    const totalValue = all.reduce((sum, q) => sum + (Number(q.total) || 0), 0);
-    const accepted = all.filter((q) => q.status === "accepted").length;
+    const totalValue = all.reduce((sum, q) => sum + getQuotationDisplayTotal(q), 0);
+    const accepted = all.filter((q) => q.status === "accepted" || q.status === "closing").length;
     const drafts = all.filter((q) => q.status === "draft").length;
 
     el.innerHTML = `
@@ -1105,6 +1105,26 @@ if (quoPanel) {
       return;
     }
 
+    // Negotiation: the client counter-offering a different number than
+    // what's on the document shouldn't force editing (or duplicating)
+    // the whole quotation. This price cell lets a new agreed number be
+    // punched in directly - it's stored as `negotiatedTotal` alongside
+    // the original `total`, and getQuotationDisplayTotal() is what
+    // every other total (My Quotations summary, Dashboard) reads from
+    // then on, so it updates everywhere at once.
+    function quotationPriceCellHTML(q) {
+      const hasNegotiated = q.negotiatedTotal != null && q.negotiatedTotal !== "";
+      const displayTotal = getQuotationDisplayTotal(q);
+      return `
+        <div class="myq-price-cell" data-myq-price-cell="${q.id}">
+          ${hasNegotiated ? `<span class="myq-price-original">${formatIDR(Number(q.total) || 0)}</span>` : ""}
+          <span class="myq-price-current">${formatIDR(displayTotal)}</span>
+          <button type="button" class="icon-btn myq-price-edit-btn" data-myq-edit-price="${q.id}" title="Update nilai negosiasi / Update negotiated amount">
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M11.3 2.3 13.7 4.7 5 13.4 2 14l0.6-3L11.3 2.3Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>
+          </button>
+        </div>`;
+    }
+
     const rows = filtered.map((q) => {
       const projectName = quotationProjectName(q);
       return `
@@ -1114,7 +1134,7 @@ if (quoPanel) {
           ${projectName ? `<p class="cell-project-sub">${escapeHtml(projectName)}</p>` : ""}
         </td>
         <td class="cell-client">${escapeHtml((q.client && (q.client.company || q.client.name)) || "\u2014")}</td>
-        <td class="cell-price num">${formatIDR(q.total)}</td>
+        <td class="cell-price num">${quotationPriceCellHTML(q)}</td>
         <td>${buildQuotationStatusSelect(q)}</td>
         <td class="cell-updated">${formatRelativeDate(q.updatedAt)}</td>
         <td class="myp-row-actions">${myqRowMenuHTML(q.id)}</td>
@@ -1134,7 +1154,7 @@ if (quoPanel) {
           <span class="badge ${status.badgeClass}">${status.label}</span>
         </div>
         <div class="project-card-bottom">
-          <span class="project-card-price">${formatIDR(q.total)}</span>
+          ${quotationPriceCellHTML(q)}
           <span class="project-card-updated">${formatRelativeDate(q.updatedAt)}</span>
         </div>
         <div class="myp-card-actions">${myqRowMenuHTML(q.id)}</div>
@@ -1164,6 +1184,42 @@ if (quoPanel) {
       sel.addEventListener("change", (e) => {
         updateQuotationStatus(sel.dataset.myqStatus, e.target.value);
         renderMyQuotationsPage();
+      });
+    });
+
+    myqPanel.querySelectorAll('[data-myq-edit-price]').forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const id = btn.dataset.myqEditPrice;
+        const q = getQuotationById(id);
+        if (!q) return;
+        const cell = myqPanel.querySelector(`[data-myq-price-cell="${id}"]`);
+        if (!cell) return;
+        const currentValue = getQuotationDisplayTotal(q);
+        cell.innerHTML = `
+          <input type="text" inputmode="numeric" class="myq-price-input" data-myq-price-input="${id}"
+            value="${formatGrouped(String(currentValue))}" placeholder="0">
+          <button type="button" class="icon-btn myq-price-save-btn" data-myq-save-price="${id}" title="Simpan / Save">
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M3 8.3 6.5 12 13 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>`;
+        const input = cell.querySelector('[data-myq-price-input]');
+        input.focus();
+        input.select();
+        input.addEventListener("input", () => { input.value = formatGrouped(parseDigits(input.value)); });
+        function commit() {
+          const raw = parseDigits(input.value);
+          const patch = raw === "" ? { negotiatedTotal: null } : { negotiatedTotal: Number(raw) };
+          updateQuotation(id, patch);
+          renderMyQuotationsPage();
+        }
+        input.addEventListener("keydown", (ev) => {
+          if (ev.key === "Enter") { ev.preventDefault(); commit(); }
+          if (ev.key === "Escape") { ev.preventDefault(); renderMyQuotationsPage(); }
+        });
+        cell.querySelector('[data-myq-save-price]').addEventListener("click", (ev) => {
+          ev.stopPropagation();
+          commit();
+        });
       });
     });
   }

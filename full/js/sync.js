@@ -54,6 +54,8 @@
   const loginError = document.querySelector('[data-sync-login-error]');
   const loginSubmitBtn = document.querySelector('[data-sync-login-submit]');
   const loginCancelBtn = document.querySelector('[data-sync-login-cancel]');
+  const forgotPasswordBtn = document.querySelector('[data-sync-forgot-password]');
+  const resetMessageEl = document.querySelector('[data-sync-reset-message]');
 
   const conflictOverlay = document.querySelector('[data-sync-conflict-overlay]');
   const keepCloudBtn = document.querySelector('[data-sync-keep-cloud]');
@@ -294,6 +296,7 @@
     loginEmail.value = "";
     loginPassword.value = "";
     showLoginError("");
+    if (resetMessageEl) resetMessageEl.hidden = true;
     loginOverlay.hidden = false;
     loginEmail.focus();
   }
@@ -330,6 +333,44 @@
       } finally {
         loginSubmitBtn.disabled = false;
         loginSubmitBtn.textContent = t("sync.submit");
+      }
+    });
+  }
+
+  // "Forgot password?" — real self-service recovery, unlike the ZIP's
+  // access-code gate. This IS a real Firebase Auth account with a real
+  // email, so Firebase's own sendPasswordResetEmail can genuinely email
+  // the person a reset link; no shop-owner involvement needed at all.
+  if (forgotPasswordBtn) {
+    forgotPasswordBtn.addEventListener("click", async () => {
+      const email = (loginEmail.value || "").trim();
+      if (!email) {
+        showLoginError("Isi email kamu dulu di kolom di atas, baru klik ini lagi. / Enter your email above first, then click this again.");
+        return;
+      }
+
+      showLoginError("");
+      if (resetMessageEl) resetMessageEl.hidden = true;
+      forgotPasswordBtn.disabled = true;
+      const originalLabel = forgotPasswordBtn.textContent;
+      forgotPasswordBtn.textContent = "Mengirim... / Sending...";
+      try {
+        await loadFirebase();
+        await auth.sendPasswordResetEmail(email);
+        if (resetMessageEl) {
+          resetMessageEl.hidden = false;
+          resetMessageEl.textContent = "Kalau email ini terdaftar, link buat bikin password baru udah dikirim — cek inbox (dan folder spam). / If this email is registered, a reset link has been sent — check your inbox (and spam folder).";
+        }
+      } catch (err) {
+        console.warn("[freelance-kit-sync] password reset failed", err);
+        if (err && err.code === "auth/invalid-email") {
+          showLoginError("Format emailnya kelihatannya salah. / That email address looks invalid.");
+        } else {
+          showLoginError("Gagal ngirim link reset, coba lagi. / Couldn't send the reset link, try again.");
+        }
+      } finally {
+        forgotPasswordBtn.disabled = false;
+        forgotPasswordBtn.textContent = originalLabel;
       }
     });
   }

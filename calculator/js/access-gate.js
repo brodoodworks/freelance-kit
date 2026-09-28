@@ -84,6 +84,29 @@
         '<button id="fk-access-submit" type="button" style="width:100%;border:none;border-radius:10px;' +
           'background:#025864;color:#fff;font-weight:600;font-size:14px;padding:13px;cursor:pointer;">' +
           'Buka Aplikasi / Unlock</button>' +
+        '<button id="fk-access-forgot" type="button" style="width:100%;border:none;background:transparent;' +
+          'color:#025864;font-weight:600;font-size:12.5px;padding:12px 0 0;cursor:pointer;text-decoration:underline;">' +
+          'Lupa kode akses? / Forgot the code?</button>' +
+        '<div id="fk-access-forgot-panel" hidden style="margin-top:10px;padding:14px 16px;background:#F6F5F0;' +
+          'border-radius:10px;text-align:left;font-size:12px;line-height:1.65;color:#4A4A4E;">' +
+          '<p style="margin:0 0 8px;font-weight:700;color:#000;">Cara cari kode akses kamu sendiri, tanpa perlu ' +
+            'hubungi penjual: / How to find your own code, no need to contact the seller:</p>' +
+          '<ol style="margin:0 0 8px;padding-left:18px;">' +
+            '<li style="margin-bottom:6px;">Cek email konfirmasi pembelian dari Lynk.id (biasanya subjeknya ' +
+              'nyebut "Freelance Kit"). / Check the purchase confirmation email from Lynk.id (subject usually ' +
+              'mentions "Freelance Kit").</li>' +
+            '<li style="margin-bottom:6px;">Login ke lynk.id → buka menu <b>"Pembelian Saya" / "My ' +
+              'Purchases"</b> → buka order Freelance Kit kamu, kode aksesnya tercantum di sana. / Log in to ' +
+              'lynk.id → open <b>"My Purchases"</b> → open your Freelance Kit order, the code is shown ' +
+              'there.</li>' +
+            '<li>Cek juga file <b>"0 - BACA DULU (Kode Akses & Cara Pakai).txt"</b> di dalam ZIP produk yang kamu ' +
+              'download pertama kali. / Also check the <b>"0 - READ FIRST"</b> file inside the product ZIP you ' +
+              'first downloaded.</li>' +
+          '</ol>' +
+          '<p style="margin:0;">Baru kalau ketiganya udah dicoba dan masih belum ketemu, hubungi penjual lewat ' +
+            'halaman produk di Lynk.id. / Only if all three don’t work, contact the seller via the product ' +
+            'page on Lynk.id.</p>' +
+        '</div>' +
         '<p style="margin:16px 0 0;font-size:11.5px;color:#9A9A9E;">Belum punya kode? Beli dulu di Lynk.id. / ' +
           "Don't have a code? Purchase first on Lynk.id.</p>" +
       '</div>';
@@ -113,6 +136,12 @@
     btn.addEventListener("click", tryUnlock);
     input.addEventListener("keydown", function (e) { if (e.key === "Enter") tryUnlock(); });
     setTimeout(function () { input.focus(); }, 50);
+
+    var forgotBtn = overlay.querySelector("#fk-access-forgot");
+    var forgotPanel = overlay.querySelector("#fk-access-forgot-panel");
+    forgotBtn.addEventListener("click", function () {
+      forgotPanel.hidden = !forgotPanel.hidden;
+    });
   }
 
   if (document.readyState === "loading") {

@@ -38,7 +38,7 @@
 
   // SHA-256 of the real access code (trimmed, uppercased) - set per
   // package build. Never the plain code itself.
-  var CODE_HASH = "1a22e2353e3ef7a26b628ad9fef29d4936eed545ea9bc8e1920aef3d9af61cf2";
+  var CODE_HASH = "da331a21ba677b3ccf63e3ae79876e8231f1e4ebc67a23253dc8be194d5cf007";
 
   var style = document.createElement("style");
   style.id = "fk-access-gate-style";

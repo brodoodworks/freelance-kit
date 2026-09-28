@@ -1535,10 +1535,20 @@ tr.row-clickable, .project-card-item.row-clickable { cursor: pointer; }
   overflow-y: auto;
 }
 
-.quo-doc-head { text-align: left; margin-bottom: 18px; }
-.quo-doc-logo { max-height: 44px; max-width: 160px; object-fit: contain; margin-bottom: 8px; display: block; }
+/* All four document types (Quotation, Proposal, Invoice, Rate Card)
+   share this centered business-info header: logo centered above a
+   centered business name, with address/phone/email/website combined
+   into a single flowing line instead of one line each. */
+.quo-doc-head { text-align: center; margin-bottom: 34px; }
+.quo-doc-logo { max-height: 44px; max-width: 160px; object-fit: contain; margin-bottom: 8px; display: block; margin-left: auto; margin-right: auto; }
 .quo-doc-business-name { font-size: 15px; font-weight: 800; }
 .quo-doc-business-line { font-size: 11.5px; color: #17181c; margin-top: 2px; }
+
+/* Kept as a harmless alias — proposal.js's markup still carries this
+   class alongside .quo-doc-head from before the header treatment was
+   unified across all four document types. */
+.prop-doc-head { text-align: center; margin-bottom: 34px; }
+.prop-doc-head .quo-doc-logo { margin-left: auto; margin-right: auto; }
 
 .quo-doc-title-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; }
 .quo-doc-title { font-size: 20px; font-weight: 800; letter-spacing: 0.02em; }
@@ -1575,7 +1585,7 @@ tr.row-clickable, .project-card-item.row-clickable { cursor: pointer; }
 
 .quo-item-row {
   display: grid;
-  grid-template-columns: 1fr 56px 130px 100px 28px;
+  grid-template-columns: 1fr 56px 130px 100px 28px 28px;
   gap: 8px;
   align-items: center;
   margin-bottom: 8px;
@@ -1601,6 +1611,63 @@ tr.row-clickable, .project-card-item.row-clickable { cursor: pointer; }
 }
 .quo-item-remove:hover { background: var(--error-tint); color: var(--error); }
 .quo-add-item { width: 100%; justify-content: center; margin-top: 4px; }
+
+/* ---- Sub-items (nested under a line item / service row) ----
+   The indented rail below each item mirrors the hanging-indent language
+   already used for section bodies elsewhere in the app
+   (.prop-doc-section-body { padding-left: 28px }), just applied to the
+   editor's own item list instead of the printed document. ---- */
+
+.quo-item-block { margin-bottom: 8px; }
+.quo-item-block .quo-item-row, .quo-item-block .rate-item-row { margin-bottom: 6px; }
+.quo-subitems {
+  margin: 0 0 6px 32px;
+  padding-left: 14px;
+  border-left: 2px solid var(--border-strong);
+}
+.quo-subitem-row {
+  display: grid;
+  grid-template-columns: 1fr 56px 130px 100px 28px 28px;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 6px;
+}
+.quo-subitem-desc, .quo-subitem-qty {
+  height: 32px; padding: 0 8px;
+  border: 1px solid var(--border-strong); border-radius: var(--r-sm);
+  background-color: var(--surface); color: var(--text); font-family: var(--font); font-size: 12px;
+}
+.quo-subitem-price input {
+  height: 32px; font-size: 12px;
+  border: 1px solid var(--border-strong); border-radius: var(--r-sm);
+  background-color: var(--surface); color: var(--text); font-family: var(--font);
+}
+.quo-subitem-price .input-prefix { font-size: 11.5px; }
+.quo-subitem-desc:focus, .quo-subitem-qty:focus, .quo-subitem-price input:focus {
+  outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-tint);
+}
+.quo-subitem-total { font-size: 12px; font-weight: 600; text-align: right; color: var(--text-faint); }
+.quo-subitem-add {
+  font-size: 12px; font-weight: 600; color: var(--primary);
+  background: transparent; border: none; cursor: pointer; padding: 4px 0;
+}
+.quo-subitem-add:hover { text-decoration: underline; }
+
+/* Rate Card's sub-item rows reuse .rate-item-row's own grid (no qty
+   column there) rather than .quo-subitem-row's — same indentation rail. */
+.rate-item-row.quo-subitem-row { grid-template-columns: 1fr 140px 90px 28px 28px; }
+
+/* ---- Sub-items inside the live preview / printed document ---- */
+
+.quo-doc-subitems-row td { border-bottom: none; padding-top: 0; padding-bottom: 4px; }
+.quo-doc-subitems { padding-left: 28px; }
+.quo-doc-subitem {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 12px;
+  font-size: 11px; color: #17181c; padding: 2px 0;
+}
+.quo-doc-subitem-plain { color: #55565c; }
+.quo-doc-subitem-desc { flex: 1; }
+.quo-doc-subitem-meta { flex-shrink: 0; color: #55565c; white-space: nowrap; }
 
 .quo-items-empty {
   text-align: center;
@@ -1704,6 +1771,10 @@ tr.row-clickable, .project-card-item.row-clickable { cursor: pointer; }
   .prop-doc-scope-desc { font-size: 8.5px; }
   .prop-doc-investment { font-size: 16px; }
   .prop-doc-timeline-item { font-size: 9.5px; }
+  .prop-doc-section-body { padding-left: 20px; }
+
+  .quo-doc-subitems { padding-left: 20px; }
+  .quo-doc-subitem { font-size: 9px; padding: 1px 0; }
 }
 
 /* ==========================================================================
@@ -1716,6 +1787,17 @@ tr.row-clickable, .project-card-item.row-clickable { cursor: pointer; }
   display: flex; gap: 8px; align-items: center;
   margin-bottom: 8px;
 }
+
+/* ---- Form: reorder (move up/down) controls, shared by every list ---- */
+
+.prop-row-updown { display: flex; flex-direction: column; width: 28px; flex-shrink: 0; }
+.prop-row-move {
+  height: 14px; width: 100%; border: none; background: transparent; padding: 0;
+  color: var(--text-faint); display: flex; align-items: center; justify-content: center;
+  cursor: pointer; border-radius: 3px; font-family: var(--font);
+}
+.prop-row-move:hover:not(:disabled) { background: var(--surface-2); color: var(--text); }
+.prop-row-move:disabled { opacity: 0.3; cursor: default; }
 .prop-list-input {
   flex: 1; height: 36px; padding: 0 10px;
   border: 1px solid var(--border-strong); border-radius: var(--r-sm);
@@ -1726,7 +1808,7 @@ tr.row-clickable, .project-card-item.row-clickable { cursor: pointer; }
 
 .prop-scope-row {
   display: grid;
-  grid-template-columns: 28px 1fr 28px;
+  grid-template-columns: 28px 1fr 28px 28px;
   gap: 10px;
   align-items: start;
   margin-bottom: 12px;
@@ -1751,7 +1833,7 @@ tr.row-clickable, .project-card-item.row-clickable { cursor: pointer; }
 
 .prop-timeline-row {
   display: grid;
-  grid-template-columns: 28px 1fr 28px;
+  grid-template-columns: 28px 1fr 28px 28px;
   gap: 10px;
   align-items: center;
   margin-bottom: 10px;
@@ -1762,9 +1844,12 @@ tr.row-clickable, .project-card-item.row-clickable { cursor: pointer; }
 /* ---- Document preview: Objectives / Deliverables checklist ---- */
 
 .prop-doc-check {
+  display: flex; align-items: flex-start; gap: 8px;
   font-size: 11.5px; color: #17181c;
   margin-top: 4px;
 }
+.prop-doc-check-mark { flex-shrink: 0; color: var(--primary-accent); font-weight: 700; }
+.prop-doc-check-text { flex: 1; min-width: 0; }
 
 /* ---- Document preview: Scope of Work ---- */
 
@@ -1793,16 +1878,16 @@ tr.row-clickable, .project-card-item.row-clickable { cursor: pointer; }
 
 /* ---- Document preview: cover-style header ---- */
 
-.prop-doc-kicker {
-  font-size: 10.5px; font-weight: 700; letter-spacing: 0.08em;
-  color: #17181c; margin-top: 16px;
-}
-.prop-doc-title { font-size: 23px; font-weight: 800; line-height: 1.25; letter-spacing: -0.01em; margin-top: 4px; }
+.prop-doc-title { font-size: 23px; font-weight: 800; line-height: 1.25; letter-spacing: -0.01em; }
 
 /* ---- Document preview: numbered section labels ---- */
 
 .prop-doc-numbered-label { display: flex; align-items: baseline; gap: 8px; }
-.prop-doc-num { color: var(--primary-accent); font-weight: 800; }
+.prop-doc-num { color: var(--primary-accent); font-weight: 800; min-width: 20px; }
+
+/* Everything under a numbered section title lines up under the title
+   text, not under the number — same left edge as "OBJECTIVES", not "01". */
+.prop-doc-section-body { padding-left: 28px; }
 
 /* ---- Editor: collapsible Proposal Content accordion ---- */
 
@@ -1836,6 +1921,69 @@ tr.row-clickable, .project-card-item.row-clickable { cursor: pointer; }
 }
 .prop-accordion-item:not(.is-open) .prop-accordion-body { display: none; }
 .prop-accordion-body .field:last-child { margin-bottom: 0; }
+
+/* Per-section include/exclude switch — lets a section stay in the form
+   for editing while being left out of the exported document, instead of
+   the only way to omit it being to erase everything typed into it. */
+.prop-accordion-header-row { display: flex; align-items: center; }
+.prop-accordion-header-row .prop-accordion-header { flex: 1; min-width: 0; }
+.prop-section-switch {
+  flex-shrink: 0;
+  display: inline-flex; align-items: center;
+  padding: 0 14px;
+  cursor: pointer;
+}
+.prop-section-switch input {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+.prop-section-switch-track {
+  position: relative;
+  width: 32px; height: 18px;
+  border-radius: 999px;
+  background: var(--border);
+  transition: background 0.15s var(--ease);
+}
+.prop-section-switch-thumb {
+  position: absolute; top: 2px; left: 2px;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+  transition: transform 0.15s var(--ease);
+}
+.prop-section-switch input:checked + .prop-section-switch-track { background: var(--primary-accent); }
+.prop-section-switch input:checked + .prop-section-switch-track .prop-section-switch-thumb { transform: translateX(14px); }
+.prop-section-switch input:focus-visible + .prop-section-switch-track { outline: 2px solid var(--primary-accent); outline-offset: 2px; }
+.prop-accordion-item.is-section-off { opacity: 0.55; }
+.prop-accordion-item.is-section-off .prop-accordion-summary { font-style: italic; }
+
+/* ---- Editor: whole-section reorder (move an accordion item itself) ---- */
+.prop-section-move { margin: 0 2px; }
+
+/* ---- Editor: custom (user-named) sections ---- */
+.prop-accordion-header-row-custom { gap: 6px; padding: 8px 10px 8px 14px; }
+.prop-section-title-input {
+  flex: 1; min-width: 0; height: 36px; padding: 0 12px;
+  border: 1px solid var(--border-strong); border-radius: var(--r-sm);
+  background: var(--surface); color: var(--text); font-family: var(--font);
+  font-size: 13px; font-weight: 700;
+}
+.prop-accordion-header-chevron-only {
+  width: auto; flex-shrink: 0;
+  padding: 6px 10px; gap: 6px;
+  border-radius: var(--r-sm);
+}
+.prop-accordion-header-chevron-only .prop-accordion-summary {
+  flex: none; font-size: 11.5px; color: var(--text-faint);
+}
+.prop-add-section-btn {
+  border-style: dashed; border-color: var(--border-strong);
+  color: var(--primary-accent); font-weight: 700;
+  margin-bottom: 8px;
+}
+.prop-add-section-btn:hover { background: var(--primary-tint); }
 
 /* ==========================================================================
    BUSINESS SETTINGS
@@ -2197,7 +2345,7 @@ tr.row-clickable, .project-card-item.row-clickable { cursor: pointer; }
 
 .rate-item-row {
   display: grid;
-  grid-template-columns: 1fr 140px 90px 28px;
+  grid-template-columns: 1fr 140px 90px 28px 28px;
   gap: 8px;
   align-items: center;
   margin-bottom: 8px;
@@ -2374,6 +2522,9 @@ tr.row-clickable, .project-card-item.row-clickable { cursor: pointer; }
   .quo-item-row { grid-template-columns: 1fr; gap: 6px; }
   .rate-item-row { grid-template-columns: 1fr; gap: 6px; }
   .quo-item-total { text-align: left; }
+  .quo-subitem-row { grid-template-columns: 1fr; gap: 6px; }
+  .quo-subitems { margin-left: 16px; }
+  .quo-subitem-total { text-align: left; }
   .logo-upload { flex-wrap: wrap; }
 
   .prop-scope-row, .prop-timeline-row { grid-template-columns: 1fr; }

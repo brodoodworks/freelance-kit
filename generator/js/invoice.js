@@ -41,6 +41,59 @@ if (invPanel) {
   let currentProjectSnapshot = null;
   let invDirty = false;
 
+  /* ---- Section include/exclude toggles ----
+     Payment Terms and Notes can each be switched off so they stay in the
+     form (still editable, content kept) but are left out of the exported
+     document — same pattern as the Proposal Generator's section
+     switches. (Invoice has no separate Terms & Conditions field.) ---- */
+  const SECTION_TOGGLE_KEYS = ["paymentTerms", "notes", "footer"];
+  let sectionEnabled = Object.fromEntries(SECTION_TOGGLE_KEYS.map((k) => [k, true]));
+
+  function applySectionToggleUI() {
+    SECTION_TOGGLE_KEYS.forEach((key) => {
+      const checkbox = invPanel.querySelector(`[data-section-enable="${key}"]`);
+      if (checkbox) checkbox.checked = sectionEnabled[key] !== false;
+    });
+  }
+
+  invPanel.querySelectorAll('[data-section-enable]').forEach((checkbox) => {
+    checkbox.addEventListener("change", () => {
+      sectionEnabled[checkbox.dataset.sectionEnable] = checkbox.checked;
+      setInvDirty(true);
+      renderPreview();
+    });
+  });
+
+  /* ---- Reorder controls (line items) ---- */
+  const MOVE_UP_ICON = '<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 6.3 5 3.3 8 6.3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  const MOVE_DOWN_ICON = '<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 3.7 5 6.7 8 3.7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  function moveButtonsHTML(i, length) {
+    return `
+      <div class="prop-row-updown">
+        <button type="button" class="prop-row-move" data-move="up" aria-label="${t("action.moveUp")}" ${i === 0 ? "disabled" : ""}>${MOVE_UP_ICON}</button>
+        <button type="button" class="prop-row-move" data-move="down" aria-label="${t("action.moveDown")}" ${i === length - 1 ? "disabled" : ""}>${MOVE_DOWN_ICON}</button>
+      </div>
+    `;
+  }
+  function wireMoveButtons(row, i, array, rerender) {
+    const upBtn = row.querySelector('[data-move="up"]');
+    const downBtn = row.querySelector('[data-move="down"]');
+    if (upBtn) upBtn.addEventListener("click", () => {
+      if (i === 0) return;
+      [array[i - 1], array[i]] = [array[i], array[i - 1]];
+      setInvDirty(true);
+      rerender();
+      renderPreview();
+    });
+    if (downBtn) downBtn.addEventListener("click", () => {
+      if (i === array.length - 1) return;
+      [array[i + 1], array[i]] = [array[i], array[i + 1]];
+      setInvDirty(true);
+      rerender();
+      renderPreview();
+    });
+  }
+
   /* ---- Save status indicator — real state only, same pattern used by
      the Quotation and Proposal Generators. No autosave is implied. ---- */
 
@@ -102,6 +155,7 @@ if (invPanel) {
       description: description || "",
       qty: qty || 1,
       unitPrice: unitPrice || 0,
+      subItems: [],
     });
     setInvDirty(true);
     renderItems();
@@ -110,6 +164,46 @@ if (invPanel) {
 
   function removeItem(id) {
     items = items.filter((it) => it.id !== id);
+    setInvDirty(true);
+    renderItems();
+    renderPreview();
+  }
+
+  /* ---- Sub-items (nested under a line item) ----
+     One row type covers both use cases the person needs: a plain
+     descriptive bullet (qty/unitPrice left blank or zero — contributes
+     Rp0 to the total) and a priced breakdown line (qty + unitPrice
+     filled in — added into the parent item's effective line total).
+     Reorder/remove reuse the same moveButtonsHTML/wireMoveButtons
+     pattern used everywhere else, scoped to that item's own subItems
+     array so reordering never crosses between parents. ---- */
+
+  function subItemsTotal(item) {
+    return (item.subItems || []).reduce((sum, s) => sum + (Number(s.qty) || 0) * (Number(s.unitPrice) || 0), 0);
+  }
+  function itemEffectiveTotal(item) {
+    return item.qty * item.unitPrice + subItemsTotal(item);
+  }
+
+  function addSubItem(itemId) {
+    const item = items.find((it) => it.id === itemId);
+    if (!item) return;
+    if (!item.subItems) item.subItems = [];
+    item.subItems.push({
+      id: "sub_" + Date.now() + "_" + Math.random().toString(36).slice(2, 7),
+      description: "",
+      qty: "",
+      unitPrice: 0,
+    });
+    setInvDirty(true);
+    renderItems();
+    renderPreview();
+  }
+
+  function removeSubItem(itemId, subId) {
+    const item = items.find((it) => it.id === itemId);
+    if (!item) return;
+    item.subItems = (item.subItems || []).filter((s) => s.id !== subId);
     setInvDirty(true);
     renderItems();
     renderPreview();
@@ -132,24 +226,46 @@ if (invPanel) {
     }
     if (invAddItemBtn) invAddItemBtn.hidden = false;
 
-    itemsContainer.innerHTML = items.map((it) => `
-      <div class="quo-item-row" data-item-id="${it.id}">
-        <input type="text" class="quo-item-desc" placeholder="Website Design" value="${escapeHtml(it.description)}" data-item-field="description">
-        <input type="number" class="quo-item-qty" min="1" step="1" value="${it.qty}" data-item-field="qty">
-        <div class="input-wrap quo-item-price">
-          <span class="input-prefix">Rp</span>
-          <input type="text" inputmode="numeric" value="${formatGrouped(it.unitPrice)}" data-item-field="unitPrice">
+    itemsContainer.innerHTML = items.map((it, i) => `
+      <div class="quo-item-block">
+        <div class="quo-item-row" data-item-id="${it.id}">
+          <input type="text" class="quo-item-desc" placeholder="Website Design" value="${escapeHtml(it.description)}" data-item-field="description">
+          <input type="number" class="quo-item-qty" min="1" step="1" value="${it.qty}" data-item-field="qty">
+          <div class="input-wrap quo-item-price">
+            <span class="input-prefix">Rp</span>
+            <input type="text" inputmode="numeric" value="${formatGrouped(it.unitPrice)}" data-item-field="unitPrice">
+          </div>
+          <span class="quo-item-total">${formatIDR(itemEffectiveTotal(it))}</span>
+          ${moveButtonsHTML(i, items.length)}
+          <button type="button" class="quo-item-remove" data-item-remove aria-label="Hapus item">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </button>
         </div>
-        <span class="quo-item-total">${formatIDR(it.qty * it.unitPrice)}</span>
-        <button type="button" class="quo-item-remove" data-item-remove aria-label="Hapus item">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-        </button>
+        <div class="quo-subitems" data-subitems-of="${it.id}">
+          ${(it.subItems || []).map((sub, si) => `
+            <div class="quo-subitem-row" data-subitem-id="${sub.id}">
+              <input type="text" class="quo-subitem-desc" placeholder="Deskripsi sub-item" value="${escapeHtml(sub.description)}" data-subitem-field="description">
+              <input type="number" class="quo-subitem-qty" min="0" step="1" placeholder="Qty" value="${sub.qty || ""}" data-subitem-field="qty">
+              <div class="input-wrap quo-subitem-price">
+                <span class="input-prefix">Rp</span>
+                <input type="text" inputmode="numeric" placeholder="0" value="${sub.unitPrice ? formatGrouped(sub.unitPrice) : ""}" data-subitem-field="unitPrice">
+              </div>
+              <span class="quo-subitem-total">${(Number(sub.qty) && Number(sub.unitPrice)) ? formatIDR(sub.qty * sub.unitPrice) : ""}</span>
+              ${moveButtonsHTML(si, it.subItems.length)}
+              <button type="button" class="quo-item-remove" data-subitem-remove aria-label="${t("action.removeSubItem")}">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+              </button>
+            </div>
+          `).join("")}
+          <button type="button" class="quo-subitem-add" data-subitem-add>${t("action.addSubItem")}</button>
+        </div>
       </div>
     `).join("");
 
-    itemsContainer.querySelectorAll('[data-item-id]').forEach((row) => {
+    itemsContainer.querySelectorAll('.quo-item-row[data-item-id]').forEach((row) => {
       const id = row.dataset.itemId;
       const item = items.find((it) => it.id === id);
+      const i = items.indexOf(item);
 
       row.querySelector('[data-item-field="description"]').addEventListener("input", (e) => {
         item.description = e.target.value;
@@ -158,18 +274,57 @@ if (invPanel) {
       });
       row.querySelector('[data-item-field="qty"]').addEventListener("input", (e) => {
         item.qty = Math.max(1, Number(e.target.value) || 1);
-        row.querySelector(".quo-item-total").textContent = formatIDR(item.qty * item.unitPrice);
+        row.querySelector(".quo-item-total").textContent = formatIDR(itemEffectiveTotal(item));
         setInvDirty(true);
         renderPreview();
       });
       row.querySelector('[data-item-field="unitPrice"]').addEventListener("input", (e) => {
         item.unitPrice = parseDigits(e.target.value);
         e.target.value = formatGrouped(item.unitPrice);
-        row.querySelector(".quo-item-total").textContent = formatIDR(item.qty * item.unitPrice);
+        row.querySelector(".quo-item-total").textContent = formatIDR(itemEffectiveTotal(item));
         setInvDirty(true);
         renderPreview();
       });
       row.querySelector('[data-item-remove]').addEventListener("click", () => removeItem(id));
+      wireMoveButtons(row, i, items, renderItems);
+    });
+
+    itemsContainer.querySelectorAll('[data-subitems-of]').forEach((wrap) => {
+      const itemId = wrap.dataset.subitemsOf;
+      const item = items.find((it) => it.id === itemId);
+      if (!item) return;
+
+      wrap.querySelectorAll('[data-subitem-id]').forEach((subRow) => {
+        const subId = subRow.dataset.subitemId;
+        const sub = (item.subItems || []).find((s) => s.id === subId);
+        const si = item.subItems.indexOf(sub);
+
+        subRow.querySelector('[data-subitem-field="description"]').addEventListener("input", (e) => {
+          sub.description = e.target.value;
+          setInvDirty(true);
+          renderPreview();
+        });
+        subRow.querySelector('[data-subitem-field="qty"]').addEventListener("input", (e) => {
+          sub.qty = e.target.value === "" ? "" : Math.max(0, Number(e.target.value) || 0);
+          subRow.querySelector(".quo-subitem-total").textContent = (Number(sub.qty) && Number(sub.unitPrice)) ? formatIDR(sub.qty * sub.unitPrice) : "";
+          itemsContainer.querySelector(`.quo-item-row[data-item-id="${itemId}"] .quo-item-total`).textContent = formatIDR(itemEffectiveTotal(item));
+          setInvDirty(true);
+          renderPreview();
+        });
+        subRow.querySelector('[data-subitem-field="unitPrice"]').addEventListener("input", (e) => {
+          sub.unitPrice = parseDigits(e.target.value);
+          e.target.value = sub.unitPrice ? formatGrouped(sub.unitPrice) : "";
+          subRow.querySelector(".quo-subitem-total").textContent = (Number(sub.qty) && Number(sub.unitPrice)) ? formatIDR(sub.qty * sub.unitPrice) : "";
+          itemsContainer.querySelector(`.quo-item-row[data-item-id="${itemId}"] .quo-item-total`).textContent = formatIDR(itemEffectiveTotal(item));
+          setInvDirty(true);
+          renderPreview();
+        });
+        subRow.querySelector('[data-subitem-remove]').addEventListener("click", () => removeSubItem(itemId, subId));
+        wireMoveButtons(subRow, si, item.subItems, renderItems);
+      });
+
+      const addBtn = wrap.querySelector('[data-subitem-add]');
+      if (addBtn) addBtn.addEventListener("click", () => addSubItem(itemId));
     });
   }
 
@@ -295,7 +450,7 @@ if (invPanel) {
   }
 
   function computeTotals() {
-    const subtotal = items.reduce((sum, it) => sum + it.qty * it.unitPrice, 0);
+    const subtotal = items.reduce((sum, it) => sum + itemEffectiveTotal(it), 0);
 
     let discountAmount = 0;
     const discountType = fields.discountType.value;
@@ -324,26 +479,59 @@ if (invPanel) {
   function renderPreview() {
     const totals = computeTotals();
     updateSummaryCard(totals);
+    // A sub-item with no qty/unitPrice (blank or zero) renders as a plain
+    // indented bullet with no numbers and contributes Rp0; one with both
+    // filled in renders with its own qty/price/subtotal and is added into
+    // the parent item's effective line total (and so into the document's
+    // Subtotal/Total) \u2014 one row type, both modes.
+    function subItemsRowHTML(it) {
+      const subs = (it.subItems || []).filter((s) => (s.description || "").trim() || (Number(s.qty) && Number(s.unitPrice)));
+      if (!subs.length) return "";
+      const rows = subs.map((s) => {
+        const qty = Number(s.qty) || 0;
+        const price = Number(s.unitPrice) || 0;
+        if (qty > 0 && price > 0) {
+          return `
+            <div class="quo-doc-subitem quo-doc-subitem-priced">
+              <span class="quo-doc-subitem-desc">${escapeHtml(s.description) || "\u2014"}</span>
+              <span class="quo-doc-subitem-meta">${qty} \u00d7 ${formatIDR(price)} = ${formatIDR(qty * price)}</span>
+            </div>`;
+        }
+        return `<div class="quo-doc-subitem quo-doc-subitem-plain">\u2022 ${escapeHtml(s.description)}</div>`;
+      }).join("");
+      return `<tr class="quo-doc-subitems-row"><td colspan="4"><div class="quo-doc-subitems">${rows}</div></td></tr>`;
+    }
+
     const rows = items.map((it) => `
       <tr>
         <td>${escapeHtml(it.description) || "\u2014"}</td>
         <td class="num">${it.qty}</td>
         <td class="num">${formatIDR(it.unitPrice)}</td>
-        <td class="num">${formatIDR(it.qty * it.unitPrice)}</td>
+        <td class="num">${formatIDR(itemEffectiveTotal(it))}</td>
       </tr>
+      ${subItemsRowHTML(it)}
     `).join("");
 
     const discountRow = totals.discountAmount > 0 ? `
       <div class="quo-total-row"><span>${td("doc.discount")}</span><span>-${formatIDR(totals.discountAmount)}</span></div>
     ` : "";
 
-    const businessLines = [];
-    if (fields.businessAddress.value.trim()) {
-      fields.businessAddress.value.trim().split("\n").forEach((line) => { if (line.trim()) businessLines.push(line.trim()); });
-    }
-    if (fields.businessEmail.value.trim()) businessLines.push(fields.businessEmail.value.trim());
-    if (fields.businessPhone.value.trim()) businessLines.push(fields.businessPhone.value.trim());
-    if (fields.businessWebsite.value.trim()) businessLines.push(fields.businessWebsite.value.trim());
+    const taxRow = totals.taxAmount > 0 ? `
+      <div class="quo-total-row"><span>${td("doc.tax")} (${totals.taxPercent}%)</span><span>${formatIDR(totals.taxAmount)}</span></div>
+    ` : "";
+
+    // Address, phone, email and website all flow as one line — separated
+    // by "·" — and wrap naturally once the line is full, instead of each
+    // piece sitting on its own line whether or not there's room for it.
+    const businessAddressText = fields.businessAddress.value.trim()
+      ? fields.businessAddress.value.trim().split("\n").map((line) => line.trim()).filter(Boolean).join(", ")
+      : "";
+    const businessInfoLine = [
+      businessAddressText,
+      fields.businessPhone.value.trim(),
+      fields.businessEmail.value.trim(),
+      fields.businessWebsite.value.trim(),
+    ].filter(Boolean).join(" · ");
 
     const clientAddressLines = fields.clientAddress.value.trim()
       ? fields.clientAddress.value.trim().split("\n").filter((l) => l.trim()).map((l) => `<p>${escapeHtml(l.trim())}</p>`).join("")
@@ -358,7 +546,7 @@ if (invPanel) {
       <div class="quo-doc-head">
         ${logoDataUrl ? `<img src="${logoDataUrl}" class="quo-doc-logo" alt="Logo">` : ""}
         <p class="quo-doc-business-name">${escapeHtml(fields.businessName.value) || td("doc.yourBusinessName")}</p>
-        ${businessLines.map((line) => `<p class="quo-doc-business-line">${escapeHtml(line)}</p>`).join("")}
+        ${businessInfoLine ? `<p class="quo-doc-business-line">${escapeHtml(businessInfoLine)}</p>` : ""}
       </div>
 
       <div class="quo-doc-title-row">
@@ -399,7 +587,7 @@ if (invPanel) {
       <div class="quo-doc-totals">
         <div class="quo-total-row"><span>${td("doc.subtotal")}</span><span>${formatIDR(totals.subtotal)}</span></div>
         ${discountRow}
-        <div class="quo-total-row"><span>${td("doc.tax")} (${totals.taxPercent}%)</span><span>${formatIDR(totals.taxAmount)}</span></div>
+        ${taxRow}
         <div class="quo-total-row quo-total-grand"><span>${td("doc.grandTotal")}</span><span>${formatIDR(totals.grandTotal)}</span></div>
       </div>
 
@@ -411,16 +599,20 @@ if (invPanel) {
         ${fields.paymentInstructions.value.trim() ? `<p class="quo-doc-pre">${escapeHtml(fields.paymentInstructions.value)}</p>` : ""}
       ` : ""}
 
-      <p class="quo-doc-section-label">${td("doc.paymentTerms")}</p>
-      <p class="quo-doc-pre">${escapeHtml(paymentTermsLabel())}</p>
+      ${sectionEnabled.paymentTerms && paymentTermsLabel().trim() ? `
+        <p class="quo-doc-section-label">${td("doc.paymentTerms")}</p>
+        <p class="quo-doc-pre">${escapeHtml(paymentTermsLabel())}</p>
+      ` : ""}
 
-      ${fields.notes.value.trim() ? `
+      ${sectionEnabled.notes && fields.notes.value.trim() ? `
         <p class="quo-doc-section-label">${td("doc.notes")}</p>
         <p class="quo-doc-pre">${escapeHtml(fields.notes.value)}</p>
       ` : ""}
 
-      <div class="quo-doc-divider"></div>
-      <p class="quo-doc-footer">${escapeHtml(fields.businessName.value) || td("doc.yourBusinessName")}</p>
+      ${sectionEnabled.footer && fields.footerNote.value.trim() ? `
+        <div class="quo-doc-divider"></div>
+        <p class="quo-doc-footer">${escapeHtml(fields.footerNote.value.trim())}</p>
+      ` : ""}
     `;
 
     return totals;
@@ -475,7 +667,12 @@ if (invPanel) {
         phone: fields.clientPhone.value,
         address: fields.clientAddress.value,
       },
-      items: items.map((it) => ({ description: it.description, qty: it.qty, unitPrice: it.unitPrice })),
+      items: items.map((it) => ({
+        description: it.description,
+        qty: it.qty,
+        unitPrice: it.unitPrice,
+        subItems: (it.subItems || []).map((s) => ({ id: s.id, description: s.description, qty: s.qty || "", unitPrice: s.unitPrice || 0 })),
+      })),
       discount: { type: fields.discountType.value, value: parseDigits(fields.discountValue.value) },
       tax: totals.taxPercent,
       subtotal: totals.subtotal,
@@ -487,6 +684,8 @@ if (invPanel) {
       paymentInstructions: fields.paymentInstructions.value,
       paymentTerms: { type: fields.paymentTermsType.value, text: paymentTermsLabel() },
       notes: fields.notes.value,
+      footerNote: fields.footerNote.value,
+      sectionEnabled: { ...sectionEnabled },
     };
 
     saveFeedbackEl.classList.remove("save-feedback-error");
@@ -566,7 +765,19 @@ if (invPanel) {
     fields.clientPhone.value = client.phone || "";
     fields.clientAddress.value = client.address || "";
 
-    items = (invoice.items || []).map((it, i) => ({ id: "item_" + i + "_" + Date.now(), ...it }));
+    // Older saved invoices have no subItems at all on their items —
+    // default to an empty array so opening one never throws or loses
+    // rendering, same tolerance already applied everywhere else here.
+    items = (invoice.items || []).map((it, i) => {
+      const item = { id: "item_" + i + "_" + Date.now(), ...it };
+      item.subItems = (it.subItems || []).map((s, si) => ({
+        id: s.id || ("sub_" + i + "_" + si + "_" + Date.now()),
+        description: s.description || "",
+        qty: s.qty || "",
+        unitPrice: s.unitPrice || 0,
+      }));
+      return item;
+    });
     renderItems();
 
     fields.discountType.value = discount.type || "none";
@@ -587,6 +798,17 @@ if (invPanel) {
     paymentCustomField.hidden = paymentTerms.type !== "custom";
 
     fields.notes.value = invoice.notes || "";
+    // Older saved invoices have no footerNote at all — fall back to an
+    // empty string (no forced default text), same as a brand-new one.
+    fields.footerNote.value = invoice.footerNote !== undefined ? invoice.footerNote : "";
+
+    // Older saved invoices (before this toggle existed) have no
+    // sectionEnabled at all — treat that as "everything on", same as it
+    // always behaved before.
+    sectionEnabled = Object.fromEntries(
+      SECTION_TOGGLE_KEYS.map((k) => [k, invoice.sectionEnabled ? invoice.sectionEnabled[k] !== false : true])
+    );
+    applySectionToggleUI();
 
     saveFeedbackEl.hidden = true;
     validationEl.hidden = true;
@@ -634,6 +856,9 @@ if (invPanel) {
     paymentCustomField.hidden = true;
 
     fields.notes.value = t("invoice.defaultNotes");
+    fields.footerNote.value = "";
+    sectionEnabled = Object.fromEntries(SECTION_TOGGLE_KEYS.map((k) => [k, true]));
+    applySectionToggleUI();
 
     loadBusinessProfile();
     populateProjectSelect(projectId);

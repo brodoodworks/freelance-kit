@@ -26,6 +26,55 @@ if (ratePanel) {
   let logoDataUrl = null;
   let editingRateCardId = null;
 
+  /* ---- Section include/exclude toggles ----
+     Notes can be switched off so it stays in the form (still editable,
+     content kept) but is left out of the exported document — same
+     pattern as the Proposal Generator's section switches. ---- */
+  const SECTION_TOGGLE_KEYS = ["notes", "footer"];
+  let sectionEnabled = Object.fromEntries(SECTION_TOGGLE_KEYS.map((k) => [k, true]));
+
+  function applySectionToggleUI() {
+    SECTION_TOGGLE_KEYS.forEach((key) => {
+      const checkbox = ratePanel.querySelector(`[data-section-enable="${key}"]`);
+      if (checkbox) checkbox.checked = sectionEnabled[key] !== false;
+    });
+  }
+
+  ratePanel.querySelectorAll('[data-section-enable]').forEach((checkbox) => {
+    checkbox.addEventListener("change", () => {
+      sectionEnabled[checkbox.dataset.sectionEnable] = checkbox.checked;
+      renderPreview();
+    });
+  });
+
+  /* ---- Reorder controls (service rows) ---- */
+  const MOVE_UP_ICON = '<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 6.3 5 3.3 8 6.3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  const MOVE_DOWN_ICON = '<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 3.7 5 6.7 8 3.7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  function moveButtonsHTML(i, length) {
+    return `
+      <div class="prop-row-updown">
+        <button type="button" class="prop-row-move" data-move="up" aria-label="${t("action.moveUp")}" ${i === 0 ? "disabled" : ""}>${MOVE_UP_ICON}</button>
+        <button type="button" class="prop-row-move" data-move="down" aria-label="${t("action.moveDown")}" ${i === length - 1 ? "disabled" : ""}>${MOVE_DOWN_ICON}</button>
+      </div>
+    `;
+  }
+  function wireMoveButtons(row, i, array, rerender) {
+    const upBtn = row.querySelector('[data-move="up"]');
+    const downBtn = row.querySelector('[data-move="down"]');
+    if (upBtn) upBtn.addEventListener("click", () => {
+      if (i === 0) return;
+      [array[i - 1], array[i]] = [array[i], array[i - 1]];
+      rerender();
+      renderPreview();
+    });
+    if (downBtn) downBtn.addEventListener("click", () => {
+      if (i === array.length - 1) return;
+      [array[i + 1], array[i]] = [array[i], array[i + 1]];
+      rerender();
+      renderPreview();
+    });
+  }
+
   function parseDigits(value) {
     const digits = String(value || "").replace(/[^0-9]/g, "");
     return digits ? parseInt(digits, 10) : 0;
@@ -50,6 +99,7 @@ if (ratePanel) {
       description: description || "",
       price: price || 0,
       unit: unit || "",
+      subItems: [],
     });
     renderItems();
     renderPreview();
@@ -61,29 +111,81 @@ if (ratePanel) {
     renderPreview();
   }
 
+  /* ---- Sub-items (nested under a service row) ----
+     Same field shape as a top-level service row (description/price/unit,
+     no qty — rate cards have none), so a sub-item is just a smaller
+     service listed under a parent one. Leaving price blank/zero renders
+     it as a plain bullet; filling it in shows its own price. Rate cards
+     carry no totals to add up, so this is display-only, same as the
+     top-level rows. Reorder/remove reuse the same moveButtonsHTML/
+     wireMoveButtons pattern, scoped to that item's own subItems array. ---- */
+
+  function addSubItem(itemId) {
+    const item = items.find((it) => it.id === itemId);
+    if (!item) return;
+    if (!item.subItems) item.subItems = [];
+    item.subItems.push({
+      id: "sub_" + Date.now() + "_" + Math.random().toString(36).slice(2, 7),
+      description: "",
+      price: 0,
+      unit: "",
+    });
+    renderItems();
+    renderPreview();
+  }
+
+  function removeSubItem(itemId, subId) {
+    const item = items.find((it) => it.id === itemId);
+    if (!item) return;
+    item.subItems = (item.subItems || []).filter((s) => s.id !== subId);
+    renderItems();
+    renderPreview();
+  }
+
   function renderItems() {
     if (!items.length) {
       itemsContainer.innerHTML = `<p class="field-help">Belum ada layanan. Klik "+ Add Service".</p>`;
       return;
     }
 
-    itemsContainer.innerHTML = items.map((it) => `
-      <div class="rate-item-row" data-item-id="${it.id}">
-        <input type="text" class="quo-item-desc" placeholder="UI/UX Design" value="${escapeHtml(it.description)}" data-item-field="description">
-        <div class="input-wrap rate-item-price">
-          <span class="input-prefix">Rp</span>
-          <input type="text" inputmode="numeric" value="${formatGrouped(it.price)}" data-item-field="price">
+    itemsContainer.innerHTML = items.map((it, i) => `
+      <div class="quo-item-block">
+        <div class="rate-item-row" data-item-id="${it.id}">
+          <input type="text" class="quo-item-desc" placeholder="UI/UX Design" value="${escapeHtml(it.description)}" data-item-field="description">
+          <div class="input-wrap rate-item-price">
+            <span class="input-prefix">Rp</span>
+            <input type="text" inputmode="numeric" value="${formatGrouped(it.price)}" data-item-field="price">
+          </div>
+          <input type="text" class="rate-item-unit" placeholder="${t("unit.perHour")}" value="${escapeHtml(it.unit)}" data-item-field="unit">
+          ${moveButtonsHTML(i, items.length)}
+          <button type="button" class="quo-item-remove" data-item-remove aria-label="Hapus layanan">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </button>
         </div>
-        <input type="text" class="rate-item-unit" placeholder="${t("unit.perHour")}" value="${escapeHtml(it.unit)}" data-item-field="unit">
-        <button type="button" class="quo-item-remove" data-item-remove aria-label="Hapus layanan">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-        </button>
+        <div class="quo-subitems" data-subitems-of="${it.id}">
+          ${(it.subItems || []).map((sub, si) => `
+            <div class="rate-item-row quo-subitem-row" data-subitem-id="${sub.id}">
+              <input type="text" class="quo-subitem-desc" placeholder="Deskripsi sub-item" value="${escapeHtml(sub.description)}" data-subitem-field="description">
+              <div class="input-wrap rate-item-price">
+                <span class="input-prefix">Rp</span>
+                <input type="text" inputmode="numeric" placeholder="0" value="${sub.price ? formatGrouped(sub.price) : ""}" data-subitem-field="price">
+              </div>
+              <input type="text" class="rate-item-unit" placeholder="${t("unit.perHour")}" value="${escapeHtml(sub.unit)}" data-subitem-field="unit">
+              ${moveButtonsHTML(si, it.subItems.length)}
+              <button type="button" class="quo-item-remove" data-subitem-remove aria-label="${t("action.removeSubItem")}">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+              </button>
+            </div>
+          `).join("")}
+          <button type="button" class="quo-subitem-add" data-subitem-add>${t("action.addSubItem")}</button>
+        </div>
       </div>
     `).join("");
 
-    itemsContainer.querySelectorAll('[data-item-id]').forEach((row) => {
+    itemsContainer.querySelectorAll('.rate-item-row[data-item-id]').forEach((row) => {
       const id = row.dataset.itemId;
       const item = items.find((it) => it.id === id);
+      const i = items.indexOf(item);
 
       row.querySelector('[data-item-field="description"]').addEventListener("input", (e) => {
         item.description = e.target.value;
@@ -99,6 +201,38 @@ if (ratePanel) {
         renderPreview();
       });
       row.querySelector('[data-item-remove]').addEventListener("click", () => removeItem(id));
+      wireMoveButtons(row, i, items, renderItems);
+    });
+
+    itemsContainer.querySelectorAll('[data-subitems-of]').forEach((wrap) => {
+      const itemId = wrap.dataset.subitemsOf;
+      const item = items.find((it) => it.id === itemId);
+      if (!item) return;
+
+      wrap.querySelectorAll('[data-subitem-id]').forEach((subRow) => {
+        const subId = subRow.dataset.subitemId;
+        const sub = (item.subItems || []).find((s) => s.id === subId);
+        const si = item.subItems.indexOf(sub);
+
+        subRow.querySelector('[data-subitem-field="description"]').addEventListener("input", (e) => {
+          sub.description = e.target.value;
+          renderPreview();
+        });
+        subRow.querySelector('[data-subitem-field="price"]').addEventListener("input", (e) => {
+          sub.price = parseDigits(e.target.value);
+          e.target.value = sub.price ? formatGrouped(sub.price) : "";
+          renderPreview();
+        });
+        subRow.querySelector('[data-subitem-field="unit"]').addEventListener("input", (e) => {
+          sub.unit = e.target.value;
+          renderPreview();
+        });
+        subRow.querySelector('[data-subitem-remove]').addEventListener("click", () => removeSubItem(itemId, subId));
+        wireMoveButtons(subRow, si, item.subItems, renderItems);
+      });
+
+      const addBtn = wrap.querySelector('[data-subitem-add]');
+      if (addBtn) addBtn.addEventListener("click", () => addSubItem(itemId));
     });
   }
 
@@ -158,18 +292,47 @@ if (ratePanel) {
     });
   }
 
+  // A sub-item with no price (blank or zero) renders as a plain indented
+  // bullet with no numbers; one with a price renders like a small service
+  // row of its own, indented under its parent. Rate cards carry no
+  // totals, so this is display-only \u2014 the same visual pattern used in
+  // quotation.js/invoice.js, adapted to this file's own price/unit
+  // fields (no qty here).
+  function subItemsRowHTML(it) {
+    const subs = (it.subItems || []).filter((s) => (s.description || "").trim() || Number(s.price));
+    if (!subs.length) return "";
+    const rows = subs.map((s) => {
+      const price = Number(s.price) || 0;
+      if (price > 0) {
+        return `
+          <div class="quo-doc-subitem quo-doc-subitem-priced">
+            <span class="quo-doc-subitem-desc">${escapeHtml(s.description) || "\u2014"}</span>
+            <span class="quo-doc-subitem-meta">${formatIDR(price)}${s.unit ? ` <span class="rate-doc-unit">${escapeHtml(s.unit)}</span>` : ""}</span>
+          </div>`;
+      }
+      return `<div class="quo-doc-subitem quo-doc-subitem-plain">\u2022 ${escapeHtml(s.description)}</div>`;
+    }).join("");
+    return `<tr class="quo-doc-subitems-row"><td colspan="2"><div class="quo-doc-subitems">${rows}</div></td></tr>`;
+  }
+
   function renderPreview() {
     const rows = items.map((it) => `
       <tr>
         <td>${escapeHtml(it.description) || "\u2014"}</td>
         <td class="num">${formatIDR(it.price)}${it.unit ? ` <span class="rate-doc-unit">${escapeHtml(it.unit)}</span>` : ""}</td>
       </tr>
+      ${subItemsRowHTML(it)}
     `).join("");
 
-    const businessLines = [];
-    if (fields.businessEmail.value.trim()) businessLines.push(fields.businessEmail.value.trim());
-    if (fields.businessPhone.value.trim()) businessLines.push(fields.businessPhone.value.trim());
-    if (fields.businessWebsite.value.trim()) businessLines.push(fields.businessWebsite.value.trim());
+    // Phone, email and website all flow as one line — separated by "·" —
+    // and wrap naturally once the line is full, instead of each piece
+    // sitting on its own line whether or not there's room for it. (Rate
+    // cards have no business address field.)
+    const businessInfoLine = [
+      fields.businessPhone.value.trim(),
+      fields.businessEmail.value.trim(),
+      fields.businessWebsite.value.trim(),
+    ].filter(Boolean).join(" · ");
 
     const validityLine = fields.validFrom.value
       ? `<p class="quo-doc-pre">${td("doc.validFrom")} ${formatDateID(fields.validFrom.value)}${fields.validUntil.value ? ` ${td("doc.to")} ${formatDateID(fields.validUntil.value)}` : ""}</p>`
@@ -179,7 +342,7 @@ if (ratePanel) {
       <div class="quo-doc-head">
         ${logoDataUrl ? `<img src="${logoDataUrl}" class="quo-doc-logo" alt="Logo">` : ""}
         <p class="quo-doc-business-name">${escapeHtml(fields.businessName.value) || td("doc.yourBusinessName")}</p>
-        ${businessLines.map((line) => `<p class="quo-doc-business-line">${escapeHtml(line)}</p>`).join("")}
+        ${businessInfoLine ? `<p class="quo-doc-business-line">${escapeHtml(businessInfoLine)}</p>` : ""}
       </div>
 
       <div class="quo-doc-divider"></div>
@@ -196,14 +359,16 @@ if (ratePanel) {
         <tbody>${rows || `<tr><td colspan="2" class="quo-doc-empty">${td("doc.noServicesYet")}</td></tr>`}</tbody>
       </table>
 
-      ${fields.notes.value.trim() ? `
+      ${sectionEnabled.notes && fields.notes.value.trim() ? `
         <div class="quo-doc-divider"></div>
         <p class="quo-doc-section-label">${td("doc.notes")}</p>
         <p class="quo-doc-pre">${escapeHtml(fields.notes.value)}</p>
       ` : ""}
 
-      <div class="quo-doc-divider"></div>
-      <p class="quo-doc-footer">${escapeHtml(fields.businessName.value) || td("doc.yourBusinessName")}</p>
+      ${sectionEnabled.footer && fields.footerNote.value.trim() ? `
+        <div class="quo-doc-divider"></div>
+        <p class="quo-doc-footer">${escapeHtml(fields.footerNote.value.trim())}</p>
+      ` : ""}
     `;
   }
 
@@ -243,8 +408,15 @@ if (ratePanel) {
         website: fields.businessWebsite.value,
         logo: logoDataUrl,
       },
-      items: items.map((it) => ({ description: it.description, price: it.price, unit: it.unit })),
+      items: items.map((it) => ({
+        description: it.description,
+        price: it.price,
+        unit: it.unit,
+        subItems: (it.subItems || []).map((s) => ({ id: s.id, description: s.description, price: s.price || 0, unit: s.unit || "" })),
+      })),
       notes: fields.notes.value,
+      footerNote: fields.footerNote.value,
+      sectionEnabled: { ...sectionEnabled },
     };
 
     saveFeedbackEl.classList.remove("save-feedback-error");
@@ -305,10 +477,33 @@ if (ratePanel) {
     logoDataUrl = business.logo || null;
     renderLogoPreview();
 
-    items = (rateCard.items || []).map((it, i) => ({ id: "svc_" + i + "_" + Date.now(), ...it }));
+    // Older saved rate cards have no subItems at all on their items —
+    // default to an empty array so opening one never throws or loses
+    // rendering, same tolerance already applied everywhere else here.
+    items = (rateCard.items || []).map((it, i) => {
+      const item = { id: "svc_" + i + "_" + Date.now(), ...it };
+      item.subItems = (it.subItems || []).map((s, si) => ({
+        id: s.id || ("sub_" + i + "_" + si + "_" + Date.now()),
+        description: s.description || "",
+        price: s.price || 0,
+        unit: s.unit || "",
+      }));
+      return item;
+    });
     renderItems();
 
     fields.notes.value = rateCard.notes || "";
+    // Older saved rate cards have no footerNote at all — fall back to an
+    // empty string (no forced default text), same as a brand-new one.
+    fields.footerNote.value = rateCard.footerNote !== undefined ? rateCard.footerNote : "";
+
+    // Older saved rate cards (before this toggle existed) have no
+    // sectionEnabled at all — treat that as "everything on", same as it
+    // always behaved before.
+    sectionEnabled = Object.fromEntries(
+      SECTION_TOGGLE_KEYS.map((k) => [k, rateCard.sectionEnabled ? rateCard.sectionEnabled[k] !== false : true])
+    );
+    applySectionToggleUI();
 
     saveFeedbackEl.hidden = true;
     validationEl.hidden = true;
@@ -324,6 +519,9 @@ if (ratePanel) {
     fields.validFrom.value = new Date().toISOString().slice(0, 10);
     fields.validUntil.value = "";
     fields.notes.value = t("rateCard.defaultNotes");
+    fields.footerNote.value = "";
+    sectionEnabled = Object.fromEntries(SECTION_TOGGLE_KEYS.map((k) => [k, true]));
+    applySectionToggleUI();
 
     loadBusinessProfile();
 

@@ -659,7 +659,23 @@ function getSummary() {
   };
 }
 
+// The sidebar/topbar identity block (avatar name + email) used to always
+// show the hardcoded placeholder ("Nama Anda" / "email@contoh.com"),
+// never the real name/email saved in Pengaturan > Identitas Bisnis - the
+// two were completely disconnected. Now it prefers the saved Business
+// Profile's owner name (falling back to the business name if no owner
+// name was given) and business email, and only falls back to the
+// placeholder text when no profile has been saved yet at all.
 function getUser() {
+  const profile = getBusinessProfile();
+  if (profile && (profile.ownerName || profile.businessName || profile.businessEmail)) {
+    return {
+      name: (profile.ownerName || profile.businessName || "").trim() || user.name,
+      role: user.role,
+      email: (profile.businessEmail || "").trim() || user.email,
+      initials: user.initials,
+    };
+  }
   return user;
 }
 

@@ -212,6 +212,11 @@ if (setPanel) {
     saveFeedbackEl.hidden = false;
     setSetDirty(false);
     renderProfileCard();
+    // The sidebar/topbar identity block (avatar name + email) reads the
+    // same Business Profile - refresh it too, or it keeps showing
+    // whatever it last showed (the placeholder, on a first save) until
+    // the next full page reload.
+    if (typeof renderUserGreeting === "function") renderUserGreeting();
     if (typeof showToast === "function") showToast(t("profile.savedToast"));
   });
 
@@ -222,6 +227,7 @@ if (setPanel) {
   function afterReset() {
     loadIntoForm();
     renderProfileCard();
+    if (typeof renderUserGreeting === "function") renderUserGreeting();
   }
 
   function renderProfileCard() {

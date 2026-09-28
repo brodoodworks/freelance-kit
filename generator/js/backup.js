@@ -347,6 +347,7 @@ if (backupCard) {
         }
         closeRestoreModal();
         if (typeof refreshEverything === "function") refreshEverything();
+        if (typeof renderUserGreeting === "function") renderUserGreeting();
         if (typeof showToast === "function") {
           showToast(t("backup.restoreFailed.title"), t("backup.restoreFailed.detail"));
         }
@@ -362,6 +363,7 @@ if (backupCard) {
       // SECTION 10 in the reminder spec: restoring is not backing up).
       markDataChanged();
       if (typeof refreshEverything === "function") refreshEverything();
+      if (typeof renderUserGreeting === "function") renderUserGreeting();
       if (window.FreelanceBackupReminder) window.FreelanceBackupReminder.refresh();
       if (typeof navigateTo === "function") {
         navigateTo("dashboard");
@@ -414,6 +416,7 @@ if (backupCard) {
       clearBackupError();
       resetAllFormState();
       if (typeof refreshEverything === "function") refreshEverything();
+      if (typeof renderUserGreeting === "function") renderUserGreeting();
       if (window.FreelanceBackupReminder) window.FreelanceBackupReminder.refresh();
       if (typeof navigateTo === "function") {
         navigateTo("dashboard");

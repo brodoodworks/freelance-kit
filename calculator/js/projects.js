@@ -712,6 +712,10 @@ function refreshEverything() {
     // is exactly the intended behavior.
     window.FreelanceSettings.renderProfileCard();
   }
+  // Sidebar/topbar identity block (avatar name + email) is sourced from
+  // the same Business Profile (see data.js getUser()) — keep it in sync
+  // with any restore/clear too, not just a manual Settings save.
+  if (typeof renderUserGreeting === "function") renderUserGreeting();
 }
 
 window.FreelanceProjects = { renderMyProjectsPage, openProjectDetail, openDeleteConfirm };

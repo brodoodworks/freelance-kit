@@ -458,7 +458,18 @@ if (ratePanel) {
     if (showValidation(problems)) return;
     renderPreview();
     printSheet.innerHTML = previewEl.innerHTML;
-    window.print();
+    // iOS/iPad Safari can call print() before it has finished laying
+    // out the freshly-injected sheet (images/webfonts not settled
+    // yet) - that shows up as the print sheet taking a long time to
+    // appear, appearing blank, or spilling onto a spurious 2nd page.
+    // Waiting a couple of animation frames + document.fonts.ready
+    // before printing gives layout a chance to settle first.
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        const ready = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
+        ready.then(() => window.print()).catch(() => window.print());
+      });
+    });
   });
 
   function loadRateCard(rateCard) {

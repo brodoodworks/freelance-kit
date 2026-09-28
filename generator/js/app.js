@@ -382,11 +382,22 @@ function renderProjectsPanel() {
     return;
   }
 
+  // Recent Projects can now mix in Quotations/Proposals/Invoices
+  // alongside saved Projects (see getProjects() in data.js) - this
+  // small label is how each row shows which kind of record it is.
+  const DOC_TYPE_LABEL = {
+    project: "Project",
+    quotation: "Quotation",
+    proposal: "Proposal",
+    invoice: "Invoice",
+  };
+
   const rows = items.map((p) => {
     const status = getStatusMeta(p.status);
+    const typeLabel = DOC_TYPE_LABEL[p.docType] || "";
     return `
-      <tr${p.id ? ` data-project-id="${p.id}" class="row-clickable"` : ""}>
-        <td class="cell-project">${escapeHtml(p.name)}</td>
+      <tr${p.id ? ` data-project-id="${p.id}" data-doc-type="${p.docType || "project"}" class="row-clickable"` : ""}>
+        <td class="cell-project">${typeLabel ? `<span class="project-card-updated" style="display:block;">${typeLabel}</span>` : ""}${escapeHtml(p.name)}</td>
         <td class="cell-client">${escapeHtml(p.client)}</td>
         <td class="cell-price num">${formatIDR(p.price)}${p.priceUnit}</td>
         <td><span class="badge ${status.badgeClass}">${status.label}</span></td>
@@ -396,10 +407,12 @@ function renderProjectsPanel() {
 
   const cards = items.map((p) => {
     const status = getStatusMeta(p.status);
+    const typeLabel = DOC_TYPE_LABEL[p.docType] || "";
     return `
-      <div class="project-card-item${p.id ? " row-clickable" : ""}"${p.id ? ` data-project-id="${p.id}"` : ""}>
+      <div class="project-card-item${p.id ? " row-clickable" : ""}"${p.id ? ` data-project-id="${p.id}" data-doc-type="${p.docType || "project"}"` : ""}>
         <div class="project-card-top">
           <div>
+            ${typeLabel ? `<p class="project-card-client">${typeLabel}</p>` : ""}
             <p class="project-card-name">${escapeHtml(p.name)}</p>
             <p class="project-card-client">${escapeHtml(p.client)}</p>
           </div>
@@ -430,7 +443,34 @@ function renderProjectsPanel() {
 
   panel.querySelectorAll('[data-project-id]').forEach((el) => {
     el.addEventListener("click", () => {
-      if (window.FreelanceProjects) window.FreelanceProjects.openProjectDetail(el.dataset.projectId);
+      const id = el.dataset.projectId;
+      const docType = el.dataset.docType || "project";
+
+      if (docType === "quotation" && window.FreelanceQuotation) {
+        const record = getQuotationById(id);
+        if (!record) return;
+        window.FreelanceQuotation.loadQuotation(record);
+        navigateTo("quotation-generator");
+        history.replaceState(null, "", "#quotation-generator");
+        return;
+      }
+      if (docType === "proposal" && window.FreelanceProposal) {
+        const record = getProposalById(id);
+        if (!record) return;
+        window.FreelanceProposal.loadProposal(record);
+        navigateTo("proposal-generator");
+        history.replaceState(null, "", "#proposal-generator");
+        return;
+      }
+      if (docType === "invoice" && window.FreelanceInvoice) {
+        const record = getInvoiceById(id);
+        if (!record) return;
+        window.FreelanceInvoice.loadInvoice(record);
+        navigateTo("invoice-generator");
+        history.replaceState(null, "", "#invoice-generator");
+        return;
+      }
+      if (window.FreelanceProjects) window.FreelanceProjects.openProjectDetail(id);
     });
   });
 }

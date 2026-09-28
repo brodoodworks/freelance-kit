@@ -485,7 +485,7 @@ if (invPanel) {
     // the parent item's effective line total (and so into the document's
     // Subtotal/Total) \u2014 one row type, both modes.
     function subItemsRowHTML(it) {
-      const subs = (it.subItems || []).filter((s) => (s.description || "").trim() || (Number(s.qty) && Number(s.unitPrice)));
+      const subs = (it.subItems || []).filter((s) => (s.description || "").trim() || Number(s.qty) || Number(s.unitPrice));
       if (!subs.length) return "";
       const rows = subs.map((s) => {
         const qty = Number(s.qty) || 0;
@@ -495,6 +495,15 @@ if (invPanel) {
             <div class="quo-doc-subitem quo-doc-subitem-priced">
               <span class="quo-doc-subitem-desc">${escapeHtml(s.description) || "\u2014"}</span>
               <span class="quo-doc-subitem-meta">${qty} \u00d7 ${formatIDR(price)} = ${formatIDR(qty * price)}</span>
+            </div>`;
+        }
+        // Quantity given but no price - still show the quantity (e.g.
+        // "3x"), just without any currency amount attached to it.
+        if (qty > 0) {
+          return `
+            <div class="quo-doc-subitem quo-doc-subitem-priced">
+              <span class="quo-doc-subitem-desc">${escapeHtml(s.description) || "\u2014"}</span>
+              <span class="quo-doc-subitem-meta">${qty}x</span>
             </div>`;
         }
         return `<div class="quo-doc-subitem quo-doc-subitem-plain">\u2022 ${escapeHtml(s.description)}</div>`;
@@ -730,7 +739,18 @@ if (invPanel) {
     if (showValidation(problems)) return;
     renderPreview();
     printSheet.innerHTML = previewEl.innerHTML;
-    window.print();
+    // iOS/iPad Safari can call print() before it has finished laying
+    // out the freshly-injected sheet (images/webfonts not settled
+    // yet) - that shows up as the print sheet taking a long time to
+    // appear, appearing blank, or spilling onto a spurious 2nd page.
+    // Waiting a couple of animation frames + document.fonts.ready
+    // before printing gives layout a chance to settle first.
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        const ready = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
+        ready.then(() => window.print()).catch(() => window.print());
+      });
+    });
   });
 
   function loadInvoice(invoice) {

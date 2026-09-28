@@ -363,18 +363,71 @@ function deleteProject(id) {
 
 // Recent Projects table (Dashboard): top 5 by updatedAt. Returns an
 // empty list — never fake rows — until the user has a real project.
+// Recent Projects (Dashboard): the 5 most recently updated records
+// across EVERY record type - a saved Pricing Calculator Project, but
+// also a Quotation, Proposal, or Invoice the person has created. It
+// used to only ever look at saved Projects, which meant creating a
+// quotation/proposal/invoice straight from a client conversation
+// (without first "Save to Project"-ing a calculation) never showed up
+// here at all. Each row carries `docType` so the click handler and
+// badge below can treat it correctly instead of assuming it's always
+// a Project.
 function getProjects() {
-  const saved = getSavedProjects();
-  if (!saved.length) return [];
+  const clientLabel = (rec) => (rec.client && (rec.client.company || rec.client.name)) || "\u2014";
 
-  return saved.slice(0, 5).map((p) => ({
+  const projectRows = getSavedProjects().map((p) => ({
     id: p.id,
+    docType: "project",
     name: p.name,
     client: p.client || "\u2014",
-    price: p.price,
-    priceUnit: "",
+    price: Number(p.price) || 0,
     status: p.status || "draft",
-    updated: formatSavedDate(p.updatedAt),
+    updatedAt: p.updatedAt,
+  }));
+
+  const quotationRows = readSavedQuotationsRaw().map((q) => ({
+    id: q.id,
+    docType: "quotation",
+    name: q.quotationNumber || "Quotation",
+    client: clientLabel(q),
+    price: Number(q.total) || 0,
+    status: q.status || "draft",
+    updatedAt: q.updatedAt,
+  }));
+
+  const proposalRows = readSavedProposalsRaw().map((p) => ({
+    id: p.id,
+    docType: "proposal",
+    name: p.proposalNumber || "Proposal",
+    client: clientLabel(p),
+    price: Number(p.investment) || 0,
+    status: p.status || "draft",
+    updatedAt: p.updatedAt,
+  }));
+
+  const invoiceRows = readSavedInvoicesRaw().map((inv) => ({
+    id: inv.id,
+    docType: "invoice",
+    name: inv.invoiceNumber || "Invoice",
+    client: clientLabel(inv),
+    price: Number(inv.total) || 0,
+    status: inv.status || "draft",
+    updatedAt: inv.updatedAt,
+  }));
+
+  const combined = [...projectRows, ...quotationRows, ...proposalRows, ...invoiceRows]
+    .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
+    .slice(0, 5);
+
+  return combined.map((r) => ({
+    id: r.id,
+    docType: r.docType,
+    name: r.name,
+    client: r.client,
+    price: r.price,
+    priceUnit: "",
+    status: r.status,
+    updated: formatSavedDate(r.updatedAt),
   }));
 }
 

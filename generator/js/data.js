@@ -451,9 +451,53 @@ function getProjects() {
   }));
 }
 
+// Normalizes a client identity down to a comparable string, so the SAME
+// company can be recognized across a Project (client is a plain string),
+// and a Quotation/Proposal/Invoice (client is {name, company, ...}).
+function clientKeyFromString(name) {
+  return String(name || "").trim().toLowerCase();
+}
+function clientKeyFromObject(client) {
+  return clientKeyFromString((client && (client.company || client.name)) || "");
+}
+
+// Dashboard summary (Total Proyek / Total Pendapatan / Proposal Tertunda /
+// Disetujui) used to count ONLY Projects. That missed every client a
+// Quotation, Proposal or Invoice was sent to directly, without ever going
+// through a Project first - a closed/accepted one of those never showed
+// up in "Total Proyek" and its value never made it into "Total
+// Pendapatan".
+//
+// A naive fix (just add up Quotations + Proposals + Invoices alongside
+// Projects) creates a NEW problem: the same client/company very often
+// gets more than one of these documents for the SAME deal - e.g. a
+// Proposal to pitch, then a Quotation with the agreed price, then an
+// Invoice to bill it - and none of those document types link to each
+// other (only a Project has a shared `projectId` other docs can point
+// at). Counting every document separately would count that one client
+// two or three times, and could add their revenue two or three times
+// too.
+//
+// So instead, every Project + standalone Quotation/Proposal/Invoice
+// (standalone = no `projectId`, i.e. not already folded into a Project)
+// is grouped into a "deal" by client identity (company name, or client
+// name if no company was given). Each unique client then counts ONCE in
+// Total Proyek, and contributes AT MOST one figure to Total Pendapatan -
+// taken from whichever single record best represents that deal
+// (Project > Quotation > Proposal > Invoice, preferring the most
+// recently updated one within the same type). This is a name-matching
+// heuristic, not a real link, so two records for the same company typed
+// with a noticeably different spelling/company name won't merge - but it
+// covers the normal case of sending a Proposal/Quotation/Invoice to the
+// same client without creating a Project for them first.
 function getSummary() {
-  const saved = getSavedProjects();
-  if (!saved.length) {
+  const projects = getSavedProjects();
+  const standaloneQuotations = readSavedQuotationsRaw().filter((q) => !q.projectId);
+  const standaloneProposals = readSavedProposalsRaw().filter((p) => !p.projectId);
+  const standaloneInvoices = readSavedInvoicesRaw().filter((inv) => !inv.projectId);
+
+  const totalRecords = projects.length + standaloneQuotations.length + standaloneProposals.length + standaloneInvoices.length;
+  if (!totalRecords) {
     return {
       totalProjects: { value: 0, deltaLabel: t("dashboard.summary.noProjectsYet"), direction: "up" },
       totalRevenue: { value: 0, deltaLabel: t("dashboard.summary.fromApprovedCompleted"), direction: "up" },
@@ -462,12 +506,71 @@ function getSummary() {
     };
   }
 
-  const totalProjects = saved.length;
-  const pendingProposals = saved.filter((p) => p.status === "proposal-sent").length;
-  const approvedCount = saved.filter((p) => p.status === "approved").length;
-  const totalRevenue = saved
-    .filter((p) => p.status === "approved" || p.status === "completed")
-    .reduce((sum, p) => sum + (Number(p.price) || 0), 0);
+  // priority: which record type "wins" when picking a single revenue
+  // figure for a deal that has more than one won record.
+  const deals = new Map();
+  let anonN = 0;
+  function pushDeal(key, entry) {
+    const k = key || `__anon_${anonN++}__`; // no client name at all -> never merges with anything else
+    if (!deals.has(k)) deals.set(k, []);
+    deals.get(k).push(entry);
+  }
+
+  projects.forEach((p) => {
+    const won = p.status === "approved" || p.status === "completed";
+    pushDeal(clientKeyFromString(p.client), {
+      stage: won ? "won" : p.status === "proposal-sent" ? "pending" : "none",
+      priority: 4,
+      revenue: Number(p.price) || 0,
+      updatedAt: p.updatedAt,
+    });
+  });
+  standaloneQuotations.forEach((q) => {
+    const won = q.status === "closing" || q.status === "accepted";
+    pushDeal(clientKeyFromObject(q.client), {
+      stage: won ? "won" : (q.status === "sent" || q.status === "negotiation") ? "pending" : "none",
+      priority: 3,
+      revenue: getQuotationDisplayTotal(q),
+      updatedAt: q.updatedAt,
+    });
+  });
+  standaloneProposals.forEach((p) => {
+    const won = p.status === "accepted";
+    pushDeal(clientKeyFromObject(p.client), {
+      stage: won ? "won" : p.status === "sent" ? "pending" : "none",
+      priority: 2,
+      revenue: Number(p.investment) || 0,
+      updatedAt: p.updatedAt,
+    });
+  });
+  standaloneInvoices.forEach((inv) => {
+    // An invoice existing at all means the deal was already won - you
+    // bill after the work is agreed, not before - so it always counts as
+    // "won" for the deal it belongs to, regardless of paid/unpaid status.
+    pushDeal(clientKeyFromObject(inv.client), {
+      stage: "won",
+      priority: 1,
+      revenue: Number(inv.total) || 0,
+      updatedAt: inv.updatedAt,
+    });
+  });
+
+  let totalRevenue = 0;
+  let pendingProposals = 0;
+  let approvedCount = 0;
+
+  deals.forEach((entries) => {
+    const wonEntries = entries.filter((e) => e.stage === "won");
+    if (wonEntries.length) {
+      approvedCount += 1;
+      wonEntries.sort((a, b) => b.priority - a.priority || new Date(b.updatedAt) - new Date(a.updatedAt));
+      totalRevenue += wonEntries[0].revenue;
+    } else if (entries.some((e) => e.stage === "pending")) {
+      pendingProposals += 1;
+    }
+  });
+
+  const totalProjects = deals.size;
 
   return {
     totalProjects: {

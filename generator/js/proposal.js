@@ -900,18 +900,12 @@ if (propPanel) {
     if (showValidation(problems)) return;
     renderPreview();
     printSheet.innerHTML = previewEl.innerHTML;
-    // iOS/iPad Safari can call print() before it has finished laying
-    // out the freshly-injected sheet (images/webfonts not settled
-    // yet) - that shows up as the print sheet taking a long time to
-    // appear, appearing blank, or spilling onto a spurious 2nd page.
-    // Waiting a couple of animation frames + document.fonts.ready
-    // before printing gives layout a chance to settle first.
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        const ready = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
-        ready.then(() => window.print()).catch(() => window.print());
-      });
-    });
+    // Direct PDF download (see js/pdf-export.js) instead of window.print():
+    // no OS print/share sheet, and the page count matches the actual
+    // content height exactly. Falls back to window.print() automatically
+    // if PDF generation can't run for some reason.
+    const filename = window.FreelanceKitPDF.safeFileName(fields.proposalNumber.value || "Proposal") + ".pdf";
+    window.FreelanceKitPDF.exportAsPdf(printSheet, filename);
   });
 
   /* ---- Load an existing proposal ---- */

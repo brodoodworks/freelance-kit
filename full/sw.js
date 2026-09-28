@@ -1,6 +1,6 @@
 // Freelance Kit — offline cache (app shell). Bump CACHE_NAME when files change
 // so returning users get the update instead of a stale cached copy.
-const CACHE_NAME = "freelance-kit-v12";
+const CACHE_NAME = "freelance-kit-v13";
 
 // The app shell can be requested under more than one URL: "Freelance
 // Kit.html" is the entry file inside the downloadable zip, while a
@@ -23,6 +23,9 @@ const ASSETS = [
   "./js/help.js",
   "./js/i18n.js",
   "./js/date-picker.js",
+  "./js/pdf-export.js",
+  "./js/vendor/html2canvas.min.js",
+  "./js/vendor/jspdf.umd.min.js",
   "./js/install-prompt.js",
   "./js/onboarding.js",
   "./js/access-gate.js",

@@ -1790,6 +1790,98 @@ tr.row-clickable, .project-card-item.row-clickable { cursor: pointer; }
   .quo-doc-subitem { font-size: 9px; padding: 1px 0; }
 }
 
+/* ---- PDF export (real download) capture mode ----
+   Mirrors the @media print rules above so html2canvas can render the
+   print-sheet's true A4 layout and turn it into a directly downloadable
+   PDF file, instead of relying on the OS print dialog. Scoped to
+   #quo-print-sheet.pdf-capture-sheet only, so it never touches the
+   on-screen live Preview panel, which reuses these same class names.
+
+   Positioned off-screen (not opacity:0 - html2canvas paints actual
+   rendered opacity, so an opacity:0 element captures as a blank page;
+   and not display:none, which never renders at all). js/pdf-export.js
+   also passes the element's real, pre-measured width/height explicitly
+   to html2canvas, because html2canvas's own auto-detected size for a
+   position:fixed/absolute capture target has been observed to come back
+   clamped to this box's min-height, silently cutting a multi-page
+   document off after page 1 if left to auto-detect. */
+
+#quo-print-sheet.pdf-capture-sheet {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: -10000px;
+  z-index: -1;
+  width: 210mm;
+  min-height: 297mm;
+  max-width: none;
+  margin: 0;
+  padding: 16mm 17mm;
+  box-sizing: border-box;
+  background: #fff;
+  box-shadow: none; border: none; border-radius: 0;
+  font-size: 10px;
+  line-height: 1.5;
+  color: #17181c;
+}
+
+#quo-print-sheet.pdf-capture-sheet .quo-doc-head { margin-bottom: 12px; }
+#quo-print-sheet.pdf-capture-sheet .quo-doc-logo { max-height: 38px; }
+#quo-print-sheet.pdf-capture-sheet .quo-doc-business-name { font-size: 18px; }
+#quo-print-sheet.pdf-capture-sheet .quo-doc-business-line { font-size: 9px; margin-top: 1px; }
+
+#quo-print-sheet.pdf-capture-sheet .quo-doc-title-row { margin-bottom: 10px; }
+#quo-print-sheet.pdf-capture-sheet .quo-doc-title { font-size: 24px; }
+#quo-print-sheet.pdf-capture-sheet .quo-doc-number { font-size: 10px; }
+#quo-print-sheet.pdf-capture-sheet .quo-doc-dates { font-size: 9px; }
+#quo-print-sheet.pdf-capture-sheet .quo-doc-dates span { font-size: 8px; }
+
+#quo-print-sheet.pdf-capture-sheet .quo-doc-divider { margin: 10px 0; }
+#quo-print-sheet.pdf-capture-sheet .quo-doc-section-label { font-size: 8.5px; margin-top: 9px; }
+#quo-print-sheet.pdf-capture-sheet .quo-doc-bill-name { font-size: 11px; }
+
+#quo-print-sheet.pdf-capture-sheet .quo-doc-table th { font-size: 8px; padding: 5px 0; }
+#quo-print-sheet.pdf-capture-sheet .quo-doc-table td { font-size: 9.5px; padding: 5px 0; }
+
+#quo-print-sheet.pdf-capture-sheet .quo-doc-totals { margin-top: 8px; }
+#quo-print-sheet.pdf-capture-sheet .quo-total-row { font-size: 9.5px; padding: 3px 0; }
+#quo-print-sheet.pdf-capture-sheet .quo-total-grand { font-size: 13px; padding-top: 6px; margin-top: 4px; }
+
+#quo-print-sheet.pdf-capture-sheet .quo-doc-pre { font-size: 9px; }
+#quo-print-sheet.pdf-capture-sheet .quo-doc-footer { font-size: 9px; margin-top: 10px; }
+
+#quo-print-sheet.pdf-capture-sheet .prop-doc-check { font-size: 9.5px; margin-top: 3px; }
+#quo-print-sheet.pdf-capture-sheet .prop-doc-scope-item { margin-top: 6px; }
+#quo-print-sheet.pdf-capture-sheet .prop-doc-scope-num { font-size: 8.5px; }
+#quo-print-sheet.pdf-capture-sheet .prop-doc-scope-title { font-size: 10px; }
+#quo-print-sheet.pdf-capture-sheet .prop-doc-scope-desc { font-size: 8.5px; }
+#quo-print-sheet.pdf-capture-sheet .prop-doc-investment { font-size: 16px; }
+#quo-print-sheet.pdf-capture-sheet .prop-doc-timeline-item { font-size: 9.5px; }
+#quo-print-sheet.pdf-capture-sheet .prop-doc-section-body { padding-left: 20px; }
+
+#quo-print-sheet.pdf-capture-sheet .quo-doc-subitems { padding-left: 20px; }
+#quo-print-sheet.pdf-capture-sheet .quo-doc-subitem { font-size: 9px; padding: 1px 0; }
+
+/* ---- "Preparing PDF..." toast shown while exporting ---- */
+.fk-pdf-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 28px;
+  transform: translateX(-50%) translateY(12px);
+  background: var(--text, #17181c);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 10px 18px;
+  border-radius: 999px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  z-index: 9999;
+}
+.fk-pdf-toast-visible { opacity: 1; transform: translateX(-50%) translateY(0); }
+
 /* ==========================================================================
    PROPOSAL GENERATOR
    ========================================================================== */

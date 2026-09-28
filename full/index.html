@@ -769,7 +769,10 @@
             </div>
 
             <div class="calc-card calc-form-card">
-              <h3 class="section-title" data-i18n="section.paymentTerms">Payment Terms</h3>
+              <div class="quo-section-header-row">
+                <h3 class="section-title" data-i18n="section.paymentTerms">Payment Terms</h3>
+                <label class="prop-section-switch"><input type="checkbox" checked data-section-enable="paymentTerms" data-i18n-aria-label="proposal.accordion.includeToggleLabel" aria-label="Include this section in the document"><span class="prop-section-switch-track"><span class="prop-section-switch-thumb"></span></span></label>
+              </div>
               <div class="field">
                 <label for="quo-payment-terms" data-i18n="field.terms">Terms</label>
                 <select id="quo-payment-terms" data-quo="paymentTermsType">
@@ -788,12 +791,29 @@
             <div class="calc-card calc-form-card">
               <h3 class="section-title" data-i18n="section.notesTerms">Notes &amp; Terms</h3>
               <div class="field">
-                <label for="quo-notes" data-i18n="field.notes">Notes</label>
+                <div class="quo-section-header-row">
+                  <label for="quo-notes" data-i18n="field.notes">Notes</label>
+                  <label class="prop-section-switch"><input type="checkbox" checked data-section-enable="notes" data-i18n-aria-label="proposal.accordion.includeToggleLabel" aria-label="Include this section in the document"><span class="prop-section-switch-track"><span class="prop-section-switch-thumb"></span></span></label>
+                </div>
                 <textarea id="quo-notes" rows="2" data-quo="notes"></textarea>
               </div>
               <div class="field">
-                <label for="quo-terms" data-i18n="field.termsConditions">Terms &amp; Conditions</label>
+                <div class="quo-section-header-row">
+                  <label for="quo-terms" data-i18n="field.termsConditions">Terms &amp; Conditions</label>
+                  <label class="prop-section-switch"><input type="checkbox" checked data-section-enable="terms" data-i18n-aria-label="proposal.accordion.includeToggleLabel" aria-label="Include this section in the document"><span class="prop-section-switch-track"><span class="prop-section-switch-thumb"></span></span></label>
+                </div>
                 <textarea id="quo-terms" rows="3" data-quo="terms"></textarea>
+              </div>
+            </div>
+
+            <div class="calc-card calc-form-card">
+              <div class="quo-section-header-row">
+                <h3 class="section-title" data-i18n="proposal.accordion.footerTitle">Closing Note</h3>
+                <label class="prop-section-switch"><input type="checkbox" checked data-section-enable="footer" data-i18n-aria-label="proposal.accordion.includeToggleLabel" aria-label="Include this section in the document"><span class="prop-section-switch-track"><span class="prop-section-switch-thumb"></span></span></label>
+              </div>
+              <div class="field">
+                <input type="text" id="quo-footer-note" placeholder="Thank you." data-i18n-placeholder="placeholder.footerNote" data-quo="footerNote" aria-label="Closing Note" data-i18n-aria-label="field.footerNote">
+                <p class="field-help" data-i18n="proposal.footerNoteHelp">Shown as its own line at the very bottom of the document — whatever you type here, exactly, nothing added automatically. Leave it empty (or turn off the switch above) to leave the document with no closing line at all.</p>
               </div>
             </div>
 
@@ -986,11 +1006,11 @@
               <div class="prop-accordion">
 
                 <div class="prop-accordion-item is-open" data-accordion-item="objectives">
-                  <button type="button" class="prop-accordion-header" data-accordion-toggle>
+                  <div class="prop-accordion-header-row"><button type="button" class="prop-accordion-header" data-accordion-toggle>
                     <span class="prop-accordion-title" data-i18n="proposal.accordion.objectivesTitle">Objectives</span>
                     <span class="prop-accordion-summary" data-accordion-summary="objectives">No objectives yet</span>
                     <svg class="prop-accordion-chevron" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3.5 5.3 7 8.7l3.5-3.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                  </button>
+                  </button><div class="prop-row-updown prop-section-move"><button type="button" class="prop-row-move" data-section-move="up" data-i18n-aria-label="action.moveUp" aria-label="Move up"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 6.3 5 3.3 8 6.3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button type="button" class="prop-row-move" data-section-move="down" data-i18n-aria-label="action.moveDown" aria-label="Move down"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 3.7 5 6.7 8 3.7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div><label class="prop-section-switch"><input type="checkbox" checked data-section-enable="objectives" data-i18n-aria-label="proposal.accordion.includeToggleLabel" aria-label="Include this section in the document"><span class="prop-section-switch-track"><span class="prop-section-switch-thumb"></span></span></label></div>
                   <div class="prop-accordion-body" data-accordion-body>
                     <div class="prop-list-items" data-prop-objectives></div>
                     <button type="button" class="btn btn-secondary quo-add-item" data-prop-add-objective data-i18n="action.addObjective">+ Add Objective</button>
@@ -998,11 +1018,11 @@
                 </div>
 
                 <div class="prop-accordion-item" data-accordion-item="scope">
-                  <button type="button" class="prop-accordion-header" data-accordion-toggle>
+                  <div class="prop-accordion-header-row"><button type="button" class="prop-accordion-header" data-accordion-toggle>
                     <span class="prop-accordion-title" data-i18n="proposal.accordion.scopeTitle">Scope of Work</span>
                     <span class="prop-accordion-summary" data-accordion-summary="scope">No items yet</span>
                     <svg class="prop-accordion-chevron" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3.5 5.3 7 8.7l3.5-3.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                  </button>
+                  </button><div class="prop-row-updown prop-section-move"><button type="button" class="prop-row-move" data-section-move="up" data-i18n-aria-label="action.moveUp" aria-label="Move up"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 6.3 5 3.3 8 6.3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button type="button" class="prop-row-move" data-section-move="down" data-i18n-aria-label="action.moveDown" aria-label="Move down"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 3.7 5 6.7 8 3.7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div><label class="prop-section-switch"><input type="checkbox" checked data-section-enable="scope" data-i18n-aria-label="proposal.accordion.includeToggleLabel" aria-label="Include this section in the document"><span class="prop-section-switch-track"><span class="prop-section-switch-thumb"></span></span></label></div>
                   <div class="prop-accordion-body" data-accordion-body hidden>
                     <div class="prop-scope-items" data-prop-scope></div>
                     <button type="button" class="btn btn-secondary quo-add-item" data-prop-add-scope data-i18n="action.addScope">+ Add Scope</button>
@@ -1010,11 +1030,11 @@
                 </div>
 
                 <div class="prop-accordion-item" data-accordion-item="deliverables">
-                  <button type="button" class="prop-accordion-header" data-accordion-toggle>
+                  <div class="prop-accordion-header-row"><button type="button" class="prop-accordion-header" data-accordion-toggle>
                     <span class="prop-accordion-title" data-i18n="proposal.accordion.deliverablesTitle">Deliverables</span>
                     <span class="prop-accordion-summary" data-accordion-summary="deliverables">No deliverables yet</span>
                     <svg class="prop-accordion-chevron" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3.5 5.3 7 8.7l3.5-3.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                  </button>
+                  </button><div class="prop-row-updown prop-section-move"><button type="button" class="prop-row-move" data-section-move="up" data-i18n-aria-label="action.moveUp" aria-label="Move up"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 6.3 5 3.3 8 6.3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button type="button" class="prop-row-move" data-section-move="down" data-i18n-aria-label="action.moveDown" aria-label="Move down"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 3.7 5 6.7 8 3.7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div><label class="prop-section-switch"><input type="checkbox" checked data-section-enable="deliverables" data-i18n-aria-label="proposal.accordion.includeToggleLabel" aria-label="Include this section in the document"><span class="prop-section-switch-track"><span class="prop-section-switch-thumb"></span></span></label></div>
                   <div class="prop-accordion-body" data-accordion-body hidden>
                     <div class="prop-list-items" data-prop-deliverables></div>
                     <button type="button" class="btn btn-secondary quo-add-item" data-prop-add-deliverable data-i18n="action.addDeliverable">+ Add Deliverable</button>
@@ -1022,16 +1042,18 @@
                 </div>
 
                 <div class="prop-accordion-item" data-accordion-item="timeline">
-                  <button type="button" class="prop-accordion-header" data-accordion-toggle>
+                  <div class="prop-accordion-header-row"><button type="button" class="prop-accordion-header" data-accordion-toggle>
                     <span class="prop-accordion-title" data-i18n="proposal.accordion.timelineTitle">Timeline</span>
                     <span class="prop-accordion-summary" data-accordion-summary="timeline">No phases yet</span>
                     <svg class="prop-accordion-chevron" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3.5 5.3 7 8.7l3.5-3.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                  </button>
+                  </button><div class="prop-row-updown prop-section-move"><button type="button" class="prop-row-move" data-section-move="up" data-i18n-aria-label="action.moveUp" aria-label="Move up"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 6.3 5 3.3 8 6.3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button type="button" class="prop-row-move" data-section-move="down" data-i18n-aria-label="action.moveDown" aria-label="Move down"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 3.7 5 6.7 8 3.7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div><label class="prop-section-switch"><input type="checkbox" checked data-section-enable="timeline" data-i18n-aria-label="proposal.accordion.includeToggleLabel" aria-label="Include this section in the document"><span class="prop-section-switch-track"><span class="prop-section-switch-thumb"></span></span></label></div>
                   <div class="prop-accordion-body" data-accordion-body hidden>
                     <div class="prop-timeline-items" data-prop-timeline></div>
                     <button type="button" class="btn btn-secondary quo-add-item" data-prop-add-phase data-i18n="action.addPhase">+ Add Phase</button>
                   </div>
                 </div>
+
+                <button type="button" class="btn btn-secondary quo-add-item prop-add-section-btn" data-prop-add-section data-i18n="action.addSection">+ Add New Section</button>
 
                 <div class="prop-accordion-item" data-accordion-item="investment">
                   <button type="button" class="prop-accordion-header" data-accordion-toggle>
@@ -1074,11 +1096,11 @@
                 </div>
 
                 <div class="prop-accordion-item" data-accordion-item="next-steps">
-                  <button type="button" class="prop-accordion-header" data-accordion-toggle>
+                  <div class="prop-accordion-header-row"><button type="button" class="prop-accordion-header" data-accordion-toggle>
                     <span class="prop-accordion-title" data-i18n="proposal.accordion.nextStepsTitle">Next Steps</span>
                     <span class="prop-accordion-summary" data-accordion-summary="next-steps">Not filled in yet</span>
                     <svg class="prop-accordion-chevron" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3.5 5.3 7 8.7l3.5-3.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                  </button>
+                  </button><label class="prop-section-switch"><input type="checkbox" checked data-section-enable="next-steps" data-i18n-aria-label="proposal.accordion.includeToggleLabel" aria-label="Include this section in the document"><span class="prop-section-switch-track"><span class="prop-section-switch-thumb"></span></span></label></div>
                   <div class="prop-accordion-body" data-accordion-body hidden>
                     <div class="field">
                       <textarea id="prop-next-steps" rows="4" data-prop="nextSteps"></textarea>
@@ -1087,14 +1109,28 @@
                 </div>
 
                 <div class="prop-accordion-item" data-accordion-item="terms">
-                  <button type="button" class="prop-accordion-header" data-accordion-toggle>
+                  <div class="prop-accordion-header-row"><button type="button" class="prop-accordion-header" data-accordion-toggle>
                     <span class="prop-accordion-title" data-i18n="field.termsConditions">Terms &amp; Conditions</span>
                     <span class="prop-accordion-summary" data-accordion-summary="terms">Not filled in yet</span>
                     <svg class="prop-accordion-chevron" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3.5 5.3 7 8.7l3.5-3.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                  </button>
+                  </button><label class="prop-section-switch"><input type="checkbox" checked data-section-enable="terms" data-i18n-aria-label="proposal.accordion.includeToggleLabel" aria-label="Include this section in the document"><span class="prop-section-switch-track"><span class="prop-section-switch-thumb"></span></span></label></div>
                   <div class="prop-accordion-body" data-accordion-body hidden>
                     <div class="field">
                       <textarea id="prop-terms" rows="3" data-prop="terms"></textarea>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="prop-accordion-item" data-accordion-item="footer">
+                  <div class="prop-accordion-header-row"><button type="button" class="prop-accordion-header" data-accordion-toggle>
+                    <span class="prop-accordion-title" data-i18n="proposal.accordion.footerTitle">Closing Note</span>
+                    <span class="prop-accordion-summary" data-accordion-summary="footer">Not filled in yet</span>
+                    <svg class="prop-accordion-chevron" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3.5 5.3 7 8.7l3.5-3.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </button><label class="prop-section-switch"><input type="checkbox" checked data-section-enable="footer" data-i18n-aria-label="proposal.accordion.includeToggleLabel" aria-label="Include this section in the document"><span class="prop-section-switch-track"><span class="prop-section-switch-thumb"></span></span></label></div>
+                  <div class="prop-accordion-body" data-accordion-body hidden>
+                    <div class="field">
+                      <input type="text" id="prop-footer-note" placeholder="Thank you." data-i18n-placeholder="placeholder.footerNote" data-prop="footerNote" aria-label="Closing Note" data-i18n-aria-label="field.footerNote">
+                      <p class="field-help" data-i18n="proposal.footerNoteHelp">Shown as its own line at the very bottom of the document — whatever you type here, exactly, nothing added automatically. Leave it empty (or turn off the switch above) to leave the document with no closing line at all.</p>
                     </div>
                   </div>
                 </div>
@@ -1347,7 +1383,10 @@
             </div>
 
             <div class="calc-card calc-form-card">
-              <h3 class="section-title" data-i18n="section.paymentTerms">Payment Terms</h3>
+              <div class="quo-section-header-row">
+                <h3 class="section-title" data-i18n="section.paymentTerms">Payment Terms</h3>
+                <label class="prop-section-switch"><input type="checkbox" checked data-section-enable="paymentTerms" data-i18n-aria-label="proposal.accordion.includeToggleLabel" aria-label="Include this section in the document"><span class="prop-section-switch-track"><span class="prop-section-switch-thumb"></span></span></label>
+              </div>
               <div class="field">
                 <label for="inv-payment-terms" data-i18n="field.terms">Terms</label>
                 <select id="inv-payment-terms" data-inv="paymentTermsType">
@@ -1365,9 +1404,23 @@
             </div>
 
             <div class="calc-card calc-form-card">
-              <h3 class="section-title" data-i18n="section.notes">Notes</h3>
+              <div class="quo-section-header-row">
+                <h3 class="section-title" data-i18n="section.notes">Notes</h3>
+                <label class="prop-section-switch"><input type="checkbox" checked data-section-enable="notes" data-i18n-aria-label="proposal.accordion.includeToggleLabel" aria-label="Include this section in the document"><span class="prop-section-switch-track"><span class="prop-section-switch-thumb"></span></span></label>
+              </div>
               <div class="field">
                 <textarea id="inv-notes" rows="2" data-inv="notes"></textarea>
+              </div>
+            </div>
+
+            <div class="calc-card calc-form-card">
+              <div class="quo-section-header-row">
+                <h3 class="section-title" data-i18n="proposal.accordion.footerTitle">Closing Note</h3>
+                <label class="prop-section-switch"><input type="checkbox" checked data-section-enable="footer" data-i18n-aria-label="proposal.accordion.includeToggleLabel" aria-label="Include this section in the document"><span class="prop-section-switch-track"><span class="prop-section-switch-thumb"></span></span></label>
+              </div>
+              <div class="field">
+                <input type="text" id="inv-footer-note" placeholder="Thank you." data-i18n-placeholder="placeholder.footerNote" data-inv="footerNote" aria-label="Closing Note" data-i18n-aria-label="field.footerNote">
+                <p class="field-help" data-i18n="proposal.footerNoteHelp">Shown as its own line at the very bottom of the document — whatever you type here, exactly, nothing added automatically. Leave it empty (or turn off the switch above) to leave the document with no closing line at all.</p>
               </div>
             </div>
 
@@ -1865,9 +1918,23 @@
             </div>
 
             <div class="calc-card calc-form-card">
-              <h3 class="section-title" data-i18n="section.notes">Notes</h3>
+              <div class="quo-section-header-row">
+                <h3 class="section-title" data-i18n="section.notes">Notes</h3>
+                <label class="prop-section-switch"><input type="checkbox" checked data-section-enable="notes" data-i18n-aria-label="proposal.accordion.includeToggleLabel" aria-label="Include this section in the document"><span class="prop-section-switch-track"><span class="prop-section-switch-thumb"></span></span></label>
+              </div>
               <div class="field">
                 <textarea id="rate-notes" rows="2" placeholder="Harga dapat berubah sesuai kompleksitas project." data-rate="notes" data-i18n-placeholder="placeholder.rateCardNotes"></textarea>
+              </div>
+            </div>
+
+            <div class="calc-card calc-form-card">
+              <div class="quo-section-header-row">
+                <h3 class="section-title" data-i18n="proposal.accordion.footerTitle">Closing Note</h3>
+                <label class="prop-section-switch"><input type="checkbox" checked data-section-enable="footer" data-i18n-aria-label="proposal.accordion.includeToggleLabel" aria-label="Include this section in the document"><span class="prop-section-switch-track"><span class="prop-section-switch-thumb"></span></span></label>
+              </div>
+              <div class="field">
+                <input type="text" id="rate-footer-note" placeholder="Thank you." data-i18n-placeholder="placeholder.footerNote" data-rate="footerNote" aria-label="Closing Note" data-i18n-aria-label="field.footerNote">
+                <p class="field-help" data-i18n="proposal.footerNoteHelp">Shown as its own line at the very bottom of the document — whatever you type here, exactly, nothing added automatically. Leave it empty (or turn off the switch above) to leave the document with no closing line at all.</p>
               </div>
             </div>
 

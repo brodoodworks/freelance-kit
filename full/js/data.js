@@ -712,8 +712,8 @@ function generateQuotationNumber() {
 
   const highest = readSavedQuotationsRaw()
     .map((q) => q.quotationNumber || "")
-    .filter((num) => num.startsWith(prefix))
-    .map((num) => parseInt(num.slice(prefix.length), 10))
+    // sequence continues across months: take the highest trailing number of ANY month
+    .map((num) => { const m = /^QT-\d{6}-(\d+)$/.exec(num); return m ? parseInt(m[1], 10) : NaN; })
     .filter((n) => !isNaN(n))
     .reduce((max, n) => Math.max(max, n), 0);
 
@@ -893,8 +893,8 @@ function generateProposalNumber() {
 
   const highest = readSavedProposalsRaw()
     .map((p) => p.proposalNumber || "")
-    .filter((num) => num.startsWith(prefix))
-    .map((num) => parseInt(num.slice(prefix.length), 10))
+    // sequence continues across months: take the highest trailing number of ANY month
+    .map((num) => { const m = /^PR-\d{6}-(\d+)$/.exec(num); return m ? parseInt(m[1], 10) : NaN; })
     .filter((n) => !isNaN(n))
     .reduce((max, n) => Math.max(max, n), 0);
 
@@ -1001,8 +1001,8 @@ function generateInvoiceNumber() {
 
   const highest = readSavedInvoicesRaw()
     .map((i) => i.invoiceNumber || "")
-    .filter((num) => num.startsWith(prefix))
-    .map((num) => parseInt(num.slice(prefix.length), 10))
+    // sequence continues across months: take the highest trailing number of ANY month
+    .map((num) => { const m = /^INV-\d{6}-(\d+)$/.exec(num); return m ? parseInt(m[1], 10) : NaN; })
     .filter((n) => !isNaN(n))
     .reduce((max, n) => Math.max(max, n), 0);
 

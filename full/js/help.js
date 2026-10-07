@@ -241,7 +241,7 @@ if (helpPanel) {
       related: ["templates-guide", "my-projects-guide", "invoice-guide"],
       sections: [
         { body: "A Quotation is a price offer you send a client before the project is agreed." },
-        { heading: "Numbering", body: "Each new quotation gets an automatic number like QT-202609-001 — the year and month, then a sequence that always continues from the highest number saved for that month." },
+        { heading: "Numbering", body: "Each new quotation gets an automatic number like QT-202609-001 — the year and month, then a running sequence that always continues from the highest number you have saved (it does not restart when the month changes)." },
         { heading: "Setup", body: "Optionally link a saved Project (this fills in the client name and a starting line item) or leave it on \"Manual\" and fill everything by hand. Client Info (name, company, email, phone, address) and Business Info are separate fields — Business Info is prefilled from your Business Profile and can be refreshed anytime with \"Use latest Business Profile\", plus it has its own logo upload." },
         { heading: "Items", body: "Add line items with description, quantity, and unit price — totals recalculate as you type. \"Load from Template\" lets you append a saved Template's items in one click." },
         { heading: "Discount, Tax, Terms", body: ["Discount — None, Percentage, or Fixed Amount", "Tax — a percentage", "Payment Terms — 50/50, 100% Upfront, 30/70, or Custom", "Notes and Terms & Conditions text fields"] },

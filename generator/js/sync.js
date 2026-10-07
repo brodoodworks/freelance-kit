@@ -214,7 +214,11 @@
       default:
         // Always include the raw code — "Could not connect" alone isn't
         // enough to tell a wrong password apart from a config problem.
-        return code ? `${t("sync.error.generic")} (${code})` : t("sync.error.generic");
+        if (code) return `${t("sync.error.generic")} (${code})`;
+        // No Firebase code = not a credentials problem (script blocked, offline,
+        // opened via file://, Firestore failure after sign-in...). Show the real message.
+        const detail = err && err.message ? String(err.message).slice(0, 140) : "";
+        return detail ? `${t("sync.error.generic")} (${detail})` : t("sync.error.generic");
     }
   }
 
